@@ -2,15 +2,13 @@
 
 > 一个专门放 `skills` 的小仓库。先把事情做小、做清楚，再把结果做得好看。
 
-`hai-stack` 现在聚焦一件事：把一段内容整理成一张完成度较高的视觉卡片。
-
-目前仓库里只有一个技能：`visual-card`。它会生成一个独立的 HTML 卡片，并通过内置脚本导出 PNG，适合做摘要、说明卡、分享图或单页信息图。
+`hai-stack` 是一组面向 AI 编程助手的技能集合，覆盖视觉卡片生成、代码质量审查、组件架构诊断、文档一致性检查等场景。
 
 ## 这是什么
 
 这是一个很轻的 `skills` 集合，不是完整应用，也不是脚手架工程。
 
-这里的重点不是“搭一套复杂系统”，而是把单个能力做成清晰、可复用、可直接拿来用的技能文件。现在的第一个技能是 `visual-card`，后面可以继续按同样方式往 `skills/` 目录扩展。
+这里的重点不是”搭一套复杂系统”，而是把单个能力做成清晰、可复用、可直接拿来用的技能文件。每个技能独立成目录，按需安装。
 
 ## 快速安装
 
@@ -24,6 +22,11 @@
 你要安装的技能名是：
 
 - `visual-card`
+- `react-component-diagnosis`
+- `clean-code-reviewer`
+- `ast-grep-rule-crafter`
+- `doc-consistency-reviewer`
+- `readme-beautifier`
 
 安装完成后，OpenClaw 就能在后续对话里识别并使用这个技能。
 
@@ -57,13 +60,10 @@
 | --- | --- |
 | `visual-card` | 把内容做成视觉卡片，输出独立 HTML，并支持导出 PNG |
 | `react-component-diagnosis` | 从 7 个维度深度诊断 React 组件架构质量，输出结构化评分报告 |
-
-## `visual-card` 适合做什么
-
-- 把一段信息整理成一张更易读的卡片
-- 做适合分享和传播的视觉摘要
-- 把普通文字内容转成有排版感的单页图文
-- 快速生成一张可交付、可预览、可截图的视觉成品
+| `clean-code-reviewer` | 基于《代码整洁之道》原则，从命名、函数、DRY、YAGNI 等 7 个维度审查代码质量 |
+| `ast-grep-rule-crafter` | 用 ast-grep YAML 编写 AST 级别的代码搜索与重写规则 |
+| `doc-consistency-reviewer` | 系统性检查文档与代码实现的一致性，找出过时或错误的描述 |
+| `readme-beautifier` | 修复 README 的结构混乱和格式不统一问题，输出专业规范的版本 |
 
 ## 目录结构
 
@@ -74,6 +74,23 @@ skills/
     scripts/
       screenshot.mjs
   react-component-diagnosis/
+    SKILL.md
+  clean-code-reviewer/
+    SKILL.md
+    references/
+      detailed-examples.md
+      language-patterns.md
+  ast-grep-rule-crafter/
+    SKILL.md
+    references/
+      rule-syntax.md
+      common-patterns.md
+  doc-consistency-reviewer/
+    SKILL.md
+    references/
+      checklist.md
+      output-format.md
+  readme-beautifier/
     SKILL.md
 ```
 
@@ -86,16 +103,9 @@ skills/
 
 如果只是查看技能说明文件，不需要额外安装别的东西。
 
-## 设计方向
-
-`visual-card` 默认不是走普通“卡片组件”那种很平的路线，而是偏杂志化、强调排版和视觉冲击力。它更适合做一张完整作品，而不是一块普通 UI。
-
-## 当前状态
-
-现在这个仓库还很小，但结构已经定下来了：
+## 结构约定
 
 - 每个技能放在自己的目录里
 - 每个技能有独立的 `SKILL.md`
-- 需要配套工具时，就放进自己的 `scripts/`
-
-如果后面继续增加别的技能，README 也可以按这个结构继续往下扩。
+- 需要配套工具时，放进自己的 `scripts/`
+- 需要参考资料时，放进自己的 `references/`
