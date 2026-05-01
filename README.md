@@ -56,6 +56,7 @@
 | 名称 | 用途 |
 | --- | --- |
 | `visual-card` | 把内容做成视觉卡片，输出独立 HTML，并支持导出 PNG |
+| `react-component-diagnosis` | 从 7 个维度深度诊断 React 组件架构质量，输出结构化评分报告 |
 
 ## `visual-card` 适合做什么
 
@@ -72,6 +73,8 @@ skills/
     SKILL.md
     scripts/
       screenshot.mjs
+  react-component-diagnosis/
+    SKILL.md
 ```
 
 ## 运行要求
