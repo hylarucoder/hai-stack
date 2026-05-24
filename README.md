@@ -12,86 +12,102 @@
 
 ## 快速安装
 
-如果你是放进 OpenClaw 里用，最直接的方式是把这个仓库里的技能目录放到 OpenClaw 的 `skills` 目录中。
+克隆仓库后，运行 `make link` 即可将所有技能以符号链接的方式安装到 `~/.claude/skills/` 和 `~/.codex/skills/`：
 
-常见位置通常是：
+```bash
+git clone https://github.com/hylarucoder/hai-stack.git
+cd hai-stack
+make link
+```
 
-- `<workspace>/skills/`
-- `~/.openclaw/skills/`
+其他管理命令：
 
-你要安装的技能名是：
+```bash
+make status   # 查看各技能的安装状态
+make unlink   # 移除所有符号链接
+```
 
-- `visual-card`
-- `react-component-diagnosis`
-- `clean-code-reviewer`
-- `ast-grep-rule-crafter`
-- `doc-consistency-reviewer`
-- `readme-beautifier`
-
-安装完成后，OpenClaw 就能在后续对话里识别并使用这个技能。
+新增技能后再跑一次 `make link`，已安装的会自动跳过。
 
 ## 怎么用
 
-最自然的用法不是记命令，而是直接对助手说清楚你的目标。
-
-例如：
+最自然的用法不是记命令，而是直接对助手说清楚你的目标。例如：
 
 ```text
-请你帮我阅读这篇文章，最后生成一张视觉卡片。
+帮我用 APoSD 的视角 review 一下这个模块的设计
+帮我诊断一下这个 React 组件的架构质量
+这个变量叫什么名字好？帮我起个名
+帮我检查一下代码质量，看看有没有 code smell
+这个 PRD 是不是太大了，需要拆吗？
+对照这份 PRD，检查一下数据模型字段是否对齐
+帮我检查 README 和代码有没有不一致的地方
+帮我美化一下这个 README
+请你阅读这篇文章，最后生成一张视觉卡片
 ```
 
-或者：
+这些技能会在 AI 助手识别到意图后自动激活，不需要记特定命令。
 
-```text
-请你帮我阅读这份内容，提炼重点，最后生成视觉卡片。
-```
+## 技能一览
 
-如果你已经知道材料来源，也可以直接这样说：
+### 设计与架构
 
-```text
-请你帮我阅读 xxx，最后生成视觉卡片。
-```
+| 名称 | 用途 | 收益 |
+| --- | --- | --- |
+| `aposd-reviewer` | 基于《软件设计哲学》(APoSD) 的深度设计审查，检测浅模块、信息泄漏、透传层等反模式 | 在架构决策阶段就消灭复杂性，而不是等它扩散后再补救 |
+| `react-component-diagnosis` | 从使用者 API、数据流、可测试性、可扩展性、性能、心智模型、边界契约 7 个维度诊断组件架构 | 一次诊断定位组件的结构性问题，避免反复重构 |
+| `naming-consultant` | 命名顾问——给变量/函数/模块/类型起名，或审计现有命名的模糊、不一致和误导问题 | 好的命名就是好的设计，减少"读代码猜意图"的时间 |
 
-这个技能更适合“先理解内容，再整理成卡片”的工作流，而不是只做一张空壳模板。
+### 代码质量
 
-## 当前包含
+| 名称 | 用途 | 收益 |
+| --- | --- | --- |
+| `clean-code-reviewer` | 基于《代码整洁之道》原则，从命名、函数大小、DRY、YAGNI、魔法数字等 7 个维度审查代码 | 系统化的代码体检，而不是凭经验零散挑问题 |
+| `ast-grep-rule-crafter` | 用 ast-grep YAML 编写 AST 级别的代码搜索与自动重写规则 | 把一次性的手工查找替换变成可复用的 lint 规则，杜绝同类问题再犯 |
 
-| 名称 | 用途 |
-| --- | --- |
-| `visual-card` | 把内容做成视觉卡片，输出独立 HTML，并支持导出 PNG |
-| `react-component-diagnosis` | 从 7 个维度深度诊断 React 组件架构质量，输出结构化评分报告 |
-| `clean-code-reviewer` | 基于《代码整洁之道》原则，从命名、函数、DRY、YAGNI 等 7 个维度审查代码质量 |
-| `ast-grep-rule-crafter` | 用 ast-grep YAML 编写 AST 级别的代码搜索与重写规则 |
-| `doc-consistency-reviewer` | 系统性检查文档与代码实现的一致性，找出过时或错误的描述 |
-| `readme-beautifier` | 修复 README 的结构混乱和格式不统一问题，输出专业规范的版本 |
+### 产品与建模
+
+| 名称 | 用途 | 收益 |
+| --- | --- | --- |
+| `prd-splitter` | PRD 粒度顾问——判断一个需求该拆成多个 PRD 还是合并，提供 6 维决策框架 | 避免 PRD 过大导致交付失控，或过小导致上下文碎片化 |
+| `entity-model-auditor` | 对照 PRD 审计实体数据模型，逐字段对比目标设计与当前实现，输出迁移变更清单 | 在开发前就对齐 PRD 和数据库，减少联调阶段的返工 |
+
+### 文档与展示
+
+| 名称 | 用途 | 收益 |
+| --- | --- | --- |
+| `doc-consistency-reviewer` | 系统性检查代码实现与文档说明的一致性，找出过时或错误的描述 | 文档与代码永远同步，新人不再被过时的 README 误导 |
+| `readme-beautifier` | 修复 README 的结构混乱和格式不统一问题，输出专业规范的版本 | 一键美化，不用再纠结排版细节 |
+| `visual-card` | 把内容做成视觉卡片，输出独立 HTML，并支持导出 PNG | 快速把文字变成可分享的精美卡片，适合社交传播和笔记归档 |
 
 ## 目录结构
 
 ```text
 skills/
-  visual-card/
+  aposd-reviewer/          # 软件设计哲学审查
+    SKILL.md
+    references/
+  ast-grep-rule-crafter/   # AST 搜索重写规则
+    SKILL.md
+    references/
+  clean-code-reviewer/     # 代码整洁度审查
+    SKILL.md
+    references/
+  doc-consistency-reviewer/ # 文档一致性审查
+    SKILL.md
+    references/
+  entity-model-auditor/    # 实体模型审计
+    SKILL.md
+  naming-consultant/       # 命名顾问
+    SKILL.md
+  prd-splitter/            # PRD 粒度顾问
+    SKILL.md
+  react-component-diagnosis/ # React 组件诊断
+    SKILL.md
+  readme-beautifier/       # README 美化
+    SKILL.md
+  visual-card/             # 视觉卡片生成
     SKILL.md
     scripts/
-      screenshot.mjs
-  react-component-diagnosis/
-    SKILL.md
-  clean-code-reviewer/
-    SKILL.md
-    references/
-      detailed-examples.md
-      language-patterns.md
-  ast-grep-rule-crafter/
-    SKILL.md
-    references/
-      rule-syntax.md
-      common-patterns.md
-  doc-consistency-reviewer/
-    SKILL.md
-    references/
-      checklist.md
-      output-format.md
-  readme-beautifier/
-    SKILL.md
 ```
 
 ## 运行要求
