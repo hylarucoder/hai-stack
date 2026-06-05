@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Info card screenshot tool - no server needed
+// Visual card screenshot tool - no server needed
 import { chromium } from 'playwright';
 import path from 'path';
 import fs from 'fs';

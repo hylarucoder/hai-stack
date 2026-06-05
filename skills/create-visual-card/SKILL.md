@@ -1,15 +1,17 @@
 ---
-name: visual-card
+name: create-visual-card
 description: Generate high-quality visual cards as self-contained HTML. Use when the user asks to create a visual card, info card, 信息卡, design card, social card, or any visually rich HTML summary of content. Triggers on phrases like "make a visual card", "信息卡", "设计一张卡片", "create a visual card", "generate a visual card".
 ---
 
-# Visual Card Generator
+# Create Visual Card
 
 Generate magazine-quality visual information cards as self-contained HTML files.
 
 ## Output
 
 A single `.html` file with embedded CSS. Width: 1024px. After writing the HTML, screenshot it using the bundled Playwright script and send the PNG image to the user.
+
+For the final handoff format, read `references/output-template.md` after generating and checking the card.
 
 ## Design System
 

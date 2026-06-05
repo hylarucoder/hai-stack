@@ -159,6 +159,8 @@ For any non-obvious classification decision, write a one-row justification:
 
 ## Output format
 
+For a reusable report skeleton, read `references/output-template.md` and adapt it to the entity and PRD scope.
+
 The final output is a single markdown document with these sections:
 
 ```

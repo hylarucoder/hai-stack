@@ -1,0 +1,4 @@
+interface:
+  display_name: "Goal Make"
+  short_description: "Create clear and verifiable goals"
+  default_prompt: "Use $goal-make to turn this intent into clear, verifiable goals."

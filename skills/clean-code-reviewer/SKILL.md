@@ -154,6 +154,8 @@ function handleClick(): void { ... }
 
 ## References
 
+**Output template**: See [references/output-template.md](references/output-template.md) for a complete review report shape.
+
 **Detailed examples**: See [references/detailed-examples.md](references/detailed-examples.md)
 - 各维度的完整案例（命名、函数、DRY、YAGNI、魔法数字）
 

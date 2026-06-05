@@ -105,6 +105,8 @@ description: README 美化器。修复结构混乱、格式不统一的 README �
 
 ## 输出格式
 
+完整交付模板见 [references/output-template.md](references/output-template.md)，但不要强制套固定 README 结构。
+
 直接输出美化后的完整 README 内容，然后附一段简短摘要：
 
 ```markdown

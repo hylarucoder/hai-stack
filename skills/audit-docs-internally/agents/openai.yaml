@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Docs Internally"
+  short_description: "Find conflicts inside documentation"
+  default_prompt: "Use $audit-docs-internally to find internal conflicts and stale sections in these docs."

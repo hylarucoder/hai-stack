@@ -140,6 +140,8 @@ ast-grep -p 'console.log($ARG)' --debug-query ast
 - Python examples
 - Go and Rust examples
 
+**Output template**: See [references/output-template.md](references/output-template.md) when delivering a rule, fix, validation notes, and known limits.
+
 ## Supported Languages
 
 Bash, C, Cpp, CSharp, Css, Elixir, Go, Haskell, Hcl, Html, Java, JavaScript, Json, Kotlin, Lua, Nix, Php, Python, Ruby, Rust, Scala, Solidity, Swift, Tsx, TypeScript, Yaml

@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Craft"
+  short_description: "Refine PRDs as whole documents"
+  default_prompt: "Use $prd-craft to improve this PRD from the whole-document perspective."

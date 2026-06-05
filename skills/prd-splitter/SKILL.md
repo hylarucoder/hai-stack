@@ -150,6 +150,8 @@ When a new feature appears, ask in order:
 
 ## Output Format
 
+For a reusable assessment skeleton, read `references/output-template.md` and adapt it to the PRD set.
+
 When advising on a PRD split/merge decision:
 
 ```markdown

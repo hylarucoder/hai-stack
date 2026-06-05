@@ -1,0 +1,4 @@
+interface:
+  display_name: "Geju"
+  short_description: "Open up bold strategic design thinking"
+  default_prompt: "Use $geju to open up the design space and challenge conservative local thinking."

@@ -224,6 +224,8 @@ description: React 组件架构诊断器。从 7 个维度（使用者 API、数
 
 ## 报告格式
 
+完整报告模板见 [references/output-template.md](references/output-template.md)，按组件规模裁剪。
+
 ```markdown
 # 组件诊断报告：{组件名}
 

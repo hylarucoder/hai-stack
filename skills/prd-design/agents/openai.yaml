@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Design"
+  short_description: "Design PRD-level product requirements"
+  default_prompt: "Use $prd-design to turn this feature idea into a clear PRD-level design."
