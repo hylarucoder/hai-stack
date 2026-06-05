@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai Goal"
+  short_description: "Define, craft, or rewrite goal documents"
+  default_prompt: "Use $hai-goal to define the goal, rewrite the plan around it, and prepare phases with verification before execution."

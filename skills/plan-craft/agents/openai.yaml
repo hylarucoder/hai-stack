@@ -1,4 +1,0 @@
-interface:
-  display_name: "Plan Craft"
-  short_description: "Refine plans into verifiable phases"
-  default_prompt: "Use $plan-craft to improve this plan into coherent phases with verifiable todos."

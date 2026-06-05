@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai TDD"
+  short_description: "Drive implementation with failing tests first"
+  default_prompt: "Use $hai-tdd to implement this with red-green-refactor and record the test evidence."

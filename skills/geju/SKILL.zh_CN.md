@@ -199,5 +199,5 @@ Codex 经常给出礼貌、平衡、低风险但不解决问题的答案。
 - 不是鲁莽实现。大胆方向仍然需要证据和验证。
 - 不是正确性担保。它的价值是启发性，加上一套严肃求证的方法。
 - 不是代码审查。实现质量问题用 `clean-code-reviewer`。
-- 不是深度架构审查。需要 APoSD 级架构 critique 时用 `architecture-reviewer`。
-- 不是 PRD 写作。输出 PRD 时用 `prd-design` 或 `prd-craft`。
+- 不是深度架构审查。需要 APoSD 级架构 critique 时用 `hai-architecture`。
+- 不是 PRD 写作。输出 PRD 时用 `hai-prd`。

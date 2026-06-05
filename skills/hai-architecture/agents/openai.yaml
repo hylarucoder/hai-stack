@@ -1,0 +1,7 @@
+interface:
+  display_name: "Hai Architecture"
+  short_description: "Architecture-level APoSD review"
+  default_prompt: "Use $hai-architecture to review this architecture through the APoSD/Ousterhout lens."
+
+policy:
+  allow_implicit_invocation: true

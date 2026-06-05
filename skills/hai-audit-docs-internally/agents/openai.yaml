@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai Audit Docs Internally"
+  short_description: "Find conflicts inside documentation"
+  default_prompt: "Use $hai-audit-docs-internally to find internal conflicts and stale sections in these docs."

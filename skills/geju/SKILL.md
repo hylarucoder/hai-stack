@@ -199,5 +199,5 @@ Counter-move:
 - Not reckless implementation. Bold direction still needs evidence and validation.
 - Not a correctness guarantee. The value is inspiration plus a disciplined way to test the hypothesis.
 - Not code review. Use `clean-code-reviewer` for implementation quality.
-- Not architecture deep review. Use `architecture-reviewer` when the user wants APoSD-level architecture critique.
-- Not PRD writing. Use `prd-design` or `prd-craft` when the output is a PRD.
+- Not architecture deep review. Use `hai-architecture` when the user wants APoSD-level architecture critique.
+- Not PRD writing. Use `hai-prd` when the output is a PRD.

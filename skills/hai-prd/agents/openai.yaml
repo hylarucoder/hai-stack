@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai PRD"
+  short_description: "Decide, design, split, merge, or refine PRDs"
+  default_prompt: "Use $hai-prd to decide whether a PRD is needed, shape its scope, and design or refine the PRD."

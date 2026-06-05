@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai Idea"
+  short_description: "Judge whether an idea is worth doing"
+  default_prompt: "Use $hai-idea to judge whether this idea is worth doing, validating, reframing, deferring, or killing."

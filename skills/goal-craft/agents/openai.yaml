@@ -1,4 +1,0 @@
-interface:
-  display_name: "Goal Craft"
-  short_description: "Break goals into phases and todos"
-  default_prompt: "Use $goal-craft to refine this goal into phases with concrete todos."
