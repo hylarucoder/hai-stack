@@ -1,6 +1,7 @@
 ---
 name: goudi
-description: Use when the user asks to be grounded, avoid over-grand designs, make a bold proposal executable, pressure-test feasibility, prevent "too much vision and too little landing", or mentions 苟帝, 落地, 先落地, 别太飘, 收一收, 可执行, 可验证, 止损.
+description: |
+  Pressure-tests an ambitious proposal and returns a grounded landing judgment (go / shrink / pause / reject / validate-first) with one minimum-viable first move, an explicit cut list, success/failure signals, and a stop rule. Use whenever a discussion has more vision than executable grounding, or the user asks how to land/ship a bold idea, define the smallest first step, scope down, pressure-test feasibility, price risk, or set a stop/rollback rule — even if they never name the skill. Triggers on 苟帝, 落地, 先落地, 怎么落地, 别太飘, 太理想化, 收一收, 砍范围, 可执行, 可验证, 最小可行, MVP, 止损, 回滚, 风险有多大, and on "make this real / be realistic / what do I do first / is this plan feasible" — including right after a geju or architecture session. Use geju instead when the goal is to open the frame and think bigger.
 ---
 
 # Goudi
@@ -27,127 +28,53 @@ Big ideas are allowed. Sweeping redesigns are allowed. Strong architecture opini
 
 If the answer cannot produce a concrete first move, it is not a plan yet. It is only a mood.
 
-## Relationship To Geju
-
-Use `geju` when Codex is trapped by local details, compatibility fear, and small-patch thinking.
-
-Use `goudi` when the answer has escaped too far upward and now needs to become an executable, testable, staged move.
-
-They are designed to work as a pair:
+`goudi` and `geju` are a designed pair:
 
 - `geju`: "What is the clean target if we stop being scared?"
 - `goudi`: "What is the first proof that this target can survive contact with reality?"
 
 Do not let `goudi` erase the bold target. Compress the first step, not the ambition.
 
-## What To Fight
-
-### 1. Vision Without First Step
-
-The proposal sounds right, but nobody knows what to do this afternoon.
-
-Counter-move:
-
-- Name the first concrete artifact: test, PRD patch, interface change, migration spike, prototype, benchmark, audit, or decision record.
-- Define the exact scope of the first step.
-- State what is intentionally out of scope.
-
-### 2. Fake Migration Plan
-
-The target model is clean, but the path assumes everything can be changed at once.
-
-Counter-move:
-
-- Identify existing contracts: persisted data, public API, user workflow, deployment, compliance, team ownership, or documented integration.
-- Split target design from migration path.
-- Prefer one narrow vertical slice over broad partial rewrites.
-- Name the irreversible step and delay it until evidence exists.
-
-### 3. Unpriced Risk
-
-The answer says "we can refactor" without pricing data loss, behavior changes, blast radius, missing tests, or hidden callers.
-
-Counter-move:
-
-- List the top 3 risks by blast radius.
-- Give each risk a verification method.
-- Decide which risk must be retired before implementation.
-- Reject work that cannot be validated inside a reasonable feedback loop.
-
-### 4. Long-Term Correct, Short-Term Irresponsible
-
-The direction may be right, but doing the full thing now would starve the current goal.
-
-Counter-move:
-
-- Separate the end-state from the next milestone.
-- Ask whether the next milestone makes the system more correct even if the full target is not finished.
-- Cut impressive but non-essential work.
-- Preserve optionality when confidence is still low.
-
-### 5. No Stop Rule
-
-The plan can only continue; it cannot fail gracefully.
-
-Counter-move:
-
-- Define failure signals before starting.
-- Define rollback or containment.
-- Define when to pause and gather evidence.
-- Make sunk-cost continuation unacceptable.
-
 ## Workflow
 
-1. Restate the bold direction in one sentence.
-   - Do not flatten the ambition.
-   - Name whether it came from `geju`, a PRD, an architecture review, or the user's idea.
+1. Restate the bold direction in one sentence. Do not flatten the ambition. Name where it came from — `geju`, a PRD, an architecture review, or the user's idea.
 
-2. Run a reality check.
-   - What real contracts constrain the work?
-   - What system area carries the most blast radius?
-   - What assumptions are unproven?
-   - What part of the proposal is mostly aesthetic, speculative, or premature?
+2. Run a reality check. Scan for the five anti-patterns, then name the constraints they expose:
+   - **Vision without first step** — sounds right, but nobody knows what to do this afternoon.
+   - **Fake migration plan** — clean target, but the path assumes everything changes at once.
+   - **Unpriced risk** — "we can refactor" with no cost on data loss, blast radius, missing tests, or hidden callers.
+   - **Long-term correct, short-term irresponsible** — the full thing now would starve the current goal.
+   - **No stop rule** — the plan can only continue; it cannot fail gracefully.
 
-3. Choose the minimum viable move.
-   - Pick one narrow vertical slice, proof point, or decision artifact.
-   - Define what it changes and what it refuses to change.
-   - Prefer something that creates evidence, not just more planning.
+   Then answer: what real contracts constrain the work? What area carries the most blast radius? What assumptions are unproven? What part is mostly aesthetic, speculative, or premature? For the per-pattern counter-moves, read `references/anti-patterns.md`.
 
-4. Make verification explicit.
-   - Success criteria must be observable.
-   - Failure signals must be named.
-   - Verification should be cheap enough to run before confidence decays.
-   - If testing is relevant, connect with `hai-tdd`.
+3. Choose the minimum viable move. Pick one narrow vertical slice, proof point, or decision artifact. Define what it changes and what it refuses to change. Prefer something that creates evidence, not just more planning.
 
-5. Cut scope aggressively.
-   - List the parts that should not be attempted in the first move.
-   - Cut compatibility work that is not tied to a real contract.
-   - Cut architecture polish that does not affect the proof point.
-   - Cut broad migration until the narrow slice is proven.
+4. Make verification explicit. Success criteria must be observable; failure signals must be named; the check must be cheap enough to run before confidence decays. If behavior needs to be driven by tests, route to `hai-tdd`.
 
-6. Define the stop rule.
-   - What evidence would kill or pause this direction?
-   - What would force a smaller target?
-   - What can be rolled back or isolated?
-   - What decision should not be made yet?
+5. Cut scope aggressively. List what the first move should not attempt. Cut compatibility work not tied to a real contract, architecture polish that does not affect the proof point, and broad migration until the narrow slice is proven.
 
-7. Read `references/output-template.md` before finalizing the answer.
+6. Define the stop rule. What evidence would kill or pause this direction? What would force a smaller target? What can be rolled back or isolated? What decision should not be made yet?
 
-## Output Rules
+## Output
 
-- Lead with the landing judgment: go / shrink / pause / reject / validate first.
-- Be concrete about the first move.
-- Include what to cut from the first attempt.
-- Include success criteria and failure signals.
+Produce the answer using `references/output-template.md` — load it before drafting. It fixes the section order: Landing Judgment / Bold Direction Kept / Reality Check / Minimum Viable Move / Verification / Cut List / Stop Rule / Next Move.
+
+Beyond the template's per-field shape, hold these constraints:
+
+- Lead with the verdict — go / shrink / pause / reject / validate first — not with the analysis.
 - Name real constraints separately from anxiety or inertia.
 - Preserve the bold target when it is useful, but do not let it replace execution.
-- Do not write a giant plan unless the user asks for a full goal document; route to `hai-goal` for that.
-- Do not turn `goudi` into "do nothing." The default is a smaller proof, not paralysis.
+- The default is a smaller proof, not paralysis. Do not turn `goudi` into "do nothing."
+- Do not write a giant plan; route to `hai-goal` when the output needs phases, todos, and execution tracking.
+
+## Route elsewhere when
+
+- The goal is to open the frame, escape compatibility fear, and think bigger — use `geju`. (`goudi` grounds an already opened frame; it does not open one.)
+- Behavior needs to be driven by tests — use `hai-tdd`.
+- The output needs full phases, todos, and execution tracking — use `hai-goal`.
 
 ## What This Skill Is Not
 
-- Not `geju`. It does not open the frame; it grounds an already opened frame.
 - Not generic project management. It is a pressure test for whether a proposal can land.
-- Not anti-refactor. It rejects fantasy migrations, not clean targets.
-- Not TDD itself. Use `hai-tdd` when behavior needs to be driven by tests.
-- Not a full goal document. Use `hai-goal` when the output needs phases, todos, and execution tracking.
+- Not anti-refactor and not timid. It rejects fantasy migrations, not clean targets — and the default is a smaller proof, not standing still.

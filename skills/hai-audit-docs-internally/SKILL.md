@@ -1,6 +1,7 @@
 ---
 name: hai-audit-docs-internally
-description: Use when a user asks to audit documentation for internal conflicts, stale sections, duplicate or contradictory claims, unclear structure, outdated assumptions, or content that should be updated, moved, merged, or removed without comparing against code implementation.
+description: |
+  Audits a document or doc set from the inside and produces a prioritized findings report (P0-P3) of internal conflicts, stale content, terminology drift, duplication, and misplaced or unsupported claims, plus update/move/merge/remove/split decisions and a suggested repair order. Use this whenever the user wants docs sanity-checked or cleaned up for self-consistency without comparing against code, even when they never say "audit": contradictory or duplicate sections, stale assumptions, unclear structure, or a PRD/spec that should hang together. Trigger on casual and Chinese phrasings too: 文档自相矛盾, 文档前后不一致, 文档内部冲突, 审一下这份文档, 帮我审审这个 PRD, 文档体检, "these two sections disagree", "is this spec consistent", "the docs repeat themselves". If the truth source is the code, use hai-audit-docs-against-code instead.
 ---
 
 # Hai Audit Docs Internally
@@ -9,18 +10,11 @@ For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the executi
 
 ## Overview
 
-Use this skill to audit one document or a documentation set from the inside. The source of truth is the document's own goal, structure, terminology, claims, and cross-references, not the codebase.
+Audit one document or a documentation set from the inside, then deliver a prioritized findings report with repair decisions. The source of truth is the document's own goal, structure, terminology, claims, and cross-references — not the codebase.
 
 ## Core Principle
 
-Treat documentation as a coherent argument:
-
-- A document should have one clear purpose and audience.
-- Sections should support the same target outcome.
-- Definitions, terms, assumptions, flows, and examples should not contradict each other.
-- Repeated content should either reinforce intentionally or be merged.
-- Stale or unsupported content should be updated, moved, marked as open, or removed.
-- Do not compare against code unless the user explicitly asks for doc-vs-code verification; use `hai-audit-docs-against-code` for that.
+A document is a coherent argument, and the audit reads it as one. Judge it for consistency of purpose, terms, and claims: every section should serve the same target, the same concept should carry the same name, and nothing should assert what another section denies or what no evidence supports. The enumerated consistency checks live in Workflow step 3.
 
 ## Workflow
 
@@ -53,6 +47,7 @@ Treat documentation as a coherent argument:
    - **Ask** when a conflict cannot be resolved from the document itself.
 
 5. Produce the audit.
+   - Deliver: Verdict, Document Map, prioritized Findings (each with type, location, evidence, impact, repair), a Remove/Update/Move decision table, Open Decisions, and a Suggested Repair Order.
    - Read `references/output-template.md` before finalizing.
    - Prioritize issues that change understanding, decisions, scope, or execution.
    - Keep wording fixes secondary unless wording causes ambiguity or conflict.
@@ -67,8 +62,8 @@ Treat documentation as a coherent argument:
 | P3 | Minor clarity, structure, or formatting issue |
 | Needs decision | The document has a real fork that requires owner input |
 
-## What This Skill Is Not
+## Use a different skill when
 
-- Not a doc-vs-code audit. Use `hai-audit-docs-against-code` when implementation is the truth source.
-- Not PRD-specific crafting. Use `hai-prd` when the document is a PRD and needs product-requirement repair.
-- Not README beautification. Use `readme-beautifier` for formatting and presentation cleanup.
+- The truth source is the code: use `hai-audit-docs-against-code` to check docs against implementation, config, and API contracts. This skill never compares against code.
+- The document is a PRD that needs product-requirement crafting or repair (scope, acceptance, structure as a spec): use `hai-prd`.
+- The docs just need formatting and presentation cleanup, not consistency judgment: use `readme-beautifier`.

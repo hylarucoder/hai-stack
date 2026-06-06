@@ -1,6 +1,15 @@
 ---
 name: hai-tdd
-description: Use when implementing a feature, fixing a bug, changing behavior, refactoring code, or when the user asks for TDD, test-driven development, test first, 红绿重构, 先写测试, or 用测试驱动开发.
+description: |
+  Drives implementation through a strict red-green-refactor loop and produces a filled-in
+  test-evidence report (target behavior, the failing RED test + why it failed for the right
+  reason, the minimal GREEN implementation, the refactor decision, and verification commands).
+  Use whenever the user implements a feature, fixes a bug, changes or protects behavior,
+  refactors, or asks to add/write a test or unit test — even when they never say "TDD". Trigger
+  on TDD, test-driven development, test first, red-green-refactor, tdd this, do it test first,
+  add test coverage, unit test for this; and on 红绿重构, 先写测试, 用测试驱动开发, 写测试, 加测试,
+  补个测试, 单元测试, 给这个写个测试, 测一下, 帮我测; plus the regression-safety intent — refactor
+  without breaking behavior, 确保不回归, 别改坏了, 保证行为不变.
 ---
 
 # Hai TDD
@@ -9,32 +18,21 @@ For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the executi
 
 ## Overview
 
-Use this skill to drive development with tests: write a failing test first, confirm it fails for the right reason, write the smallest implementation that passes, then refactor while keeping tests green.
-
-This is not "add tests at the end." TDD defines behavior before implementation. If the test never failed first, it did not prove that it constrains the target behavior.
+Drive development with tests: write a failing test first, confirm it fails for the right reason, write the smallest implementation that passes, then refactor while keeping tests green. This is not "add tests at the end" — TDD defines behavior before implementation.
 
 ## Core Principle
 
 Red, then green, then refactor.
 
-Do not write production code before a failing test. If implementation already exists without a test, do not call the process TDD; either label it as tests-after or return to a test-first path.
+Do not write production code before a failing test. A test that never failed first has not proven it constrains the target behavior — so the RED failure is the evidence, not a formality. If implementation already exists without a test, do not call the process TDD; either label it as tests-after or return to a test-first path.
 
-## When To Use
+## Skip or ask first when
 
-Use this skill for:
+The skill is already triggered; the open decision is whether TDD fits this change. Pause and confirm with the user when:
 
-- New feature implementation.
-- Bug fixes.
-- Behavior changes.
-- Refactoring when behavior must be protected.
-- Explicit requests for TDD, test-first, red-green-refactor, or test-driven development.
-
-Ask or skip when:
-
-- The work is a throwaway prototype.
+- The work is a throwaway prototype or a spike, or the user asked for code reading before implementation.
 - The change is pure configuration, copy, or styling.
 - The behavior cannot reasonably be verified automatically yet.
-- The user explicitly asks for a spike or code reading before implementation.
 
 ## Workflow
 
@@ -46,19 +44,17 @@ Ask or skip when:
 2. RED: write the failing test first.
    - The test name should describe behavior, not say "works".
    - Test one behavior at a time.
-   - Prefer public APIs, user-observable behavior, or stable boundaries.
-   - Avoid mocks unless external systems, time, network, randomness, or permissions make them necessary.
+   - Prefer public APIs, user-observable behavior, or stable boundaries — they keep the test stable when you refactor internals.
+   - Avoid mocks unless external systems, time, network, randomness, or permissions force them; mocks tie the test to implementation and hide real behavior.
 
 3. Verify RED.
-   - Run the smallest relevant test command.
-   - Confirm the test fails.
-   - Confirm it fails because the target behavior is missing, not because of syntax, imports, bad test code, or environment setup.
+   - Run the smallest relevant test command and confirm the test fails.
+   - Confirm it fails because the target behavior is missing, not because of syntax, imports, bad test code, or environment setup — that distinction is what makes the RED a real constraint rather than a broken test.
    - If the test passes immediately, it did not prove new behavior; fix the test.
 
 4. GREEN: write the minimal implementation.
-   - Write only enough code to pass the current test.
-   - Do not add future features.
-   - Do not mix in unrelated refactors.
+   - Write only enough code to pass the current test. Extra code is unverified by any failing test, so it falls outside TDD's safety net.
+   - Do not add future features and do not mix in unrelated refactors.
    - Do not skip the minimal implementation step for a larger "complete" design.
 
 5. Verify GREEN.
@@ -75,8 +71,6 @@ Ask or skip when:
    - Every new behavior returns to RED.
    - Do not put multiple behaviors into one large test.
 
-Read `references/output-template.md` before finalizing.
-
 ## Test Quality Bar
 
 Good TDD tests:
@@ -90,21 +84,18 @@ Good TDD tests:
 
 ## Common Mistakes
 
-- Writing implementation first, adding tests later, and calling it TDD.
-- Writing one large test that covers many behaviors.
-- Distorting the production API just to make tests convenient.
-- Testing only whether a mock was called, not real behavior.
-- Skipping RED failure verification.
-- Over-designing during GREEN.
-- Refactoring without rerunning tests.
+Traps not already caught by the workflow steps above:
 
-## Output Requirements
+- Distorting the production API just to make tests convenient — the test should adapt to a good design, not the design to the test.
+- Testing only whether a mock was called, not the real behavior, so the test passes even when the behavior is wrong.
 
-When reporting work, include:
+## Use a different skill when
 
-- Target behavior.
-- RED test.
-- RED command and failure reason.
-- Minimal GREEN implementation.
-- GREEN command and pass result.
-- Refactor decision and post-refactor verification.
+- The work is too broad to slice into one verifiable behavior, or the goal/phasing is unclear — use `hai-goal` to turn it into verifiable phases first, then return here to drive each phase.
+- The question is module boundaries, abstraction depth, or dependency direction rather than behavior under test — use `hai-architecture`.
+- You are deciding whether the feature is worth building at all — use `hai-idea`.
+- You are choosing the name of the unit, function, or concept under test — use `hai-naming`.
+
+## Output
+
+Report using `references/output-template.md` — fill every RED / GREEN / REFACTOR field with real evidence; do not collapse it to "tested, passing". Read the template before finalizing.

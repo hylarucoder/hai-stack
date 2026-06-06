@@ -1,16 +1,20 @@
 ---
 name: entity-model-auditor
 description: |
-  Audit entity data models by comparing PRD specifications against current codebase implementation.
-  Produces a structured field-by-field review table that shows target design vs current state,
-  with classification decisions and a migration change list.
+  Audit and design entity data models into a field-by-field markdown report: a target-vs-current
+  audit table per entity, a classification of every field (table column / config blob /
+  runtime-computed / remove), a grouped migration change list, and design-decision justifications
+  — each field run through five cuts (exist? store or compute? column or config? system or content?
+  what form to store?).
 
-  Use this skill when the user asks to: review a data model, audit entity fields against a PRD,
-  check if backend fields match product spec, design a data model from a PRD,
-  compare PRD fields with database schema, or when they mention
-  "实体建模", "数据模型审核", "字段审查", "PRD 对齐", "模型设计".
-  Also use when the user points at a PRD and says things like
-  "check what's missing", "are the fields right", "review this entity".
+  Use this whenever the user reasons about what fields an entity should have or where they should
+  live, even if they never say "audit": designing a data model, checking PRD fields against a DB
+  schema or backend types, deciding store-vs-compute or column-vs-jsonb, judging whether a field
+  is redundant, spotting a bloated/over-modeled entity, or planning a schema migration. Trigger
+  even when they just paste a PRD, schema, or Prisma/SQLAlchemy model and ask "are the fields
+  right", "what's missing", "should this be a column or jsonb", "is this field even needed". Also
+  on 实体建模, 数据模型审核, 字段审查, 字段太多了, 这个表设计得对吗, PRD 对齐, 模型设计,
+  该存还是该算, 列还是配置, 帮我看下这个模型.
 ---
 
 # Entity Model Auditor
@@ -18,6 +22,41 @@ description: |
 Given a PRD (product requirements document) and an optional codebase, produce a structured
 data model audit for each entity. The audit answers: what fields should exist, where should
 they live, what do we have now, and what needs to change.
+
+Two stances run through the whole process:
+
+- **Start from the PRD, not the codebase.** The PRD defines what should exist; the codebase
+  shows what does exist. The delta between them is the work.
+- **Every storage classification is really a "cost to change later" judgment.** A table column
+  costs a schema migration to change; a config blob field is free to add or remove; a system
+  field costs a code change; a content field changes by editing data alone. Cuts 3, 4, and 5
+  are all pricing this same question — what does it cost to change this field after ship — so
+  reason from that one idea instead of memorizing three separate tables.
+
+The final artifact is both a specification (the target design) and a migration guide (the work
+to get there). Anyone reading it should know the target, the current state, and the change.
+
+## Output shape
+
+The whole workflow fills in this one document. Build the sections in order; each step below
+produces a named slot.
+
+```
+# [Entity Name] Data Model Audit
+
+> Design principle: [one-line summary of the storage philosophy]
+
+## 1. [Entity] Table        — audit table for table-level fields
+## 2. Config Fields         — audit table for config fields, grouped by logical section
+## 3. Runtime Fields        — computed/derived fields with derivation rules
+## 4. Related Entities      — junction tables, version tables, etc.
+## 5. Change List           — grouped by change type
+## 6. Design Decisions      — non-obvious justifications
+```
+
+Sections 1 and 2 use the 8-column audit table defined in Step 3. Read
+`references/output-template.md` for a fill-in-the-blanks instance of this exact shape before
+finalizing.
 
 ## Workflow
 
@@ -32,8 +71,8 @@ If no codebase is provided, the "current state" columns will be marked as unknow
 ### Step 2: Apply the Five Cuts to each field
 
 Every field goes through five classification questions, in order. Each cut narrows down
-where and how the field should exist. The reasoning behind each cut matters more than
-the answer — explain non-obvious decisions.
+where and how the field should exist. Explain non-obvious decisions in the table rather than
+just recording the answer.
 
 #### Cut 1 — Should this field exist at all?
 
@@ -79,8 +118,8 @@ For fields that should be stored, decide where:
 | You need to filter, sort, or query by this value | Table column |
 | It's a user-facing "tuning knob" that doesn't affect queries | Config blob (jsonb / json) |
 
-The benefit of config blob: adding a new field requires no database migration.
-This matters a lot during intensive iteration periods.
+The benefit of config blob: adding a new field requires no database migration (config avoids a
+migration per change — the cost-to-change lens from the intro).
 
 Fields promoted to table columns should be ones the product actually filters on
 (check the PRD's list/search/filter requirements), not ones that "might" be useful to query.
@@ -94,8 +133,10 @@ This only applies to fields stored in the config blob:
 | System field | Backend logic branches on this value (if/switch statements, query parameters, API behavior changes) | Validate against an enum. Backend must understand every possible value. |
 | Content field | Flows into prompts, display, or descriptions without the backend interpreting it | Free text. No enum validation. Template/seed data provides initial values. |
 
-Why this matters: system fields need code changes when you add a new option.
-Content fields can get new options by updating template data alone.
+Why this matters (same cost-to-change lens): a system field costs a code change every time you
+add an option, because the backend branches on it; a content field gets new options by updating
+template data alone. Cuts 3, 4, and 5 are all pricing the same thing — Cut 3 prices a schema
+migration, Cut 4 prices a code change, Cut 5 prices a data/transform change.
 
 #### Cut 5 — What form is the stored value?
 
@@ -111,9 +152,11 @@ For each stored field, clarify what exactly gets persisted:
 Content fields sourced from templates typically store the actual display value,
 not an abstract key — because the template IS the source of truth for what options exist.
 
-### Step 3: Build the audit table
+### Step 3: Build the audit table (fills sections 1 and 2)
 
-For each entity, produce a table with these columns:
+For each entity, produce a table with these 8 columns. This is the canonical audit table used
+by both **section 1 (table-level fields)** and **section 2 (config fields)** of the output —
+split the rows between the two sections by their Classification.
 
 | Column | What it answers |
 |--------|----------------|
@@ -130,7 +173,7 @@ Group fields by logical section (identity, behavior, parameters, access control,
 based on what makes sense for the entity. Use the PRD's own grouping as a starting point
 but don't follow it blindly — regroup if the PRD's sections mix concerns.
 
-### Step 4: Produce the change list
+### Step 4: Produce the change list (fills section 5)
 
 After the table, summarize all changes needed in a flat list grouped by change type:
 
@@ -140,15 +183,18 @@ After the table, summarize all changes needed in a flat list grouped by change t
 - **Moves** — fields changing storage location (column → config, config → runtime)
 - **API gaps** — fields that exist in storage but have no update/read path through the API
 
-### Step 5: Document runtime-computed fields
+### Step 5: Document runtime-computed fields (fills section 3)
 
-List all fields that are NOT stored but need to be available at the API or runtime level.
+List all fields that are not stored but need to be available at the API or runtime level.
 For each, document:
 - The derivation rule (how to compute it)
 - Where the source data lives
 - When the computation happens (API response time? request execution time?)
 
-### Step 6: List design decisions
+Junction tables, version tables, and other related entities go in **section 4** — apply the same
+five cuts to each related entity's fields.
+
+### Step 6: List design decisions (fills section 6)
 
 For any non-obvious classification decision, write a one-row justification:
 
@@ -157,47 +203,29 @@ For any non-obvious classification decision, write a one-row justification:
 | `summary` is a column, not config | Card list displays it directly; avoiding jsonb parse on every list query |
 | `theme` moved from column to config | Not a query/filter dimension; keeping columns minimal |
 
-## Output format
+## Output
 
-For a reusable report skeleton, read `references/output-template.md` and adapt it to the entity and PRD scope.
+Assemble the six sections from the "Output shape" skeleton at the top of this file: sections 1
+and 2 hold the 8-column audit table (split by Classification), section 3 the runtime fields,
+section 4 related entities, section 5 the change list, section 6 the design decisions. Before
+finalizing, read `references/output-template.md` — it is a fill-in-the-blanks instance of exactly
+that shape, with the same section headings and the same column set.
 
-The final output is a single markdown document with these sections:
+Two ordering rules to keep the result honest:
 
-```
-# [Entity Name] Data Model Audit
+- Question every field's existence (Cut 1) before deciding where to put it. A field that
+  shouldn't exist doesn't need a storage decision.
+- Name each field for what it is, not where it came from or how it's used — and surface the
+  stored form, not the presentation form (an object storage key, not a full URL). For deeper
+  naming disputes, hand off to hai-naming.
 
-> Design principle: [one-line summary of the storage philosophy]
+## When to hand off
 
-## 1. [Entity] Table
-[Audit table for table-level fields]
+This skill assumes the PRD is roughly settled and focuses on field placement and the
+storage/migration delta. Route elsewhere when the real problem is upstream:
 
-## 2. Config Fields
-[Audit table for config fields, grouped by logical section]
-
-## 3. Runtime Fields
-[List of computed/derived fields with derivation rules]
-
-## 4. Related Entities
-[Junction tables, version tables, etc.]
-
-## 5. Change List
-[Grouped by change type]
-
-## 6. Design Decisions
-[Non-obvious justifications]
-```
-
-## Principles to follow
-
-- Start from the PRD, not the codebase. The PRD defines what SHOULD exist.
-  The codebase shows what DOES exist. The delta is the work.
-- Question every field's existence before deciding where to put it.
-  A field that shouldn't exist doesn't need a storage decision.
-- Prefer fewer table columns. Each column is a migration when you change it.
-  Config blob fields are free to add/remove during iteration.
-- Separate runtime state from persistent configuration.
-  If a value changes automatically based on system events (not user actions), it's runtime.
-- Name fields for what they ARE, not where they came from or how they're used.
-  Store the raw form, not the presentation form (e.g., an object storage key, not a full URL).
-- The audit table is both a specification AND a migration guide.
-  Anyone reading it should know: what's the target, what's the current state, what's the work.
+- **hai-naming** — the dispute is purely what to call a field/concept, not where it should live.
+- **hai-prd** — the PRD itself is the problem: scope is wrong, requirements conflict, or the
+  fields are undecided because the product intent is undecided. Fix the PRD first, then audit.
+- **clean-code-reviewer / react-component-diagnosis** — the user wants general code-quality or
+  component-design review, not a field-level data-model audit.

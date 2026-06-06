@@ -1,52 +1,59 @@
 ---
 name: hai-audit-docs-against-code
-description: Audit whether documentation matches code implementation, configuration, and API contracts. Use when the user asks to verify README/docs/API docs against implementation, check whether docs are stale, compare documentation with code, or find doc-code mismatches. Trigger phrases include 文档和代码一致性, 文档是否过时, verify docs against code, docs vs implementation.
+description: |
+  Audits documentation against the actual code, config, schemas, and API contracts and produces a
+  severity-ranked (P0-P3 + needs-evidence) report of every stale or mismatched claim, each with a doc
+  location, a code/contract reference, the impact, and a minimal suggested fix. Use whenever the user
+  wants to verify README/docs/API docs against the implementation, check whether docs fell behind, or
+  confirm setup steps / env vars / endpoints / examples still match the code after a rename or refactor —
+  even on casual asks like "是不是过时了", "README 和代码对不上", "readme 还准吗", "我们改了接口文档忘了更新吧",
+  "audit our docs", or "do the docs still match". Trigger on 文档和代码一致性, 文档是否过时, 文档跟实现不一致,
+  这个 API 文档还准不准, openapi 和文档对得上吗, verify docs against code, docs vs implementation. For doc-vs-doc
+  internal contradictions with no code comparison, use hai-audit-docs-internally instead.
 ---
 
 # Hai Audit Docs Against Code
 
 For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the execution source of truth.
 
-## Goal
+## Overview
 
-Find stale or implementation-inconsistent claims in README and documentation, with evidence from source code, configuration, schemas, API contracts, or generated types.
+Find stale or implementation-inconsistent claims in README and documentation, each backed by evidence
+from source code, configuration, schemas, API contracts, or generated types. The audit runs in both
+directions — docs-to-code and code-to-docs — and reports findings as a severity-ranked list, not prose.
 
 ## Core Principles
 
 1. **Code is truth**: when documentation conflicts with implementation, source code, configuration, and contract files win.
-2. **Evidence before judgment**: every issue needs a concrete document location and a concrete implementation/config/contract reference.
-3. **Contracts first**: OpenAPI, protobuf, GraphQL schema, database schema, and TypeScript types are strong sources of truth.
-4. **Tighten safety defaults**: security, permissions, sandboxing, privacy, billing, and destructive operations should be reviewed with higher severity.
-5. **Audit by scenario**: organize the audit around real user/developer/operator scenarios, not loose file-by-file scavenging.
-6. **Explain the repair value**: every fix should state the benefit, such as reducing misuse, improving onboarding, or preventing failed integration.
+2. **Contracts first**: OpenAPI, protobuf, GraphQL schema, database schema, and TypeScript types are strong sources of truth — prefer them over hand-written prose.
+3. **Tighten safety defaults**: security, permissions, sandboxing, privacy, billing, and destructive operations get elevated severity (see Severity table).
+4. **Evidence before judgment**: every issue needs a concrete doc location and a concrete code/config/contract reference — operationalized in the Workflow.
+5. **Audit by scenario**: organize around real user/developer/operator scenarios, not file-by-file scavenging — operationalized in the Workflow.
+6. **Explain the repair value**: every fix states the benefit (reduced misuse, smoother onboarding, fewer failed integrations) — a required per-issue field.
 
 ## Workflow
 
 1. Enumerate the documentation surface.
-   - Root README.
-   - `docs/**/*.md`.
-   - API docs, examples, setup guides, generated docs, or user-provided documentation paths.
-   - Contract files such as OpenAPI, protobuf, GraphQL schema, database schema, and TS types.
+   - Root README, `docs/**/*.md`, API docs, examples, setup guides, generated docs, or user-provided doc paths.
+   - Contract files: OpenAPI, protobuf, GraphQL schema, database schema, and TS types.
 
 2. Define audit themes.
-   - Extract 3-8 concrete scenarios from the README, docs, APIs, and configuration.
-   - Examples: quickstart setup, API integration, environment configuration, permissions/security, lifecycle states, domain entities.
-   - Group issues by theme; use a general documentation hygiene bucket only when no theme fits.
+   - Extract 3-8 concrete scenarios from the README, docs, APIs, and configuration (quickstart setup, API integration, environment configuration, permissions/security, lifecycle states, domain entities).
+   - Group issues by theme; use a general documentation-hygiene bucket only when no theme fits.
 
-3. Review each document.
-   - Extract important claims: behavior, commands, defaults, fields, API endpoints, permissions, examples, lifecycle states, and configuration.
+3. Review each document (docs-to-code), driven by `references/checklist.md`.
+   - Use the checklist to extract important claims: behavior, commands, defaults, fields, API endpoints, permissions, examples, lifecycle states, configuration.
    - Search the codebase for the matching implementation or contract.
    - Classify mismatches: missing feature, renamed concept, changed behavior, outdated default, broken command, stale example, wrong API shape, or unsupported claim.
-   - Record each issue with document evidence, implementation evidence, impact, suggested fix, and repair value.
+   - Record each issue with the per-issue fields under Output.
 
-4. Cross-check from implementation back to docs.
-   - Use contract files, configuration files, routes, CLI definitions, public types, and tests to find user-facing behavior that docs omit or describe incorrectly.
-   - Prioritize omissions that would cause setup failure, integration failure, unsafe operation, or wrong mental models.
+4. Cross-check from implementation back to docs (code-to-docs), also driven by `references/checklist.md`.
+   - Use contract files, configuration, routes, CLI definitions, public types, and tests to find user-facing behavior that docs omit or describe incorrectly.
+   - Prioritize omissions that cause setup failure, integration failure, unsafe operation, or wrong mental models.
 
 5. Produce the audit.
-   - Read `references/checklist.md` and `references/output-template.md` before finalizing.
-   - Use `references/output-format.md` for issue fields.
-   - Keep uncertain findings as "needs evidence" rather than overstating them.
+   - Assemble findings into the report; keep uncertain findings as "needs evidence" rather than overstating them.
+   - Read `references/output-template.md` and fill it in before finalizing.
 
 ## Severity
 
@@ -58,30 +65,25 @@ Find stale or implementation-inconsistent claims in README and documentation, wi
 | P3 | Minor wording, formatting, or link issue | Broken low-impact link |
 | Needs evidence | Suspicion without enough proof | Requires further investigation |
 
-## Output Requirements
+Elevate severity by at least one level when the claim touches security, permissions, sandboxing,
+privacy, billing, or destructive operations — a wrong claim there is more dangerous than elsewhere.
 
-For each issue, include:
+## Output
 
-- Severity.
-- Document location.
-- Implementation/config/contract evidence.
-- Impact.
-- Minimal suggested fix.
-- Repair value.
-- Related principle.
+Each issue carries: severity, document location, implementation/config/contract evidence, impact,
+minimal suggested fix, repair value, and related principle. End with a summary verdict (pass /
+conditional pass / fail), counts by severity, and a recommended fix order.
 
-End with a summary verdict:
-
-- Pass / conditional pass / fail.
-- Counts by severity.
-- Recommended fix order.
+The full report shape — issue fields, summary verdict table, and worked examples — lives in
+`references/output-template.md`. Read it and fill it in before finalizing; do not invent a second schema.
 
 ## Parallelization
 
-If the scope is large, split work by:
+If scope is large, split work by documentation type (README / API docs / setup docs / guides),
+module or feature area, or direction (docs-to-code and code-to-docs). When combining parallel
+audits, deduplicate issues and normalize severity.
 
-- Documentation type: README, API docs, setup docs, guides.
-- Module or feature area.
-- Direction: docs-to-code and code-to-docs.
+## Use a different skill when
 
-When combining parallel audits, deduplicate issues and normalize severity.
+- The comparison is doc-vs-doc with no codebase as truth source (internal contradictions, stale sections, duplication) — use `hai-audit-docs-internally`.
+- You are auditing entity/data-model fields against a PRD (which fields exist, store-vs-compute, column-vs-config) — use `entity-model-auditor`.

@@ -23,6 +23,7 @@ Use this template to produce the goal document before execution starts. If the u
 - **Evidence source**: <test, metric, review, artifact, command, user signal, trace, behavior>
 - **Pass criteria**: <clear pass/fail rule>
 - **Confidence note**: <why this evidence is credible, or what proxy is being used>
+- **Judgment owner**: <who or what is authorized to declare it done: system, test, metric, reviewer, user signal, or explicit acceptance>
 
 ## Current State
 - <what exists now>

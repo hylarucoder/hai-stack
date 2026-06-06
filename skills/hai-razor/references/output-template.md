@@ -1,71 +1,77 @@
-# Hai Razor 输出模板
+# Hai Razor Output Template
 
-用于审计需求、流程、字段、状态、模块、抽象或链路的存在必要性。
+Use this template when auditing the existence necessity of requirements, workflow steps, fields,
+states, modules, abstractions, or any chain. It is the canonical output shape referenced from
+`SKILL.md` (Output section); the inline skeleton there is a summary of this. Keep verdicts
+evidence-led. The verdict vocabulary — Keep / Merge / Defer / Delete / Replace / Prove first — must
+match the decision table in `SKILL.md` verbatim. (For a Chinese-led run, see `SKILL.zh_CN.md`.)
 
 ```markdown
 # Hai Razor: <scope>
 
 ## Verdict
-- **结论**: <保留核心 / 合并部分 / 延后部分 / 删除部分 / 替代当前形态 / 先证明>
-- **一句话理由**: <最关键的存在必要性判断>
-- **切割原则**: <这次审计用什么标准判断“值得存在”>
+- **Verdict**: <keep core / merge some / defer some / delete some / replace current shape / prove first>
+- **One-line reason**: <the single most important existence-necessity judgment>
+- **Razor principle used**: <the bar this audit applied for "deserves to exist">
 
-## 审计范围
-- **链路/对象**: <PRD、流程、模块、字段列表、状态机、架构边界等>
-- **当前目标**: <这条链路声称要达成什么>
-- **不审计**: <本次不判断的范围，避免误切>
+## Audit Scope
+- **Chain / targets**: <PRD, flow, module, field list, state machine, architecture boundary, etc.>
+- **Current goal**: <what this chain claims to achieve>
+- **Not audited**: <what this pass does not judge, to prevent mis-cutting>
 
-## 论据
-| 来源 | 看到什么 | 支持/削弱哪个判断 | 置信度 |
-|------|----------|------------------|--------|
-| <PRD/代码/schema/指标/用户流/测试/日志/访谈等> | <具体证据> | <对应的保留、删除、合并、延后、替代或先证明判断> | 高/中/低 |
+## Evidence
+| Source | What was seen | Supports / weakens which verdict | Confidence |
+|--------|---------------|----------------------------------|------------|
+| <PRD/code/schema/metrics/user flow/tests/logs/interviews/...> | <concrete evidence> | <the keep/delete/merge/defer/replace/prove-first verdict it bears on> | High/Med/Low |
 
-> 如果缺少论据，直接说明缺口，并把相关判断降级为“先证明”或“假设”。
+> If evidence is missing, say so directly and downgrade the affected verdict to "Prove first" or "assumption."
 
-## 落实前/落实后对比
-<当建议改变较大的工作流、业务流程、模块链路、状态机、服务边界或架构流时必须填写；小范围局部审计可省略并说明原因。>
+## Before / After
+<Required when the recommendation changes a substantial workflow, process, module chain, state
+machine, service boundary, or architecture flow — a structural cut relocates responsibility, and the
+reviewer must see the new owner. A small local audit may omit this with a stated reason.>
 
-### 落实前
+### Before
 ```mermaid
 flowchart LR
-  A["现有参与者/模块/步骤"] --> B["当前复杂度所在位置"]
+  A["existing actors / modules / steps"] --> B["where complexity currently lives"]
 ```
 
-### 落实后
+### After
 ```mermaid
 flowchart LR
-  A["保留的核心责任"] --> B["新的责任归属或简化后的链路"]
+  A["preserved core responsibility"] --> B["new owner / simplified chain"]
 ```
 
 ## Razor Map
-| 概念 | 声称用途 | 删除后具体坏什么 | 隐藏承担者 | 判断 | 理由 |
-|------|----------|------------------|------------|------|------|
-| <概念> | <它声称解决什么> | <用户目标/不变量/安全/决策/运维是否会坏> | <谁会吸收责任> | 保留/合并/延后/删除/替代/先证明 | <判断依据> |
+| Concept | Claimed purpose | What concretely breaks if deleted | Hidden owner | Verdict | Reason |
+|---------|-----------------|-----------------------------------|--------------|---------|--------|
+| <concept> | <what it claims to solve> | <user goal / invariant / safety / decision / ops impact> | <who absorbs the responsibility> | Keep/Merge/Defer/Delete/Replace/Prove first | <basis for the verdict> |
 
-## 应该砍掉或合并的东西
-| 概念 | 动作 | 最强存活理由 | 为什么仍然不够 |
-|------|------|--------------|----------------|
-| <概念> | 删除/合并/延后/替代/先证明 | <支持它留下的最强论点> | <为什么这个论点不足以证明独立存在> |
+## To Cut or Merge
+| Concept | Action | Strongest survival argument | Why it still falls short |
+|---------|--------|-----------------------------|--------------------------|
+| <concept> | Delete/Merge/Defer/Replace/Prove first | <strongest case for keeping it> | <why that case does not justify independent existence> |
 
-## 必须保留的复杂度
-| 概念 | 保留原因 | 不能误切的边界 |
-|------|----------|----------------|
-| <概念> | <它保护什么目标、不变量、边界或风险> | <删到哪里会出问题> |
+## Complexity To Preserve
+| Concept | Why preserved | Boundary that must not be mis-cut |
+|---------|---------------|-----------------------------------|
+| <concept> | <which goal, invariant, boundary, or risk it protects> | <where cutting starts to cause damage> |
 
-## 剃刀后的形态
-<用短段落或列表描述删减、合并或替代后的更小模型。>
+## Shape After the Razor
+<A short paragraph or list describing the smaller model after deletes, merges, or replacements.>
 
-## 风险和护栏
-- **可能反弹**: <未来哪里最可能把被删概念重新加回来>
-- **误切风险**: <可能删掉了什么真实复杂度>
-- **护栏**: <测试、验收、命名、文档、架构边界或后续证明任务>
+## Risks & Guardrails
+- **Likely rebound**: <where future builders are most likely to reintroduce a deleted concept>
+- **Mis-cut risk**: <real complexity that might have been deleted by mistake>
+- **Guardrails**: <tests, acceptance criteria, naming, docs, architecture boundary, or follow-up proof tasks>
 
-## 下一步
-<如果可以执行，列出 cut list；如果证据不足，列出 prove-first 清单；如果需要落地，转 `hai-goal`。>
+## Next Steps
+<If executable, list the cut list; if evidence is thin, list the prove-first items; if it needs landing, route to `hai-goal`.>
 
-## HTML 交付物
-- **路径**: `/tmp/hai-razor-<slug>/index.html`
-- **生成规则**: 完整审计必须生成；小范围局部审计可跳过，但要说明理由。
-- **内容要求**: 结论、论据、落实前/落实后图、Razor Map、删减/合并清单、必须保留的复杂度、风险、护栏、下一步。
-- **视觉要求**: 克制、清晰、可扫描；不要只把 Markdown 原样塞进 HTML。
+## HTML Artifact
+- **Path**: `/tmp/hai-razor-<slug>/index.html`
+- **When**: required for a full audit; a small local audit may skip it with a stated reason.
+- **Contents**: verdict, evidence, before/after diagrams, Razor Map, cut/merge list, preserved complexity, risks, guardrails, next steps.
+- **Visual**: restrained, clear, scannable — do not just paste the Markdown into HTML.
 ```

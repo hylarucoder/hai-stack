@@ -1,6 +1,7 @@
 ---
 name: hai-idea
-description: Use when the user asks whether an idea is good, worth doing, worth validating, too vague, risky, low-value, or should be killed, postponed, reframed, or turned into a goal. Trigger on 想法是不是好主意, 值不值得做, 要不要做, 是否应该验证, 该不该砍掉.
+description: |
+  Evaluates whether an idea deserves attention and returns a clear verdict — Do / Validate first / Reframe / Defer / Kill — with a dimension-by-dimension scorecard (pain, audience, leverage, timing, cost, risk, proof path), the strongest objection, a stronger reframe, and the cheapest validation test. Use whenever the user wonders if an idea, feature, product, or project is good, worth doing, worth their time, too vague, risky, low-value, a distraction, or a fake need; wants two or more ideas compared and ranked; or asks whether to build, ship, kill, postpone, reframe, or turn it into a goal or PRD — even when they only say it casually and never ask for an evaluation. Trigger on 想法是不是好主意, 我有个想法, 帮我看看这个想法, 这个点子怎么样, 值不值得做, 值得投入吗, 要不要做, 该不该做, 这个需求要不要接, 是否应该验证, 该不该砍掉, 是不是伪需求, 是不是在瞎折腾, 哪个更值得做, and casual English like "should I build this", "is this worth my time", "worth doing? or kill it".
 ---
 
 # Hai Idea
@@ -9,29 +10,13 @@ For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the executi
 
 ## Overview
 
-Use this skill to judge whether an idea deserves attention.
-
-The goal is not to politely praise the idea or produce a bland pros/cons list. The goal is to make the decision clear: do it, validate first, reframe it, defer it, or kill it.
-
-An idea can be interesting and still be the wrong thing to do now. A good evaluation separates excitement, real value, opportunity cost, and proof.
+Judge whether an idea deserves attention and return one clear verdict — Do, Validate first, Reframe, Defer, or Kill — with a scorecard, the strongest objection, a stronger reframe, and the cheapest test that could change the call. When the user hands you two or more ideas, rank them by decision value, not novelty.
 
 ## Core Principle
 
 Make bold judgments, then verify carefully.
 
 Give a clear call, but attach the call to evidence. Do not hide behind "it depends" when the audience is vague, the pain is weak, the cost is high, timing is wrong, or no proof path exists.
-
-## When To Use
-
-Use this skill when the user asks:
-
-- Is this idea good?
-- Is it worth doing?
-- Should we build, write, launch, or spend time on it?
-- Which idea is more worth doing?
-- Does this idea have value, leverage, timing, market fit, or system value?
-- Should this idea become a goal, PRD, experiment, or backlog item?
-- Is this a distraction?
 
 ## Evaluation Frame
 
@@ -50,38 +35,25 @@ Evaluate only the dimensions that affect the decision:
 
 ## Workflow
 
-1. Restate the idea in one sentence.
-   - Remove decoration and excitement.
-   - Name the target user or affected system.
-   - State the expected outcome.
+1. Restate the idea in one sentence. Remove decoration and excitement, name the target user or affected system, and state the expected outcome.
 
-2. Identify the decision.
-   - Is the current decision to do, validate, prioritize, reframe, or kill?
-   - If comparing ideas, rank by decision value rather than novelty.
+2. Identify the decision. Is the current decision to do, validate, prioritize, reframe, or kill? If comparing ideas, rank by decision value rather than novelty.
 
-3. Evaluate the decisive dimensions.
-   - Penalize vague users, fake urgency, high maintenance cost, missing evidence, and high opportunity cost.
-   - Reward sharp pain, repeated use, cheap validation, high leverage, and clear exit criteria.
+3. Evaluate the decisive dimensions from the Evaluation Frame above. Penalize vague users, fake urgency, high maintenance cost, missing evidence, and high opportunity cost. Reward sharp pain, repeated use, cheap validation, high leverage, and clear exit criteria.
 
-4. Make the call.
-   - Use exactly one of: **Do**, **Validate first**, **Reframe**, **Defer**, **Kill**.
-   - Explain the reason directly.
-   - If the idea has potential but is not executable yet, state what must become true first.
+4. Make the call. Pick exactly one verdict from the Verdict Guide below, explain the reason directly, and state your confidence (high / medium / low). If the idea has potential but is not executable yet, state what must become true first.
 
-5. Define the smallest useful validation.
-   - What is the cheapest test that could change the decision?
-   - What signal would prove demand, feasibility, quality, or strategic value?
-   - What result would show the idea is not worth continuing?
+5. State the strongest objection. Name the single best reason not to do this now, even if your verdict is Do — a call you cannot argue against yourself is not yet verified.
 
-6. Choose the next skill if needed.
-   - If the idea is worth executing, use `hai-goal`.
-   - If it needs product requirements, use `hai-prd`.
-   - If it needs bigger strategic challenge, use `geju`.
-   - If it is mainly blocked by naming, use `hai-naming`.
+6. Offer a stronger version. If the current idea is weak or only partly right, give the strongest nearby reframe. Skip only when the idea is already at its best form.
 
-Read `references/output-template.md` before finalizing.
+7. Define the smallest useful validation. What is the cheapest test that could change the decision? What signal would prove demand, feasibility, quality, or strategic value, and what result would show the idea is not worth continuing? Bound it with a timebox when one applies.
+
+Read `references/output-template.md` — it is the canonical output shape — before finalizing.
 
 ## Verdict Guide
+
+The verdict is exactly one of these five calls:
 
 - **Do**: clear audience, real pain, good timing, manageable cost, and enough evidence to proceed.
 - **Validate first**: plausible upside, but a key assumption is unproven.
@@ -93,7 +65,12 @@ Read `references/output-template.md` before finalizing.
 
 - Treating an interesting idea as a good idea.
 - Confusing "I can build it" with "it is worth doing".
-- Ignoring opportunity cost.
 - Accepting vague audiences like "everyone", "developers", or "teams" without a concrete scenario.
-- Treating lack of evidence as neutral. Lack of evidence is itself a risk.
 - Designing the full solution before deciding whether the idea deserves one.
+
+## Use a different skill when
+
+- The decision to build is already made and the user wants phases, todos, or an execution plan: use `hai-goal`.
+- The idea is solid and now needs product requirements: use `hai-prd`.
+- The user wants to challenge scope or ambition without a do/kill verdict — open the frame and think bigger: use `geju`.
+- The problem is purely choosing or fixing a name: use `hai-naming`.
