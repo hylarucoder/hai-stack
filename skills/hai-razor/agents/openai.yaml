@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai Razor"
+  short_description: "Audit what truly deserves to exist"
+  default_prompt: "Use $hai-razor to audit which requirements, modules, fields, states, or workflow steps truly deserve to exist."
