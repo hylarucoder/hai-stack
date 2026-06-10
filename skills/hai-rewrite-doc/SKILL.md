@@ -3,9 +3,10 @@ name: hai-rewrite-doc
 description: |
   Verifies a drifted, patched-over document block by block — against the current conclusions, the
   codebase, and anything else checkable — then rewrites it around the evidence: blocks that
-  survive verification keep their original wording, blocks that fail are deleted, and the result
-  ships as the rewritten document plus a disposition table (keep / rewrite / delete / undecided,
-  each citing the check) and an open-questions list. Use whenever a document has accumulated
+  survive verification keep their original wording, blocks that fail are removed (never repaired
+  into a plausible-looking fix), and the result ships as the rewritten document plus a
+  disposition table (keep / delete / undecided, each citing the check) and an open-questions
+  list. Use whenever a document has accumulated
   messy, doubtful claims through rounds of discussion and the user wants it verified and cleaned,
   not patched again. Trigger on 重写这份文档, 这文档已经烂了, 文档已经不对了, 逐条核实这份文档,
   把不对的内容删掉, 按最新结论重写, 文档跟讨论结论对不上, 别再缝缝补补了, 推倒重写, and English
@@ -47,6 +48,12 @@ anchor, the codebase, a config file, a schema, a runnable command — must actua
 before it is kept or deleted. A claim that cannot be checked is never silently kept or dropped;
 it goes to Open Questions.
 
+**Verification failure means removal, not repair.** The instinct to fix a failing block — to
+explain why it failed and write a corrected version — is exactly how rot enters: the "fix" is a
+guess wearing a fix's clothes, and it reads as authoritative. Remove the block. If its topic
+still needs covering, that coverage comes from the anchor; if the anchor has nothing to say, the
+gap goes to Open Questions for the user to fill deliberately.
+
 ## Workflow
 
 1. **Build the anchor.** Collect the conclusions that are true *now*: decisions made, decisions
@@ -69,9 +76,10 @@ it goes to Open Questions.
 
 5. **Give every block exactly one verdict:**
    - **Keep** — verified still true; reuse it with the original wording and voice.
-   - **Rewrite** — the core survives verification, but details, numbers, or judgment are stale.
-   - **Delete** — verified wrong, contradicts the anchor, or is patch residue nobody can
-     explain. Cite the check that failed.
+   - **Delete** — failed verification: verified wrong, contradicts the anchor, or is patch
+     residue nobody can explain. Cite the check that failed. Do not rewrite it into a version
+     that would pass — remove it; any replacement coverage comes from the anchor, not from the
+     failed block.
    - **Undecided** — unverifiable without the user; park it in Open Questions. Never silently
      keep or drop it.
 
@@ -97,7 +105,7 @@ only when the user explicitly asks to keep the original untouched. The reply car
 # Hai Rewrite Doc: <document>
 ## Anchor               — numbered current conclusions the rewrite derives from
 ## Rewritten Document   — path to the rewritten file (inline only when the document is short)
-## Disposition Table    — old block → Keep / Rewrite / Delete / Undecided, each citing the check it passed or failed
+## Disposition Table    — old block → Keep / Delete / Undecided, each citing the check it passed or failed
 ## Open Questions       — what the anchor cannot settle, and which section each one blocks
 ```
 
@@ -120,12 +128,15 @@ Read `references/output-template.md` before finalizing.
 - Not a patch merger — it never produces "the old doc plus the latest edits".
 - Not a summarizer — the output is a full working document, not a digest.
 - Not a fresh composition — verified-true content is preserved, not paraphrased.
+- Not a repair shop — a failing block is removed, never patched into a passing one.
 - Not silent — nothing from the old document disappears without a line in the disposition table.
 
 ## Common Mistakes
 
 - Writing before the anchor is explicit — the rewrite inherits guesses instead of conclusions.
 - Judging blocks by smell instead of checking them — checkable claims get checked.
+- Repairing a failing block instead of removing it — explaining why it failed and writing a
+  "corrected" version reintroduces guesses; failure means removal.
 - Deleting without citing the check that failed; a Delete verdict is earned, not asserted.
 - Treating "it was discussed once" as consensus; only the latest standing decision counts.
 - Silently dropping blocks instead of recording a Delete verdict.
