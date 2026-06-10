@@ -30,6 +30,10 @@ passes keeps its original wording, and only what fails verification is removed. 
 value is catching the many small wrong claims a messy document hides — one by one, with the
 check on record — not composing a prettier document.
 
+Verification runs at two levels: **macro** (the document's frame — frontmatter/YAML metadata,
+title, stated purpose) and **micro** (every individual point). Both levels carry the same rule:
+fail means removal.
+
 Deliver three things: the rewritten document, a disposition verdict for every block of the old
 one, and the open questions that cannot be verified without the user.
 
@@ -69,10 +73,20 @@ gap goes to Open Questions for the user to fill deliberately.
 3. **Inventory the old document.** Split it into blocks (sections, claims, tables, examples,
    commands, numbers). The inventory exists so that every block gets verified — none skipped.
 
-4. **Verify each block against evidence.** Check it against the anchor first, then against
-   anything else checkable: the code, config, schema, the commands and paths it cites, linked
-   documents. A messy document hides many small wrong claims; go through them one by one instead
-   of skimming. Record what was checked — the disposition table cites it.
+4. **Verify at two levels: macro first, then micro.**
+   - **Macro — the document's frame.** Verify the frontmatter/YAML metadata, title, stated
+     purpose, and top-level framing before anything else. A frame that no longer fits the
+     current scenario, or has simply fallen behind it, fails like any other block: remove it
+     (replacement framing comes from the anchor). And a failed frame casts suspicion downward —
+     content that existed only to serve the dead frame must be re-verified against the anchor,
+     not against the frame.
+   - **Micro — every point, one by one.** Check each block against the anchor, then against
+     anything else checkable: the code, config, schema, the commands and paths it cites, linked
+     documents. List-heavy documents are where rot hides: a list is never verified wholesale —
+     it passes only when every item in it has passed individually, and failed items are removed
+     individually.
+
+   Record what was checked at both levels — the disposition table cites it.
 
 5. **Give every block exactly one verdict:**
    - **Keep** — verified still true; reuse it with the original wording and voice.
@@ -135,6 +149,9 @@ Read `references/output-template.md` before finalizing.
 
 - Writing before the anchor is explicit — the rewrite inherits guesses instead of conclusions.
 - Judging blocks by smell instead of checking them — checkable claims get checked.
+- Passing a list wholesale — a list passes only when every item in it passed individually.
+- Skipping the frame because it "looks structural" — stale frontmatter/YAML metadata fails and
+  gets removed like any other block.
 - Repairing a failing block instead of removing it — explaining why it failed and writing a
   "corrected" version reintroduces guesses; failure means removal.
 - Deleting without citing the check that failed; a Delete verdict is earned, not asserted.

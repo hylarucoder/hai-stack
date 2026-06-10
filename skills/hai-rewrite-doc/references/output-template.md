@@ -31,14 +31,17 @@ Every verdict cites the check it passed or failed — an anchor item, a code/con
 reference, a command that was run, or a linked document. "Looked wrong" is not a check.
 
 A failed check means the block is removed, never repaired into a passing version — replacement
-coverage, when needed, comes from the anchor.
+coverage, when needed, comes from the anchor. Cover both levels: macro rows (frontmatter/YAML
+metadata, title, stated purpose) and micro rows (individual points — list items are dispositioned
+one by one, never as a whole list).
 
 | # | Old block | Verdict | Check (passed / failed) |
 | --- | --- | --- | --- |
-| 1 | <section / claim / table> | Keep | verified against anchor 2 + `src/config.ts:14`; wording preserved |
-| 2 | <section / claim> | Delete | verified wrong: default value contradicts `settings.py:88` |
-| 3 | <section / claim> | Delete | verified wrong: command no longer exists (`make build` removed in a1b2c3) |
-| 4 | <section / claim> | Undecided | unverifiable without user — see Open Question 1 |
+| 1 | frontmatter / YAML metadata | Delete | macro: frame no longer fits the current scenario (anchor 1) |
+| 2 | <section / claim / table> | Keep | verified against anchor 2 + `src/config.ts:14`; wording preserved |
+| 3 | <list item 3 of section X> | Delete | verified wrong: default value contradicts `settings.py:88` |
+| 4 | <section / claim> | Delete | verified wrong: command no longer exists (`make build` removed in a1b2c3) |
+| 5 | <section / claim> | Undecided | unverifiable without user — see Open Question 1 |
 
 ## Open Questions
 
