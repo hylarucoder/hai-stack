@@ -27,12 +27,15 @@ Path: `<absolute path to the rewritten file>`
 
 ## Disposition Table
 
-| # | Old block | Verdict | Reason (cite anchor #) |
+Every verdict cites the check it passed or failed — an anchor item, a code/config/schema
+reference, a command that was run, or a linked document. "Looked wrong" is not a check.
+
+| # | Old block | Verdict | Check (passed / failed) |
 | --- | --- | --- | --- |
-| 1 | <section / claim / table> | Keep | still true under anchor 2; wording preserved |
-| 2 | <section / claim> | Rewrite | idea survives, judgment stale vs anchor 1 |
-| 3 | <section / claim> | Delete | contradicts anchor 3 / unexplainable patch residue |
-| 4 | <section / claim> | Undecided | needs user input — see Open Question 1 |
+| 1 | <section / claim / table> | Keep | verified against anchor 2 + `src/config.ts:14`; wording preserved |
+| 2 | <section / claim> | Rewrite | core holds (anchor 1), but the default value contradicts `settings.py:88` |
+| 3 | <section / claim> | Delete | verified wrong: command no longer exists (`make build` removed in a1b2c3) |
+| 4 | <section / claim> | Undecided | unverifiable without user — see Open Question 1 |
 
 ## Open Questions
 

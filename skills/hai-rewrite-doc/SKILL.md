@@ -1,16 +1,17 @@
 ---
 name: hai-rewrite-doc
 description: |
-  Rewrites a drifted, patched-over document from scratch around an explicit anchor of current
-  conclusions, and returns the full rewritten document plus a disposition table (keep / rewrite /
-  delete / undecided for every block of the old doc) and an open-questions list. Use whenever a
-  document has been through several rounds of discussion and no longer matches what was actually
-  decided — stale judgments, leftover patches, sections nobody remembers the reason for — and the
-  user wants it rewritten rather than patched again. Trigger on 重写这份文档, 这文档已经烂了,
-  文档已经不对了, 推倒重写, 按最新结论重写, 文档跟讨论结论对不上, 别再缝缝补补了, 重新整理这份文档,
-  and English like "rewrite this doc", "this doc has drifted, redo it from our conclusions",
-  "rebaseline this document". For a findings report without a rewrite use hai-audit-docs-internally;
-  if the document is a PRD use hai-prd; if it is a plan or goal document use hai-goal.
+  Verifies a drifted, patched-over document block by block — against the current conclusions, the
+  codebase, and anything else checkable — then rewrites it around the evidence: blocks that
+  survive verification keep their original wording, blocks that fail are deleted, and the result
+  ships as the rewritten document plus a disposition table (keep / rewrite / delete / undecided,
+  each citing the check) and an open-questions list. Use whenever a document has accumulated
+  messy, doubtful claims through rounds of discussion and the user wants it verified and cleaned,
+  not patched again. Trigger on 重写这份文档, 这文档已经烂了, 文档已经不对了, 逐条核实这份文档,
+  把不对的内容删掉, 按最新结论重写, 文档跟讨论结论对不上, 别再缝缝补补了, 推倒重写, and English
+  like "rewrite this doc", "verify this doc and strip what's wrong", "this doc has drifted". For
+  a findings report without a rewrite use hai-audit-docs-internally; if the document is a PRD use
+  hai-prd; if it is a plan or goal document use hai-goal.
 ---
 
 # Hai Rewrite Doc
@@ -19,12 +20,17 @@ For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the executi
 
 ## Overview
 
-Take one document that has rotted through rounds of discussion and patching, and rewrite it as a
-whole from an explicit anchor of current conclusions. The old document is raw material and
-evidence — never the base to patch.
+Take one document that has rotted through rounds of discussion and patching, verify it block by
+block, and rewrite it around what survives. The old document is raw material and evidence —
+never the base to patch.
+
+The default stance toward old content is **preservation**: every block gets verified, what
+passes keeps its original wording, and only what fails verification is removed. The skill's
+value is catching the many small wrong claims a messy document hides — one by one, with the
+check on record — not composing a prettier document.
 
 Deliver three things: the rewritten document, a disposition verdict for every block of the old
-one, and the open questions the anchor cannot settle.
+one, and the open questions that cannot be verified without the user.
 
 ## Core Principle
 
@@ -35,6 +41,11 @@ the document from it.
 
 So the order is fixed: **anchor first, then rewrite**. Never start writing before the anchor is
 written down, and never merge old text into the new document without a verdict.
+
+And verdicts are earned by verification, not by smell. A claim that can be checked — against the
+anchor, the codebase, a config file, a schema, a runnable command — must actually be checked
+before it is kept or deleted. A claim that cannot be checked is never silently kept or dropped;
+it goes to Open Questions.
 
 ## Workflow
 
@@ -48,24 +59,31 @@ written down, and never merge old text into the new document without a verdict.
    we finally decide about X", ask the user pointed questions before writing anything. A rewrite
    from a guessed anchor just produces the next rotten version.
 
-3. **Inventory the old document.** Split it into blocks (sections, claims, tables, examples). For
-   each block ask: is it still true under the anchor? why does it exist? would anyone miss it?
+3. **Inventory the old document.** Split it into blocks (sections, claims, tables, examples,
+   commands, numbers). The inventory exists so that every block gets verified — none skipped.
 
-4. **Give every block exactly one verdict:**
-   - **Keep** — still true and well written; reuse it, preserving the author's voice.
-   - **Rewrite** — the idea survives but the judgment or wording is stale.
-   - **Delete** — contradicts the anchor, or is patch residue nobody can explain.
-   - **Undecided** — cannot be judged without the user; park it in Open Questions. Never silently
+4. **Verify each block against evidence.** Check it against the anchor first, then against
+   anything else checkable: the code, config, schema, the commands and paths it cites, linked
+   documents. A messy document hides many small wrong claims; go through them one by one instead
+   of skimming. Record what was checked — the disposition table cites it.
+
+5. **Give every block exactly one verdict:**
+   - **Keep** — verified still true; reuse it with the original wording and voice.
+   - **Rewrite** — the core survives verification, but details, numbers, or judgment are stale.
+   - **Delete** — verified wrong, contradicts the anchor, or is patch residue nobody can
+     explain. Cite the check that failed.
+   - **Undecided** — unverifiable without the user; park it in Open Questions. Never silently
      keep or drop it.
 
-5. **Re-derive the structure from the anchor**, not from the old table of contents. The old
-   structure is itself an accumulation of patches; reusing it quietly re-imports the rot.
+6. **Decide the structure deliberately.** Keep the old structure when it still serves the anchor
+   — preservation extends to structure, not only wording. Re-derive it from the anchor only when
+   the structure itself is patch residue.
 
-6. **Write the new document in full.** It must stand alone — a reader with no access to the
+7. **Write the new document in full.** It must stand alone — a reader with no access to the
    discussion history should understand it. Match the original language and register unless the
    anchor changes the audience.
 
-7. **Check the rewrite against the anchor, item by item.** Every anchor conclusion is
+8. **Check the rewrite against the anchor, item by item.** Every anchor conclusion is
    represented; everything in the new document traces to the anchor or to a Keep verdict.
    Anything that fails this check gets fixed or moved to Open Questions.
 
@@ -79,7 +97,7 @@ only when the user explicitly asks to keep the original untouched. The reply car
 # Hai Rewrite Doc: <document>
 ## Anchor               — numbered current conclusions the rewrite derives from
 ## Rewritten Document   — path to the rewritten file (inline only when the document is short)
-## Disposition Table    — old block → Keep / Rewrite / Delete / Undecided, each with a reason
+## Disposition Table    — old block → Keep / Rewrite / Delete / Undecided, each citing the check it passed or failed
 ## Open Questions       — what the anchor cannot settle, and which section each one blocks
 ```
 
@@ -101,12 +119,14 @@ Read `references/output-template.md` before finalizing.
 - Not a beautifier — it changes content and judgment, not just formatting.
 - Not a patch merger — it never produces "the old doc plus the latest edits".
 - Not a summarizer — the output is a full working document, not a digest.
+- Not a fresh composition — verified-true content is preserved, not paraphrased.
 - Not silent — nothing from the old document disappears without a line in the disposition table.
 
 ## Common Mistakes
 
 - Writing before the anchor is explicit — the rewrite inherits guesses instead of conclusions.
-- Reusing the old table of contents out of habit.
+- Judging blocks by smell instead of checking them — checkable claims get checked.
+- Deleting without citing the check that failed; a Delete verdict is earned, not asserted.
 - Treating "it was discussed once" as consensus; only the latest standing decision counts.
 - Silently dropping blocks instead of recording a Delete verdict.
 - Rewriting Keep blocks anyway and destroying the author's voice.
