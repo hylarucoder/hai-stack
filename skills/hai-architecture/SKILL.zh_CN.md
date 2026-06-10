@@ -226,7 +226,7 @@
 
 - 请求是给概念、变量、模块或实体**起名/改名** → 用 **hai-naming**。
 - 请求是**全仓重构机会挖掘**——"在整个代码库里找加深机会" → 用 **improve-codebase-architecture**。
-- 请求是**单个 React 组件**的 API、数据流或可测试性 → 用 **component-diagnosis** / **react-component-diagnosis**。
+- 请求是**单个 React 组件**的 API、数据流或可测试性 → 用 **react-component-diagnosis**。
 - 请求是**写或拆 PRD / 产品需求** → 用 **hai-prd**。
 - 请求是**局部代码风格 / clean-code 审查**（函数长度、魔法数字、口味层面的风格） → 用 **clean-code-reviewer**。
 

@@ -4,15 +4,13 @@ description: |
   Produce an evidence-grounded architecture review or design-decision critique — an architecture map,
   the painful complexity center, 3-6 chosen review lenses, ranked findings with file:line evidence,
   why-not alternatives, and a red/blue adversarial check — grounded in John Ousterhout's "A Philosophy
-  of Software Design" (APoSD). Trigger whenever the user asks about architecture or system-design
-  quality: module/package boundaries, abstraction depth, deep vs shallow modules, information hiding,
-  dependency direction, change amplification / blast radius, ownership, error boundaries, or whether to
-  split / merge / combine modules — including 架构审查, 架构 review, 模块边界, 依赖方向, 抽象太浅,
-  复杂度太高, 这个设计合不合理, or an APoSD / Ousterhout / "philosophy of software design" review.
-  Be pushy: trigger even when they only say "is this structure ok", "these modules feel tangled",
-  "should I split this", "review my system design", or "why does touching X force edits everywhere",
-  not just when they say "architecture review". For naming use hai-naming; for whole-repo refactor
-  hunting use improve-codebase-architecture; for a single React component use component-diagnosis.
+  of Software Design" (APoSD). Trigger on any architecture or system-design quality question:
+  module/package boundaries, abstraction depth, deep vs shallow modules, information hiding,
+  dependency direction, change amplification, ownership, error boundaries, or split vs merge —
+  including 架构审查, 架构 review, 模块边界, 依赖方向, 抽象太浅, 复杂度太高, 这个设计合不合理,
+  or an APoSD / Ousterhout review. Be pushy: trigger even when they only say "is this structure
+  ok", "these modules feel tangled", "should I split this", or "why does touching X force edits
+  everywhere".
 ---
 
 # Hai Architecture
@@ -243,7 +241,7 @@ Read `references/output-template.md` before finalizing a markdown review. When t
 
 - The request is about **naming or renaming** a concept, variable, module, or entity → use **hai-naming**.
 - The request is **whole-repo refactor hunting** — "find deepening opportunities across the codebase" → use **improve-codebase-architecture**.
-- The request is **one React component's** API, data flow, or testability → use **component-diagnosis** / **react-component-diagnosis**.
+- The request is **one React component's** API, data flow, or testability → use **react-component-diagnosis**.
 - The request is **writing or scoping a PRD / product requirements** → use **hai-prd**.
 - The request is **local code-style / clean-code review** (function size, magic numbers, taste-level style) → use **clean-code-reviewer**.
 

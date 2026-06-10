@@ -127,6 +127,7 @@ description: |
 ## 什么时候改用别的 skill
 
 - 大胆方向已经选定，现在需要可行性与落地压力测试——用 `goudi` 让它可执行、给落地降风险。geju 和 goudi 是一对配套姿态：geju 打开格局，goudi 把它踩到地上。
+- 问题是这件事到底值不值得做（做 / 砍 / 延后）——用 `hai-idea`。geju 假定事情值得做，只质疑它的范围和高度。
 - 用户想要实现质量审查——用 `clean-code-reviewer`。
 - 用户想要 APoSD 级别的架构 critique（模块边界、抽象深度）——用 `hai-architecture`。
 - 输出物是 PRD——用 `hai-prd`。

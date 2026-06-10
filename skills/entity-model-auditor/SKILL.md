@@ -3,14 +3,12 @@ name: entity-model-auditor
 description: |
   Audit and design entity data models into a field-by-field markdown report: a target-vs-current
   audit table per entity, a classification of every field (table column / config blob /
-  runtime-computed / remove), a grouped migration change list, and design-decision justifications
-  — each field run through five cuts (exist? store or compute? column or config? system or content?
-  what form to store?).
+  runtime-computed / remove), a grouped migration change list, and design-decision justifications.
 
   Use this whenever the user reasons about what fields an entity should have or where they should
   live, even if they never say "audit": designing a data model, checking PRD fields against a DB
-  schema or backend types, deciding store-vs-compute or column-vs-jsonb, judging whether a field
-  is redundant, spotting a bloated/over-modeled entity, or planning a schema migration. Trigger
+  schema, deciding store-vs-compute or column-vs-jsonb, spotting a bloated or over-modeled
+  entity, or planning a schema migration. Trigger
   even when they just paste a PRD, schema, or Prisma/SQLAlchemy model and ask "are the fields
   right", "what's missing", "should this be a column or jsonb", "is this field even needed". Also
   on 实体建模, 数据模型审核, 字段审查, 字段太多了, 这个表设计得对吗, PRD 对齐, 模型设计,

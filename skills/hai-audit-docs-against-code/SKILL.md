@@ -34,7 +34,10 @@ directions — docs-to-code and code-to-docs — and reports findings as a sever
 ## Workflow
 
 1. Enumerate the documentation surface.
-   - Root README, `docs/**/*.md`, API docs, examples, setup guides, generated docs, or user-provided doc paths.
+   - When the user names targets — a single file or any batch of files — audit exactly those.
+     Do not widen the scope to sibling docs or a whole directory uninvited.
+   - Only when no target is given, default to the standard surface: root README, `docs/**/*.md`,
+     API docs, examples, setup guides, generated docs.
    - Contract files: OpenAPI, protobuf, GraphQL schema, database schema, and TS types.
 
 2. Define audit themes.
@@ -87,3 +90,4 @@ audits, deduplicate issues and normalize severity.
 
 - The comparison is doc-vs-doc with no codebase as truth source (internal contradictions, stale sections, duplication) — use `hai-audit-docs-internally`.
 - You are auditing entity/data-model fields against a PRD (which fields exist, store-vs-compute, column-vs-config) — use `entity-model-auditor`.
+- The document has drifted from the discussion conclusions and the user wants it rewritten, not a mismatch report — use `hai-rewrite-doc`.

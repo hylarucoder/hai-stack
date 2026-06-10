@@ -10,15 +10,15 @@ ast-grep uses tree-sitter to parse code into AST, enabling precise pattern match
 
 ## Project Configuration
 
-项目级扫描需要 `sgconfig.yml` 配置文件：
+Project-level batch scanning via `ast-grep scan` requires an `sgconfig.yml` config file; one-off pattern tests via `ast-grep run -p '<pattern>'` do not.
 
 ```yaml
-# sgconfig.yml (项目根目录)
+# sgconfig.yml (project root)
 ruleDirs:
-  - rules          # 规则目录，递归加载所有 .yml 文件
+  - rules          # rule directory; recursively loads all .yml files
 ```
 
-典型项目结构：
+Typical project structure:
 
 ```
 my-project/
@@ -30,20 +30,20 @@ my-project/
 └── src/
 ```
 
-运行项目扫描：
+Run a project scan:
 
 ```bash
-ast-grep scan              # 自动查找 sgconfig.yml
-ast-grep scan --config path/to/sgconfig.yml  # 指定配置
+ast-grep scan              # auto-discovers sgconfig.yml
+ast-grep scan --config path/to/sgconfig.yml  # explicit config
 ```
 
-> **注意**: `ast-grep scan` 命令必须有 `sgconfig.yml`，而 `ast-grep run -p` 可单独使用。
+> **Note**: the `ast-grep scan` command requires `sgconfig.yml`, while `ast-grep run -p` works standalone.
 
 ## Rule Workflow
 
-### Lint Rule (常见)
+### Lint Rule (most common)
 
-只检查不修复，用于 CI/编辑器提示：
+Check-only, no fix — for CI / editor diagnostics:
 
 ```yaml
 # rules/no-console-log.yml
@@ -55,13 +55,13 @@ rule:
   pattern: console.log($$$ARGS)
 ```
 
-验证：
+Validate:
 
 ```bash
 ast-grep scan -r rules/no-console-log.yml src/
 ```
 
-### Rewrite Rule (可选)
+### Rewrite Rule (optional)
 
 To auto-fix, add ONE `fix:` line to the lint rule above — nothing else changes:
 
@@ -76,7 +76,7 @@ Apply the fix (note the `--update-all` flag — `scan` without it only reports):
 ast-grep scan -r rules/no-console-log.yml --update-all src/
 ```
 
-### 开发流程 (canonical workflow — follow these steps)
+### Development Flow (canonical workflow — follow these steps)
 
 1. **Explore** the pattern via CLI before writing YAML: `ast-grep -p 'console.log($ARG)' src/`. Inspect node types with `--debug-query ast` when the pattern won't match:
    ```bash

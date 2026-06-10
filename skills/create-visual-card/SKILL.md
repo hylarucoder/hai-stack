@@ -1,7 +1,7 @@
 ---
 name: create-visual-card
 description: |
-  Generate a magazine-quality visual card as a single self-contained HTML file (embedded CSS, Swiss-grid + bold-type design system), then screenshot it to a shareable PNG and hand back both files. Use this whenever the user wants content turned into a visually rich card or shareable image — even if they don't say the word "card." Triggers: make/create/generate/design a visual card, info card, knowledge card, quote card, social card, summary/takeaway/cheatsheet card; 信息卡, 知识卡片, 金句卡, 语录卡, 做张卡片, 设计一张卡片, 把这段内容做成卡片, 把要点排成一张图, 总结成一张图, 小红书封面, 公众号封面图, 朋友圈配图. Prefer this over generic HTML/frontend skills when the goal is one decorative card image (for multi-section reports use hai-visual-report).
+  Generate a magazine-quality visual card as a single self-contained HTML file (embedded CSS, Swiss-grid + bold-type design system), then screenshot it to a shareable PNG and hand back both files. Use this whenever the user wants content turned into a visually rich card or shareable image — even if they don't say the word "card." Triggers: make/create/generate/design a visual card, info card, knowledge card, quote card, social card, summary/takeaway/cheatsheet card; 信息卡, 知识卡片, 金句卡, 语录卡, 做张卡片, 设计一张卡片, 把这段内容做成卡片, 把要点排成一张图, 总结成一张图, 小红书封面, 公众号封面图, 朋友圈配图. Prefer this over generic HTML/frontend skills when the goal is one decorative card image. When the content is a multi-section report instead of a single card, use hai-visual-report.
 ---
 
 # Create Visual Card

@@ -4,13 +4,12 @@ description: |
   Produces 3-5 candidate names with one recommended final name, the three-stage reasoning
   trail behind it (research-stage / top-of-head / final-after-reading), and — for reviews — a
   priority-ordered rename list with old->new and migration scope. Use when the user asks how
-  to name or rename anything (concept, variable, function, module, type, file, product surface,
-  domain entity, event, workflow state, or abstraction), wants a naming review or audit, or
-  says a name feels vague, stiff, misleading, inconsistent, too long, too generic, or hard to
-  choose — even if they only mention it in passing while reviewing code. Be pushy: trigger on
-  "what should I call this", "better name for X", "this name sucks", "rename this var", "whats
-  a good name", "review my naming", and when every candidate feels awkward (usually a design-
-  boundary problem, not a vocabulary one). Chinese triggers: 起名, 命名, 取名, 改名, 名字不好,
+  to name or rename anything (concept, variable, function, prop, module, type, file, domain
+  entity, event, or abstraction), wants a naming review or audit, or says a name feels vague,
+  stiff, misleading, inconsistent, too long, too generic, or hard to choose — even if they only
+  mention it in passing while reviewing code. Be pushy: trigger on "what should I call this",
+  "better name for X", "this name sucks", "rename this var", "whats a good name", "review my
+  naming". Chinese triggers: 起名, 命名, 取名, 改名, 名字不好,
   这个叫什么好, 取个名字, 换个名, 这名字怎么样, 名字太长, 命名规范, 命名审查, 变量名/函数名怎么取.
 ---
 
@@ -194,6 +193,8 @@ Mechanical checks the principles above do not already cover — use as checks, n
 - The concept is a data-model field question (should it exist, store vs compute, column vs jsonb)
   — route to **entity-model-auditor**.
 - The user actually wants a bold direction change, not a name — route to **geju**.
+- The question is a whole React component's API surface, not one prop or identifier — route to
+  **react-component-diagnosis**; naming a single prop stays here.
 
 ## What this skill is NOT
 

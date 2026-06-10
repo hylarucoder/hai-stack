@@ -9,9 +9,8 @@ description: |
   phrasings: 可视化一下, 做个可视化, 做成网页, 做个网页版, 把这个评审做成网页, 做成一页 HTML, 输出 HTML,
   做个汇报页/展示页, 做成 PPT 样子的网页, 弄个好看点的报告, 整理成一份报告页面, 带 mermaid 图的报告,
   render this as a page/webpage, make it visual/interactive, turn my analysis into slides-like html,
-  dashboard of this (including typos like html repot / viz report). Prefer this over create-visual-card
-  when the content is multi-section and needs structure, tradeoffs, route, risk, and evidence rather
-  than a single shareable card.
+  dashboard of this. When the user wants a single shareable card instead of a multi-section
+  report, use create-visual-card.
 ---
 
 # Hai Visual Report

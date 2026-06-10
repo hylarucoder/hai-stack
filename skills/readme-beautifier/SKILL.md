@@ -1,139 +1,143 @@
 ---
 name: readme-beautifier
-description: README 美化器。接收结构混乱、格式不统一的 README（或同类 markdown 项目文档如 CONTRIBUTING.md、docs/index.md、项目说明.md），输出结构清晰、标题层级正确、列表/代码块/表格格式一致、视觉专业的完整版本，并附一段改动摘要——内容不增不减，只改结构和格式。当用户请求美化、整理、排版、格式化、修复 README，或只是把一份杂乱的 README 丢给你说"太乱了""看下""帮我弄一下"时使用，即使没有明确说"美化"二字。触发词：美化 README、README 美化、整理 README、README 排版、README 格式化、README 太乱了、看下我这个 README、beautify README、fix/format/clean up/tidy/polish/reformat README、reorganize readme、my readme looks messy/ugly、make my README look professional。
+description: |
+  Produces a restructured, consistently formatted, professional-looking README (or similar markdown project doc such as CONTRIBUTING.md, docs/index.md, 项目说明.md) plus a short change summary — content untouched: nothing added, nothing removed, only structure and formatting fixed (heading hierarchy, lists, code blocks, tables, spacing). Use whenever the user asks to beautify, tidy, reorganize, reformat, format, or fix a README — and be pushy: fire even when the user just dumps a messy README and says 太乱了 / 看下 / 帮我弄一下, without ever saying "beautify". Triggers: 美化 README, README 美化, 整理 README, README 排版, README 格式化, README 太乱了, 看下我这个 README, beautify README, fix/format/clean up/tidy/polish/reformat README, reorganize readme, my readme looks messy/ugly, make my README look professional.
 ---
 
-# README 美化器
+# Readme Beautifier
 
-接收一份结构混乱或格式不统一的 README，输出结构清晰、格式一致、视觉专业的版本。
+## Overview
 
-## 核心原则
+Take a README whose structure is messy or whose formatting is inconsistent, and deliver a version with clear structure, consistent formatting, and a professional look.
 
-- **内容不增不减**：不编造信息，不删除有效内容，只做结构和格式层面的改善
-- **忠于原意**：保留作者的表达意图和语气，不做风格改写
-- **最小改动**：能小修的不大改，能调格式的不重写
-- **尊重原文，不强行套用**：原文已有的合理选择（章节顺序、是否加徽章/目录/中英文空格）一律保留，缺什么也不主动补——下面的检查清单据此判断，不再逐项重复这条原则
+## Core Principles
 
-## 美化流程
+- **Content unchanged — nothing added, nothing removed**: do not invent information, do not delete valid content; improve only at the structure and formatting level.
+- **Faithful to the original meaning**: preserve the author's intent and tone; do not rewrite for style.
+- **Minimal change**: prefer a small fix over a big one; prefer adjusting formatting over rewriting.
+- **Respect the original; never force-fit**: keep every reasonable choice the original already made (section order, whether to include badges / a TOC / spaces between Chinese and English), and do not proactively add what is missing — apply the checklist below under this principle instead of restating it per item.
+
+## Workflow
 
 ```
-1. 读取 README → 理解项目是什么、面向谁
-2. 诊断问题 → 逐项检查下面的检查清单
-3. 制定方案 → 列出要改什么、为什么改
-4. 执行美化
-5. 给出摘要
+1. Read the README → understand what the project is and who it is for
+2. Diagnose problems → check every item in the checklist below
+3. Plan the changes → list what to change and why
+4. Apply the beautification
+5. Deliver the summary
 ```
 
-第 4、5 步按下面「输出格式」交付。
+Deliver steps 4 and 5 in the format defined under "Output" below.
 
-## 检查清单
+## Checklist
 
-按优先级从高到低排列。每项只在确实存在问题时才修复。
+Ordered from highest to lowest priority. Fix an item only when the problem actually exists.
 
-### 1. 标题层级
+### 1. Heading hierarchy
 
-- h1 只出现一次，用于项目名
-- 层级连续递增，不跳级（h1 → h3 是错的）
-- 同级标题的粒度对齐（不要一个 h2 是"安装"，另一个 h2 是"如何在 Docker 里用 volume 挂载配置文件"）
+- Use h1 exactly once, for the project name.
+- Keep levels consecutive — never skip (h1 → h3 is wrong).
+- Align granularity across same-level headings (do not have one h2 be "Install" and another h2 be "How to mount config files with a Docker volume").
 
-### 2. 一句话描述
+### 2. One-line description
 
-- 项目名下方紧跟一句话说清楚这个项目是什么、做什么
-- 用 `>` 引用块或普通段落均可，但要有
-- 如果原文已有但藏在中间，提到开头
+- Place a single sentence right under the project name that says what the project is and does.
+- A `>` blockquote or a plain paragraph both work, but it must exist.
+- If the original has one buried in the middle, move it to the top.
 
-### 3. 段落结构
+### 3. Section structure
 
-- 每个章节有明确的职责，不混杂多个主题
-- 常见的合理顺序：是什么 → 快速开始 → 用法 → 配置 → 目录结构 → 贡献 → 许可证
-- 空章节（只有标题没有内容）删掉或补一句说明
+- Give every section a single clear responsibility; do not mix topics.
+- A common sensible order: what it is → quick start → usage → configuration → directory layout → contributing → license.
+- Delete empty sections (heading with no content) or add one explanatory sentence.
 
-### 4. 列表格式
+### 4. List formatting
 
-- 同一个列表内的条目格式统一（全用 `-` 或全用 `*`，不混用）
-- 嵌套缩进一致（2 空格或 4 空格，不混用）
-- 有序列表用 `1.` 自动编号而非手动编号（避免插入条目后序号错乱）
-- 列表前后有空行
+- Keep item markers uniform within one list (all `-` or all `*`, never mixed).
+- Keep nesting indentation consistent (2 spaces or 4 spaces, never mixed).
+- Use `1.` auto-numbering for ordered lists instead of manual numbers (avoids renumbering when items are inserted).
+- Surround lists with blank lines.
 
-### 5. 代码块
+### 5. Code blocks
 
-- 所有代码块标注语言（```bash / ```yaml / ```text 等）
-- 行内代码用反引号包裹：命令、文件名、变量名、包名
-- 命令示例中去掉不必要的 `$` 前缀（除非需要区分输入和输出）
-- 多行命令用代码块而非行内代码
+- Tag every code block with a language (```bash / ```yaml / ```text, etc.).
+- Wrap inline code in backticks: commands, file names, variable names, package names.
+- Strip unnecessary `$` prefixes from command examples (unless input must be distinguished from output).
+- Put multi-line commands in code blocks, not inline code.
 
-### 6. 表格
+### 6. Tables
 
-- 列对齐（不要求像素级对齐，但至少视觉上整齐）
-- 表头有意义
-- 如果表格只有两列且内容简短，考虑是否列表更合适
-- 如果列表有三个以上平行维度的信息，考虑是否表格更合适
+- Align columns (pixel-perfect alignment is not required, but they should look tidy).
+- Make headers meaningful.
+- If a table has only two columns of short content, consider whether a list fits better.
+- If a list carries three or more parallel dimensions of information, consider whether a table fits better.
 
-### 7. 链接与引用
+### 7. Links and references
 
-- 链接文字有意义（不要 "点击这里"、"链接"）
-- 检查明显的死链格式（`[text]()` 空链接、`[text](TODO)` 占位符）
-- 相对路径与绝对路径的使用是否合理
+- Make link text meaningful (no "click here", no "link").
+- Check for obviously broken link formats (`[text]()` empty links, `[text](TODO)` placeholders).
+- Check that relative vs absolute paths are used sensibly.
 
-### 8. 空白与分隔
+### 8. Whitespace and separation
 
-- 标题前空一行
-- 段落之间空一行
-- 不要连续两个以上空行
-- 中英文之间加空格（原文大部分已加则统一补齐，大部分没加则跟随原文）
-- 列表和段落之间空一行
-- 文件以单个换行符结尾（无多余空行，也不缺换行）
+- Put a blank line before headings.
+- Put a blank line between paragraphs.
+- Never allow more than two consecutive blank lines.
+- Spaces between Chinese and English: if the original mostly has them, fill in the gaps for consistency; if it mostly does not, follow the original.
+- Put a blank line between lists and paragraphs.
+- End the file with a single newline (no trailing blank lines, no missing newline).
 
-### 9. 徽章（Badges）
+### 9. Badges
 
-- 原文有徽章才整理：统一放在项目名下方、一句话描述上方
-- 徽章之间用空格分隔，不换行
+- Tidy badges only if the original has them: gather them right below the project name and above the one-line description.
+- Separate badges with spaces, no line breaks.
 
-### 10. 目录（TOC）
+### 10. Table of contents (TOC)
 
-- 章节超过 6 个时建议添加目录，6 个以内不加
-- 目录用链接列表，指向对应标题的锚点
-- 如果原文已有目录但锚点失效，修复而非删除
+- Suggest adding a TOC when there are more than 6 sections; do not add one at 6 or fewer.
+- Build the TOC as a link list pointing to the headings' anchors.
+- If the original already has a TOC with broken anchors, repair it rather than delete it.
 
-## 不做的事
+## Do not
 
-- **不加装饰性元素**：不加 emoji、分隔线、花哨的 ASCII art，除非原文已有
-- **不改技术内容**：不改命令、不改配置项、不改代码示例的逻辑
-- **不翻译**：不把中文翻成英文，也不反过来
-- **不补内容**：如果缺少"贡献指南"章节，不自动补一个——只在摘要里提一句"可以考虑补充"
-- **不改文件名**：输出的还是 README.md，不改成别的
+- **Do not add decorative elements**: no emoji, no horizontal rules, no fancy ASCII art, unless the original already has them.
+- **Do not change technical content**: do not alter commands, configuration options, or the logic of code examples.
+- **Do not translate**: do not turn Chinese into English or the reverse.
+- **Do not add content**: if a "Contributing" section is missing, do not auto-create one — only mention in the summary that it could be added.
+- **Do not rename the file**: the output stays README.md, never something else.
 
-## 换用别的技能
+## Use a different skill when
 
-本技能只管格式和结构，不管内容对不对。用户说"检查我的 README"时要区分意图：
+This skill handles only formatting and structure, never whether the content is correct. Content-level problems are out of scope — this skill never changes meaning. When the user says "check my README", distinguish the intent:
 
-- 想确认 README 写的内容跟代码/配置/接口是否一致、有没有过时 → 用 **hai-audit-docs-against-code**
-- 想做文档内部一致性 / 陈旧内容审查（不跟代码对比）→ 用 **hai-audit-docs-internally**
-- 想美化排版、统一格式、理顺结构 → 就是本技能
+- The user wants to confirm the README matches the code / config / API, or whether it is stale → use **hai-audit-docs-against-code**.
+- The user wants an internal-consistency / stale-content audit of the docs themselves (internal contradictions, no code comparison) → use **hai-audit-docs-internally**.
+- The user wants the content rewritten around the current conclusions because the doc drifted through rounds of discussion → use **hai-rewrite-doc**.
+- The user wants the layout beautified, the formatting unified, the structure straightened out → this skill.
 
-## 输出格式
+## Output
 
-常规路径：直接输出美化后的完整 README 内容，然后附一段简短摘要。
+Normal path: output the complete beautified README content directly, followed by a short summary.
 
 ```markdown
-<完整的美化后 README.md 内容>
+<full beautified README.md content>
 
 ---
 
-**美化摘要**
+**Beautification summary**
 
-改动了以下几点：
+Changed the following:
 - ...
 
-建议后续补充（不在本次改动范围内）：
+Suggested follow-up additions (out of scope for this pass):
 - ...
 ```
 
-README 已经规范、无需改动时的输出格式（检查摘要），见 [references/output-template.md](references/output-template.md) 末尾。两种完整交付模板都在该文件，定稿前对照一遍。
+For the output format when the README is already clean and needs no changes (the check summary), see the end of [references/output-template.md](references/output-template.md). Both complete delivery templates live in that file — compare against it before finalizing.
 
-## 边界情况
+## Edge cases
 
-- **README 非常短（< 10 行）**：只做格式修复，不人为撑篇幅
-- **README 非常长（> 300 行）**：优先修复结构问题，格式问题只修最刺眼的
-- **多语言 README**：只美化当前文件，不动其他语言版本
-- **README 本身就很好**：不强行改，按 references/output-template.md 末尾的「检查摘要」格式回复
+- **Very short README (< 10 lines)**: only fix formatting; do not pad the length.
+- **Very long README (> 300 lines)**: fix structural problems first; fix only the most glaring formatting problems.
+- **Multilingual README**: beautify only the current file; do not touch other language versions.
+- **README is already good**: do not force changes; reply using the "check summary" format at the end of references/output-template.md.

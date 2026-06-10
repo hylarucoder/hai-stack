@@ -148,6 +148,8 @@ Diagnosis** for a fresh goal document.
   design, then return.
 - **hai-tdd** — a phase is ready to implement. The goal document hands off to test-driven execution
   inside each phase.
+- **hai-rewrite-doc** — the drifted artifact is a general document, not a plan or goal document.
+  This skill's rewrite mode owns plans; anchor-first rewriting of everything else lives there.
 
 ## What this skill is NOT
 

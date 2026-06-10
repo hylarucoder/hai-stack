@@ -5,9 +5,9 @@ description: Produces a severity-rated (高/中/低) Clean Code findings report 
 
 # Clean Code Review
 
-基于《代码整洁之道》原则，聚焦 7 个高收益检查维度。
+Grounded in the principles of *Clean Code* (Robert C. Martin), focused on 7 high-leverage check dimensions.
 
-## Review Workflow
+## Workflow
 
 ```
 Review Progress:
@@ -21,83 +21,85 @@ Severity reflects maintainability impact, so the report leads with what to fix f
 
 When the codebase is primarily Python or Go, consult [references/language-patterns.md](references/language-patterns.md) for language-specific smells before finalizing.
 
-## 核心原则：功能保留
+## Core Principle: Behavior Preservation
 
-所有建议仅针对**实现方式**优化——绝不建议改变代码的功能、输出或行为。
+Every suggestion targets only **how the code is implemented** — never suggest changing the code's functionality, output, or behavior.
 
 ## Check Dimensions
 
 These are the detection signals and thresholds — the load-bearing decision criteria. Full ❌/✅ worked examples for dimensions 1–5 live in [references/detailed-examples.md](references/detailed-examples.md); read it when you need richer cases or are unsure a finding qualifies.
 
-### 1. 命名问题【有意义的命名】
+### 1. Naming Problems (Meaningful Names)
 
-检查标志：
-- `data1`, `temp`, `result`, `info`, `obj` 等无意义命名
-- 同一概念多种命名（`get`/`fetch`/`retrieve` 混用）
-- 布尔值缺少 `is`/`has`/`can`/`should` 前缀
+Detection signals:
+- Meaningless names like `data1`, `temp`, `result`, `info`, `obj`
+- Multiple names for the same concept (mixing `get`/`fetch`/`retrieve`)
+- Booleans missing an `is`/`has`/`can`/`should` prefix
 
 ```typescript
 const data1 = fetchUser();   // ❌  →  const userProfile = fetchUser();  // ✅
 ```
 
-### 2. 函数问题【函数短小 + SRP】
+### 2. Function Problems (Small Functions + SRP)
 
-检查标志：
-- 函数超过 **100 行**
-- 参数超过 **3 个**（改用参数对象）
-- 函数做多件事（违反单一职责）
-- 函数名暗示只读却有副作用
+Detection signals:
+- Function exceeds **100 lines**
+- More than **3 parameters** (use a parameter object instead)
+- Function does multiple things (violates Single Responsibility)
+- Function name implies read-only but it has side effects
 
-### 3. 重复问题【DRY】
+### 3. Duplication (DRY)
 
-检查标志：
-- 相似的 if-else 结构
-- 相似的数据转换/错误处理逻辑
-- Copy-paste 痕迹
+Detection signals:
+- Similar if-else structures
+- Similar data-transformation / error-handling logic
+- Copy-paste traces
 
-### 4. 过度设计【YAGNI】
+### 4. Over-Engineering (YAGNI)
 
-检查标志：
-- 从未为 true 的 `if (config.legacyMode)` 分支（死代码）
-- 只有一个实现的接口
-- 过度防御 / 无用的 try-catch 或 if-else
+Detection signals:
+- `if (config.legacyMode)` branches that are never true (dead code)
+- Interfaces with only one implementation
+- Over-defensive / useless try-catch or if-else
 
-### 5. 魔法数字【避免硬编码】
+### 5. Magic Numbers (Avoid Hardcoding)
 
-检查标志：
-- 裸露数字无解释（`retryCount > 3`、`setTimeout(fn, 86400000)`）
-- 硬编码字符串、状态码、时间常量
+Detection signals:
+- Bare numbers with no explanation (`retryCount > 3`, `setTimeout(fn, 86400000)`)
+- Hardcoded strings, status codes, time constants
 
 ```typescript
 if (retryCount > 3) {}   // ❌  →  const MAX_RETRY_COUNT = 3; if (retryCount > MAX_RETRY_COUNT) {}  // ✅
 ```
 
-### 6. 结构清晰度【可读性优先】
+### 6. Structural Clarity (Readability First)
 
-检查标志：
-- 嵌套三元运算符
-- 过度紧凑的单行代码
-- 过深的条件嵌套（**> 3 层**）——优先用 guard clauses 早返回
+Detection signals:
+- Nested ternary operators
+- Overly compact one-liners
+- Deep conditional nesting (**> 3 levels**) — prefer guard clauses with early returns
 
-### 7. 项目规范【一致性】
+### 7. Project Conventions (Consistency)
 
-检查标志：
-- import 顺序混乱（外部库 vs 内部模块）
-- 函数声明风格不一致
-- 命名规范不统一（camelCase vs snake_case 混用）
+Detection signals:
+- Disordered import order (external libraries vs internal modules)
+- Inconsistent function declaration style
+- Inconsistent naming conventions (mixing camelCase and snake_case)
 
 > [!TIP]
-> 项目规范应参照 `CLAUDE.md` `AGENTS.md` 或项目约定的编码标准。
+> Source project conventions from the project root `CLAUDE.md` / `AGENTS.md`, plus linter configs (`.eslintrc`, `.prettierrc`, ruff/flake8 config).
 
 ## Severity Levels
 
-| 级别 | 标准 |
-|------|------|
-| 高 | 影响可维护性/可读性，应立即修复 |
-| 中 | 有改进空间，建议修复 |
-| 低 | 代码气味，可选优化 |
+Use 高 / 中 / 低 as the literal severity labels in the report — they are part of the output contract.
 
-## Output Format
+| Level | Criteria |
+|------|------|
+| 高 (High) | Hurts maintainability/readability; fix immediately |
+| 中 (Medium) | Room for improvement; fix recommended |
+| 低 (Low) | Code smell; optional optimization |
+
+## Output
 
 Emit a Summary first, then P-numbered findings sorted by severity, then patterns worth keeping and any tests needed to refactor safely. Skeleton (read [references/output-template.md](references/output-template.md) before finalizing — it is the full, canonical shape):
 
@@ -105,39 +107,39 @@ Emit a Summary first, then P-numbered findings sorted by severity, then patterns
 # Clean Code Review: <scope>
 
 ## Summary
-<最高杠杆的可维护性风险，一段话>
+<the highest-leverage maintainability risk, one paragraph>
 
 ## Findings
 
-### P1: <问题简述>
+### P1: <issue title>
 - **原则**: <命名 / 单一职责 / DRY / YAGNI / 魔法数字 / 结构清晰度 / 项目规范>
-- **位置**: `文件:行号`
+- **位置**: `<file>:<line>`
 - **级别**: 高 / 中 / 低
-- **问题**: <为什么让代码更难读、改、测>
-- **建议**: <保留行为的重构方向>
-- **Why now**: <不改的风险>
+- **问题**: <what makes the code harder to read, change, or test>
+- **建议**: <behavior-preserving refactor direction>
+- **Why now**: <risk if left as-is>
 
 ## Good Patterns To Keep
-- <值得保留的实现选择>
+- <implementation choice worth preserving>
 
 ## Test Gaps
-- <重构期间为保护行为所需的测试>
+- <tests needed to protect behavior during the refactor>
 ```
 
 ## References
 
 - [references/output-template.md](references/output-template.md) — the full canonical report shape; read before finalizing output.
-- [references/detailed-examples.md](references/detailed-examples.md) — full ❌/✅ worked cases for the 5 core dimensions (命名、函数、DRY、YAGNI、魔法数字); read when you need richer cases or are unsure a finding qualifies.
-- [references/language-patterns.md](references/language-patterns.md) — TypeScript/JavaScript、Python、Go 各自的语言特定坏味道; consult when the codebase is primarily one of these languages.
+- [references/detailed-examples.md](references/detailed-examples.md) — full ❌/✅ worked cases for the 5 core dimensions (naming, functions, DRY, YAGNI, magic numbers); read when you need richer cases or are unsure a finding qualifies.
+- [references/language-patterns.md](references/language-patterns.md) — language-specific smells for TypeScript/JavaScript, Python, and Go; consult when the codebase is primarily one of these languages.
 
 ## Multi-Agent Parallel
 
 When parallelizing across subagents, split the work along one axis, then dedupe and reconcile severity ratings when merging:
 
-1. **按检查维度** — 7 维度各一个 agent
-2. **按模块/目录** — 不同模块各一个 agent
-3. **按语言** — TypeScript、Python、Go 各一个 agent
-4. **按文件类型** — 组件、hooks、工具函数、类型定义
+1. **By check dimension** — one agent per dimension (7 total)
+2. **By module/directory** — one agent per module
+3. **By language** — one agent each for TypeScript, Python, Go
+4. **By file type** — components, hooks, utility functions, type definitions
 
 ## Use a different skill when
 
@@ -146,4 +148,4 @@ This skill reports file/function-level Clean Code findings and does not modify c
 - **Architecture / module boundaries / abstraction quality** (system-level, APoSD) → `hai-architecture`.
 - **Eliminating `any` / TypeScript type safety** → `ts-type-safety-reviewer`.
 - **Actually applying the refactors** (not just reporting) → `code-simplifier`.
-- **React component design** (使用者 API、数据流、可测试性) → `component-diagnosis` / `react-component-diagnosis`.
+- **React component design** (consumer API, data flow, testability) → `component-diagnosis` / `react-component-diagnosis`.

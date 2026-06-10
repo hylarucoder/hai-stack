@@ -135,6 +135,7 @@ description: |
 - 别扭的名字其实是模块边界 / 抽象问题（立场 #6）——转交 **hai-architecture**，先改设计再改名。
 - 这个概念其实是数据模型字段问题（要不要存在、存还是算、列还是 jsonb）——转交 **entity-model-auditor**。
 - 用户真正想要的是大方向的改变，而不是一个名字——转交 **geju**。
+- 问题是整个 React 组件的 API 表面，而不是某一个 prop 或标识符——转交 **react-component-diagnosis**；给单个 prop 起名仍归本 skill。
 
 ## 这个 skill 不是什么
 

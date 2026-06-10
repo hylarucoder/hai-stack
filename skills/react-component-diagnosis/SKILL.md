@@ -1,255 +1,272 @@
 ---
 name: react-component-diagnosis
-description: 深度诊断单个 React 组件的架构设计质量，产出一份结构化体检报告：7 维度评分卡（使用者 API、数据流、可测试性、可扩展性、性能、心智模型、边界契约，每维 1-5 分 + 代码证据）、设计亮点、按 P0/P1/P2 分级且标注工作量的改进建议——所有评分基于逐行读代码后发现的具体问题（useMemo 依赖、useEffect cleanup、类型断言、每帧重复计算等），而非扫一眼目录得出的表面评价。当用户请求组件诊断、组件设计审查、架构分析、组件体检、组件 API/props 设计评估时使用，即使没说出"诊断"二字也应主动触发：用户指向一个组件目录或 .tsx 文件问"这个组件设计得怎么样"、"帮我看看这个组件"、"这个写得怎么样"、"是否需要重构"、"为什么每次都 re-render"、"useEffect 写对了吗"、"props 设计合理吗"，或用英文说 "review this React component"、"is this component well designed"、"audit this component"、"should I refactor this component" 时，都应触发。触发词：组件诊断、组件体检、架构审查、设计分析、组件评审、组件 API、props 设计、组件要不要重构、component diagnosis、component review、react component audit。
+description: |
+  Produces a structured diagnosis report on one React component's design: a 7-dimension scorecard
+  (consumer API, data flow, testability, extensibility, performance, mental model, boundaries &
+  contracts — each scored 1-5 with code evidence), design highlights, and P0/P1/P2 recommendations
+  with effort estimates, every score grounded in line-by-line reading. Be pushy: trigger whenever
+  the user points at a component directory or .tsx file and asks about its design, quality,
+  props/API, or re-render behavior, even casually — 组件诊断, 组件体检, 架构审查, 设计分析, 组件评审,
+  组件 API, props 设计, 组件要不要重构, "这个组件设计得怎么样", "帮我看看这个组件", "为什么每次都
+  re-render", "useEffect 写对了吗", "props 设计合理吗", "review this React component", "is this
+  component well designed", "audit this component", "should I refactor this component".
 ---
 
-# React 组件架构诊断器
+# React Component Architecture Diagnosis
 
-从 7 个维度对一个 React 组件做深度体检，输出结构化诊断报告。
+## Overview
 
-## 诊断流程
+Run a deep health check on a single React component across 7 dimensions and output a structured diagnosis report.
 
-```
-1. 定位组件 → 读取全部源文件（含子目录）。真正的缺陷常藏在子文件（hook/util）里，跳过任何文件就会漏掉
-2. 概括职责 → 用一句话说清这个组件做什么
-3. 逐维度评分 → 回答核心问题 + 打分 + 找代码证据
-4. 交叉检查 → 回看每个维度，补齐遗漏的具体问题
-5. 套用模板 → 评分卡 + 亮点 + 改进建议
-```
-
-贯穿全流程的一条原则：**只报告逐行读代码才能发现的问题，而非扫目录就能得出的表面结构评价。** 完整的诊断原则见文末「诊断原则」。
-
-## 七个诊断维度
-
-每个维度回答一个核心问题，评分 1-5：
-
-| 分数 | 含义 |
-|------|------|
-| 5 | 教科书级别，可作为团队标杆 |
-| 4 | 扎实，有小瑕疵但不影响大局 |
-| 3 | 及格，能用但有明显改进空间 |
-| 2 | 问题突出，会拖慢开发或埋坑 |
-| 1 | 需要重写或大幅重构 |
-
-打分基于具体代码证据，不凭感觉。同一个问题只在最相关的那个维度扣分——重复计分会拉偏综合分，让一个根因看起来像好几个独立问题。
-
-### 1. 使用者 API（Consumer API）
-
-**核心问题：调用者能用最少的认知负担做出正确的事情吗？**
-
-审视点：
-- **最小可用示例**：需要传几个 props 才能跑起来？超过 3 个必填 props 就要警惕
-- **默认值覆盖**：80% 的使用场景能零配置吗？检查是否有合理的 defaultProps 或参数默认值
-- **类型自文档化**：Props 类型名是否让人一看就懂？是否区分了"输入类型"（宽松）和"内部类型"（严格）？
-- **错误引导**：传错参数时，报错信息是否指向修复方向？还是只丢一个 TypeScript 类型错误？
-- **API 一致性**：命名风格是否统一？回调是 `onXxx` 还是 `handleXxx`？状态 prop 和控制 prop 是否有清晰的模式？
+## Workflow
 
 ```
-高分信号：
-- 有 preset/factory 函数简化常见配置
-- Props 接口有 JSDoc 但不啰嗦
-- 导出了 estimate/utility 函数让调用者可以做计算
-
-低分信号：
-- 必填 props 超过 5 个
-- 布尔 props 用双重否定（noDisableX）
-- 同一个概念有多种配置方式且文档没说清楚选哪个
+1. Locate the component → read ALL source files (including subdirectories). Real defects often
+   hide in sub-files (hooks/utils); skipping any file means missing them
+2. Summarize the responsibility → state in one sentence what the component does
+3. Score each dimension → answer the core question + score + find code evidence
+4. Cross-check → revisit every dimension and fill in missed concrete issues
+5. Apply the template → scorecard + highlights + recommendations
 ```
 
-### 2. 数据流（Data Flow）
+One principle runs through the whole flow: **report only problems that can be found by reading code line by line, never surface-level structural judgments a directory scan would produce.** The full set of principles is in "Diagnosis Principles" at the end.
 
-**核心问题：数据从 props 到渲染输出，变换链条是否清晰、单向、可追踪？**
+## The Seven Dimensions
 
-审视点：
-- **变换层次**：数据经过几层变换？每层的输入/输出类型是否明确？
-- **单向性**：是否存在反向回调修改上游数据？是否有隐式双向绑定？
-- **副作用隔离**：纯计算和副作用（API 调用、DOM 操作、定时器）是否分开？
-- **中间产物**：变换中间的数据是否可序列化、可 console.log 调试？
-- **状态位置**：状态放在了正确的层级吗？有没有不必要地提升或下沉？
+Each dimension answers one core question, scored 1-5:
 
-```
-高分信号：
-- 纯计算逻辑抽到独立函数/文件，不依赖 React
-- 数据变换像流水线：A → B → C → render，每步类型明确
-- useEffect 只处理真正的副作用，不用来做数据派生
+| Score | Meaning |
+|-------|---------|
+| 5 | Textbook-level; can serve as the team benchmark |
+| 4 | Solid; minor flaws that don't affect the big picture |
+| 3 | Passing; usable but with clear room for improvement |
+| 2 | Prominent problems; will slow development or plant traps |
+| 1 | Needs a rewrite or major refactor |
 
-低分信号：
-- 组件内部有复杂的 useEffect 链互相触发
-- 同一份数据在多个 state 里冗余存储
-- props 传入后被 useState 复制一份（同步 props→state 反模式）
-```
+Base every score on concrete code evidence, not gut feel. Deduct for a given problem in the single most relevant dimension only — double-counting skews the overall score and makes one root cause look like several independent problems.
 
-### 3. 可测试性（Testability）
+### 1. Consumer API
 
-**核心问题：能否在不启动浏览器的情况下验证核心逻辑？**
+**Core question: can callers do the right thing with the least cognitive load?**
 
-审视点：
-- **纯函数比例**：核心业务逻辑中，纯函数占多少？纯函数可以直接单测，不需要 mock
-- **依赖可替换性**：外部依赖（API、存储、第三方库）是否可以在测试中替换？
-- **测试存在性**：有没有测试？测试覆盖的是核心路径还是边边角角？
-- **测试粒度**：测试粒度是否匹配代码变更频率？变更最频繁的模块测试是否最厚？
-- **边界覆盖**：空输入、零值、越界、异常路径是否有覆盖？
+Inspection points:
+- **Minimal working example**: how many props must be passed to get it running? More than 3 required props is a warning sign
+- **Default coverage**: can 80% of use cases run with zero configuration? Check for sensible defaultProps or parameter defaults
+- **Self-documenting types**: do props type names make sense at a glance? Is there a distinction between "input types" (loose) and "internal types" (strict)?
+- **Error guidance**: when a wrong argument is passed, does the error message point toward the fix, or does it just throw a TypeScript type error?
+- **API consistency**: is the naming style uniform? Are callbacks `onXxx` or `handleXxx`? Is there a clear pattern for state props vs. control props?
 
 ```
-高分信号：
-- 核心逻辑在独立文件中，import 进来就能测
-- 测试文件和源文件同目录或紧邻
-- 测试描述读起来像规格说明
+High-score signals:
+- Preset/factory functions simplify common configurations
+- The props interface has JSDoc without being verbose
+- Estimate/utility functions are exported so callers can do calculations
 
-低分信号：
-- 所有逻辑都在组件里，必须 render 才能测
-- 测试严重依赖 mock，mock 比真实代码还多
-- 没有测试
+Low-score signals:
+- More than 5 required props
+- Boolean props with double negatives (noDisableX)
+- Multiple ways to configure the same concept, with no docs on which to pick
 ```
 
-### 4. 可扩展性（Extensibility）
+### 2. Data Flow
 
-**核心问题：加一个新功能，需要改几个文件、碰几个层？**
+**Core question: from props to render output, is the transformation chain clear, unidirectional, and traceable?**
 
-审视点：
-- **扩展模式**：新增一个变体/类型，是"加一个 case"还是"改一条 if-else 链"？
-- **组合优于继承**：是否用组合（children、render props、hooks）而非继承来扩展？
-- **插件点**：是否有明确的扩展点（handler 数组、策略模式、slot 模式）？
-- **变更影响面**：改一个功能是否会波及到不相关的代码？
-- **过度设计检测**：是否为了"未来可能"加了现在用不到的抽象？
-
-```
-高分信号：
-- 用 discriminated union 做类型分发
-- 渲染策略通过 handler/plugin 数组扩展
-- 新增功能只需要加文件，不需要改现有文件
-
-低分信号：
-- 一个巨大的 switch/if-else 散落在多处
-- 加一个小功能要改 5+ 个文件
-- 有 3 层抽象但只有 1 个实现
-```
-
-### 5. 性能（Performance）
-
-**核心问题：在典型使用场景下，是否存在不必要的计算或渲染？**
-
-审视点：
-- **渲染效率**：是否存在不必要的 re-render？Context 是否拆分得当？
-- **计算位置**：重计算发生在渲染循环内还是外？是否用了 useMemo/useCallback 在正确的地方？
-- **异步处理**：大计算是否异步/延迟执行？是否会阻塞首次渲染？
-- **内存**：是否有未清理的订阅、定时器、事件监听？useEffect cleanup 是否真正取消了进行中的异步操作？
-- **Bundle 影响**：依赖的第三方库体积如何？是否可以 tree-shake？
-
-#### 帧级分析（动画/渲染密集型组件必做）
-
-如果组件涉及动画、视频渲染、或高频更新（如 60fps），需要做帧级分析——追踪每一帧渲染中实际执行了哪些计算：
-
-- **每帧都会执行的代码**：在 useCurrentFrame() 驱动的渲染中，哪些 useMemo 的依赖每帧都变？这些 useMemo 内部做了多重的计算？
-- **对象创建频率**：每帧是否生成新的数组/对象引用？如果连续帧计算结果相同（如动画未推进），是否有跳过机制？
-- **GC 压力**：高频创建的临时对象（如 token 数组切片、字符串 split 结果）是否可以缓存或复用？
-- **DOM 节点数**：是否一次性渲染了大量 DOM 节点（如为每个音效帧创建 Sequence），而非按需渲染？
-- **依赖链稳定性**：useMemo/useEffect 的依赖中是否包含引用不稳定的对象？即使用 useMemo 包裹了上游计算，重建条件是否足够严格？
+Inspection points:
+- **Transformation layers**: how many layers of transformation does the data pass through? Are the input/output types of each layer explicit?
+- **Unidirectionality**: do reverse callbacks mutate upstream data? Is there implicit two-way binding?
+- **Side-effect isolation**: are pure computation and side effects (API calls, DOM operations, timers) separated?
+- **Intermediate products**: is the data mid-transformation serializable and console.log-debuggable?
+- **State placement**: is state at the right level? Any unnecessary lifting or sinking?
 
 ```
-高分信号：
-- 重计算一次性完成，结果缓存
-- Context 按更新频率分离，避免全树刷新
-- 大依赖动态 import
-- 连续帧结果相同时有 early return 或引用复用
+High-score signals:
+- Pure computation extracted into standalone functions/files, with no React dependency
+- Data transformation reads like a pipeline: A → B → C → render, each step with explicit types
+- useEffect handles only true side effects, never data derivation
 
-低分信号：
-- 每帧/每次渲染都重新计算不变的数据
-- 一个 Context 包含所有状态，任何变化全树 re-render
-- useEffect 里有未清理的 setInterval
-- 每帧 split/slice/concat 创建大量临时对象且无缓存
-- useEffect cleanup 只设 cancelled flag 但不取消异步操作
+Low-score signals:
+- Complex useEffect chains inside the component triggering each other
+- The same data stored redundantly in multiple states
+- Props copied into useState after arrival (the props→state sync anti-pattern)
 ```
 
-### 6. 心智模型（Mental Model）
+### 3. Testability
 
-**核心问题：一个新人打开代码，能否在 10 分钟内理解"这个东西怎么工作"？**
+**Core question: can the core logic be verified without launching a browser?**
 
-审视点：
-- **文件即职责**：文件名是否能让人猜到里面做什么？
-- **命名一致性**：同一个概念在不同文件里叫同一个名字吗？
-- **目录结构**：目录组织是按职责还是按技术类型？有没有模糊的 utils/helpers 垃圾桶？
-- **依赖方向**：是否单向？有没有循环依赖？
-- **意外最小化**：有没有"意外的文件"或"意外的行为"——打开一个文件发现做的事和文件名完全不搭？
-
-```
-高分信号：
-- 文件名就是职责描述
-- 依赖图是 DAG（有向无环）
-- README 或目录结构让人一眼看懂全貌
-
-低分信号：
-- 有 utils.ts 超过 200 行
-- 同一个概念在不同地方叫不同名字
-- 文件之间循环 import
-```
-
-### 7. 边界与契约（Boundaries & Contracts）
-
-**核心问题：这个组件和外部世界的接触面有多小、契约有多严格？**
-
-审视点：
-- **入口校验**：在哪一层做校验？是否只在入口做一次，之后内部信任数据？
-- **外部依赖封装**：对第三方库的依赖是否有封装层？换库的成本有多大？
-- **类型边界**：跨层传递数据时，是否有类型变换而不是一路透传同一个类型？
-- **类型安全**：是否存在 `as`、`as never`、`as any` 类型断言？每处断言的原因是什么——是设计缺陷还是外部类型不匹配的权宜之计？
-- **校验一致性**：不同入口路径（组件入口 vs 工具函数直接调用）的校验是否一致？是否存在绕过 schema 校验的路径？
-- **错误边界**：组件崩溃是否有 ErrorBoundary 兜底？错误是否有分级处理？
-- **接触点计数**：这个组件和外部世界有几个接触点？每个接触点是否可以独立替换？
+Inspection points:
+- **Pure-function ratio**: what fraction of the core business logic is pure functions? Pure functions can be unit-tested directly, no mocks needed
+- **Dependency replaceability**: can external dependencies (API, storage, third-party libraries) be replaced in tests?
+- **Test existence**: are there tests? Do they cover the core paths or only the fringes?
+- **Test granularity**: does test granularity match code change frequency? Are the most frequently changed modules the most thickly tested?
+- **Boundary coverage**: are empty input, zero values, out-of-range values, and exception paths covered?
 
 ```
-高分信号：
-- Zod/schema 在入口校验，内部不做防御性编程
-- 第三方库通过 adapter/wrapper 封装，只暴露需要的接口
-- 类型随层级变化：InputProps → ResolvedProps → RenderData
-- 零 `as any`，少量 `as` 断言且有明确理由
+High-score signals:
+- Core logic lives in standalone files; import it and test it directly
+- Test files sit in the same directory as, or right next to, the source
+- Test descriptions read like a specification
 
-低分信号：
-- 每个函数都做 null check 和类型断言
-- 第三方库的类型直接出现在公开 API 里
-- 没有 ErrorBoundary，一个子组件崩溃整个页面白屏
-- 多处 `as never` / `as any` 强制转型，原因不明
-- 不同调用路径对同一数据的校验不一致
+Low-score signals:
+- All logic lives inside the component; rendering is required to test anything
+- Tests lean heavily on mocks; the mocks outnumber the real code
+- No tests
 ```
 
-## 报告格式
+### 4. Extensibility
 
-按这个骨架输出，按组件规模裁剪。完整字段说明和示例见 [references/output-template.md](references/output-template.md)，定稿前对照一遍。
+**Core question: to add a new feature, how many files must change and how many layers must be touched?**
+
+Inspection points:
+- **Extension pattern**: is adding a new variant/type "add a case" or "modify an if-else chain"?
+- **Composition over inheritance**: is extension done through composition (children, render props, hooks) rather than inheritance?
+- **Plugin points**: are there explicit extension points (handler arrays, strategy pattern, slot pattern)?
+- **Change blast radius**: does changing one feature ripple into unrelated code?
+- **Over-engineering detection**: are there abstractions added for "maybe in the future" that nothing uses today?
+
+```
+High-score signals:
+- Discriminated unions used for type dispatch
+- Render strategies extended through handler/plugin arrays
+- New features only require adding files, never editing existing ones
+
+Low-score signals:
+- One giant switch/if-else scattered across multiple places
+- Adding a small feature requires changing 5+ files
+- 3 layers of abstraction with only 1 implementation
+```
+
+### 5. Performance
+
+**Core question: under typical usage, is there unnecessary computation or rendering?**
+
+Inspection points:
+- **Render efficiency**: are there unnecessary re-renders? Is Context split appropriately?
+- **Computation placement**: does heavy computation happen inside or outside the render loop? Are useMemo/useCallback used in the right places?
+- **Async handling**: are big computations async/deferred? Do they block the first render?
+- **Memory**: any uncleaned subscriptions, timers, or event listeners? Does the useEffect cleanup actually cancel in-flight async operations?
+- **Bundle impact**: how heavy are the third-party dependencies? Can they be tree-shaken?
+
+#### Frame-Level Analysis (mandatory for animation/render-heavy components)
+
+If the component involves animation, video rendering, or high-frequency updates (e.g. 60fps), do frame-level analysis — trace which computations actually execute on every frame render:
+
+- **Code that runs every frame**: in useCurrentFrame()-driven rendering, which useMemo dependencies change every frame? How heavy is the computation inside those useMemos?
+- **Object creation frequency**: are new array/object references created every frame? When consecutive frames produce identical results (e.g. the animation hasn't advanced), is there a skip mechanism?
+- **GC pressure**: can high-frequency temporary objects (token array slices, string split results) be cached or reused?
+- **DOM node count**: are large numbers of DOM nodes rendered all at once (e.g. one Sequence per sound-effect frame) rather than on demand?
+- **Dependency-chain stability**: do useMemo/useEffect dependencies include reference-unstable objects? Even with the upstream computation wrapped in useMemo, are the rebuild conditions strict enough?
+
+```
+High-score signals:
+- Heavy computation done once, result cached
+- Context split by update frequency, avoiding whole-tree refreshes
+- Large dependencies dynamically imported
+- Early return or reference reuse when consecutive frames produce identical results
+
+Low-score signals:
+- Unchanging data recomputed every frame/render
+- One Context holding all state, so any change re-renders the whole tree
+- An uncleaned setInterval inside useEffect
+- split/slice/concat creating piles of uncached temporary objects every frame
+- useEffect cleanup only sets a cancelled flag without cancelling the async operation
+```
+
+### 6. Mental Model
+
+**Core question: can a newcomer opening the code understand "how this thing works" within 10 minutes?**
+
+Inspection points:
+- **File as responsibility**: can you guess what a file does from its name?
+- **Naming consistency**: is the same concept called the same name across different files?
+- **Directory structure**: is the directory organized by responsibility or by technical type? Is there a vague utils/helpers junk drawer?
+- **Dependency direction**: unidirectional? Any circular dependencies?
+- **Surprise minimization**: any "surprise files" or "surprise behavior" — opening a file and finding it does something entirely unrelated to its name?
+
+```
+High-score signals:
+- File names are responsibility descriptions
+- The dependency graph is a DAG (directed acyclic)
+- A README or the directory structure conveys the whole picture at a glance
+
+Low-score signals:
+- A utils.ts over 200 lines
+- The same concept named differently in different places
+- Circular imports between files
+```
+
+### 7. Boundaries & Contracts
+
+**Core question: how small is this component's contact surface with the outside world, and how strict are the contracts?**
+
+Inspection points:
+- **Entry validation**: at which layer is validation done? Is it done once at the entry, with the internals trusting the data afterward?
+- **Third-party encapsulation**: are third-party library dependencies wrapped? How costly would swapping a library be?
+- **Type boundaries**: when data crosses layers, is there a type transformation, or is one type passed straight through?
+- **Type safety**: are there `as`, `as never`, `as any` type assertions? What is the reason behind each — a design flaw, or a stopgap for mismatched external types?
+- **Validation consistency**: is validation consistent across entry paths (component entry vs. direct utility-function calls)? Are there paths that bypass schema validation?
+- **Error boundaries**: is there an ErrorBoundary catching component crashes? Are errors handled with severity tiers?
+- **Touchpoint count**: how many touchpoints does this component have with the outside world? Can each one be replaced independently?
+
+```
+High-score signals:
+- Zod/schema validation at the entry; no defensive programming inside
+- Third-party libraries wrapped behind adapters, exposing only the needed interface
+- Types evolve per layer: InputProps → ResolvedProps → RenderData
+- Zero `as any`; few `as` assertions, each with a clear reason
+
+Low-score signals:
+- Every function does null checks and type assertions
+- Third-party library types appear directly in the public API
+- No ErrorBoundary; one child component crash white-screens the whole page
+- Multiple `as never` / `as any` force-casts with unclear reasons
+- Inconsistent validation of the same data across different call paths
+```
+
+## Output
+
+Follow this skeleton, trimmed to the component's scale. Full field descriptions and examples are in [references/output-template.md](references/output-template.md); check against it before finalizing.
 
 ```markdown
-# 组件诊断报告：{组件名}
-> {一句话概括组件职责}
+# Component Diagnosis Report: {component name}
+> {one-sentence summary of the component's responsibility}
 
-## 评分卡       —— 7 维 + 综合，★ 评分 + 一句话评价
-## 逐维度分析   —— 每维优点/不足，引用 文件名:行号，说清"是什么 + 为什么是问题"
-## 亮点         —— 2-3 个值得推广的具体设计，引用代码位置
-## 改进建议     —— 按 P0(尽快改) / P1(建议优化) / P2(锦上添花) 分级，
-                    每条含 问题 / 影响 / 建议(给方向不写代码) / 工作量(小<1h / 中1-4h / 大>4h)
-## 架构图（可选）—— 多层结构时用文本图或 mermaid 画数据流
+## Scorecard              — 7 dimensions + overall, ★ ratings + a one-line verdict each
+## Per-Dimension Analysis — strengths/weaknesses per dimension, citing filename:line,
+                            stating "what it is + why it is a problem"
+## Highlights             — 2-3 concrete designs worth spreading, with code locations
+## Recommendations        — graded P0 (fix soon) / P1 (worth optimizing) / P2 (nice to have),
+                            each with Problem / Impact / Suggestion (give direction, no code) /
+                            Effort (small <1h / medium 1-4h / large >4h)
+## Architecture Diagram (optional) — for multi-layer structures, draw the data flow as a
+                            text diagram or mermaid
 ```
 
-## 诊断原则
+## Diagnosis Principles
 
-- **证据驱动**：每个评分都要有具体代码位置支撑，不凭印象打分。引用格式：`文件名:行号` 或 `文件名` 中的 `函数名`
-- **深入代码**：表面的结构夸奖（"分层清晰"、"命名不错"）任何人扫一眼目录就能得出，价值有限。真正有用的诊断来自逐行阅读关键路径后才能发现的问题，重点查这几类：
-  - 追踪数据在每一层的具体变换，看变换链是否清晰单向
-  - 检查 useMemo/useEffect 的依赖列表是否真的稳定（漏依赖、引用每次都变）
-  - 追踪类型断言（`as`、`as never`、`as any`）出现的位置和背后的设计妥协
-  - 识别每帧/每次渲染中不必要的重复计算
-  - 检查 cleanup 函数是否真正清理了异步操作，而不只是设个 flag
-- **上下文感知**：一个 50 行的工具组件和一个 2000 行的复合组件，标准不同。简单组件不需要四层流水线，复杂组件没有测试才是问题
-- **不重复计分**：同一个问题只在最相关的维度扣分。重复计分会拉偏综合分，让一个根因看起来像好几个独立问题
-- **建议可执行**：改进建议要具体到"怎么改"，而不是"应该更好"
-- **先褒后贬**：先说亮点，再说问题。好的设计值得被看见
-- **扣分要有底气，给高分也要有证据**：找到了具体代码问题才扣分，不是"感觉可以更好"就扣；给 5 分也不能因为"没发现问题"就默认——5 分意味着在这个维度上找到了值得学习的设计模式
+- **Evidence-driven**: back every score with a concrete code location; never score by impression. Citation format: `filename:line`, or `functionName` in `filename`
+- **Go deep into the code**: surface-level structural praise ("clean layering", "nice naming") is what anyone gets from scanning a directory, and is of limited value. Truly useful diagnosis comes from problems only a line-by-line read of the critical paths can reveal. Focus on these categories:
+  - Trace the concrete data transformation at each layer; check the chain is clear and unidirectional
+  - Check whether useMemo/useEffect dependency lists are actually stable (missing deps, references that change every time)
+  - Trace where type assertions (`as`, `as never`, `as any`) appear and the design compromise behind each
+  - Identify unnecessary repeated computation per frame / per render
+  - Check that cleanup functions actually cancel async operations, not just set a flag
+- **Context-aware**: a 50-line utility component and a 2000-line composite component deserve different standards. A simple component doesn't need a four-stage pipeline; a complex component with no tests is the real problem
+- **No double-counting**: deduct for a given problem only in the most relevant dimension. Double-counting skews the overall score and makes one root cause look like several independent problems
+- **Actionable suggestions**: recommendations must be concrete about "how to change it", not "it should be better"
+- **Praise before criticism**: state highlights first, then problems. Good design deserves to be seen
+- **Earn the deduction — and earn the high score**: deduct only when a concrete code problem is found, never because "it feels like it could be better"; likewise never give a 5 by default just because "no problems were found" — a 5 means you found design patterns in that dimension worth learning from
 
-## 什么时候用别的 skill
+## Use a different skill when
 
-这个 skill 聚焦**单个 React 组件**的 7 维深度诊断。如果用户真正要的是别的，先转过去：
+This skill focuses on the 7-dimension deep diagnosis of a **single React component**. If the user actually wants something else, route there first:
 
-- **整个代码库 / 模块边界 / 抽象深浅 / 依赖方向**（不是单组件）→ `hai-architecture`（基于 APoSD 的系统级架构审查）或 `improve-codebase-architecture`（全仓找重构机会）
-- **只想消除 `any` / 收紧类型** → `ts-type-safety-reviewer`
-- **通用代码坏味道 / Clean Code 体检**（命名、函数过长、重复、过度设计、魔法数字）→ `clean-code-reviewer`
-- **只想把最近改动的代码简化整理一下** → `code-simplifier`
+- **The target is not a React component** — a util file, a service, a hook library, or a generic module → `clean-code-reviewer`
+- **Whole codebase / module boundaries / abstraction depth / dependency direction** (not a single component) → `hai-architecture` (APoSD-based system-level architecture review) or `improve-codebase-architecture` (whole-repo refactor hunting)
+- **Only eliminating `any` / tightening types** → `ts-type-safety-reviewer`
+- **Generic code smells / Clean Code health check** (naming, long functions, duplication, over-engineering, magic numbers) → `clean-code-reviewer`
+- **Naming a single prop/variable** → `hai-naming`; this skill scores the whole component API surface, not one identifier
+- **Just simplifying and tidying recently changed code** → `code-simplifier`
 
-判定信号：用户指向单个组件目录/.tsx 并问设计质量 → 留在这里；范围一旦扩到多模块、跨文件架构或全仓重构 → 转 architecture 类 skill。
+Decision signal: the user points at a single component directory/.tsx and asks about design quality → stay here; the moment the scope expands to multiple modules, cross-file architecture, or whole-repo refactoring → route to an architecture skill.

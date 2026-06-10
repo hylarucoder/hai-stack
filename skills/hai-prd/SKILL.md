@@ -154,7 +154,9 @@ output only the mode(s) relevant to the question.
 Routing away from a PRD is the Need-PRD decision itself — see the table in **Mode 1**. In short:
 settle execution phases/todos in **hai-goal**, module boundaries and tradeoffs in
 **hai-architecture**, whether the idea is worth doing in **hai-idea**, a code/bugfix/test-first
-task in **hai-tdd**, and documentation consistency in the **doc-audit** skills. Return to PRD work
+task in **hai-tdd**, what fields an entity should have and where they live in
+**entity-model-auditor**, documentation consistency in the **doc-audit** skills, and an
+anchor-first rewrite of a drifted non-PRD document in **hai-rewrite-doc**. Return to PRD work
 only when a product boundary and provable acceptance actually need to exist.
 
 ## What this skill is NOT

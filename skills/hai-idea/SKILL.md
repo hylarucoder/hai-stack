@@ -1,7 +1,7 @@
 ---
 name: hai-idea
 description: |
-  Evaluates whether an idea deserves attention and returns a clear verdict — Do / Validate first / Reframe / Defer / Kill — with a dimension-by-dimension scorecard (pain, audience, leverage, timing, cost, risk, proof path), the strongest objection, a stronger reframe, and the cheapest validation test. Use whenever the user wonders if an idea, feature, product, or project is good, worth doing, worth their time, too vague, risky, low-value, a distraction, or a fake need; wants two or more ideas compared and ranked; or asks whether to build, ship, kill, postpone, reframe, or turn it into a goal or PRD — even when they only say it casually and never ask for an evaluation. Trigger on 想法是不是好主意, 我有个想法, 帮我看看这个想法, 这个点子怎么样, 值不值得做, 值得投入吗, 要不要做, 该不该做, 这个需求要不要接, 是否应该验证, 该不该砍掉, 是不是伪需求, 是不是在瞎折腾, 哪个更值得做, and casual English like "should I build this", "is this worth my time", "worth doing? or kill it".
+  Evaluates whether an idea deserves attention and returns a clear verdict — Do / Validate first / Reframe / Defer / Kill — with a dimension-by-dimension scorecard, the strongest objection, a stronger reframe, and the cheapest validation test. Use whenever the user wonders if an idea, feature, product, or project is good, worth doing, worth their time, a distraction, or a fake need; wants two or more ideas compared and ranked; or asks whether to build, ship, kill, postpone, or reframe — even when said casually, never as an explicit "evaluate this". Trigger on 想法是不是好主意, 我有个想法, 帮我看看这个想法, 这个点子怎么样, 值不值得做, 值得投入吗, 要不要做, 该不该做, 这个需求要不要接, 是否应该验证, 该不该砍掉, 是不是伪需求, 是不是在瞎折腾, 哪个更值得做, and casual English like "should I build this", "is this worth my time", "worth doing? or kill it".
 ---
 
 # Hai Idea
@@ -10,7 +10,7 @@ For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the executi
 
 ## Overview
 
-Judge whether an idea deserves attention and return one clear verdict — Do, Validate first, Reframe, Defer, or Kill — with a scorecard, the strongest objection, a stronger reframe, and the cheapest test that could change the call. When the user hands you two or more ideas, rank them by decision value, not novelty.
+Return one clear verdict per idea, never a survey of considerations. When the user hands you two or more ideas, rank them by decision value, not novelty.
 
 ## Core Principle
 

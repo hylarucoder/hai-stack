@@ -71,6 +71,7 @@ Beyond the template's per-field shape, hold these constraints:
 ## Route elsewhere when
 
 - The goal is to open the frame, escape compatibility fear, and think bigger — use `geju`. (`goudi` grounds an already opened frame; it does not open one.)
+- The question is whether the idea deserves doing at all — use `hai-idea`. `goudi` pressure-tests how to land a proposal, not whether it should exist.
 - Behavior needs to be driven by tests — use `hai-tdd`.
 - The output needs full phases, todos, and execution tracking — use `hai-goal`.
 

@@ -10,7 +10,7 @@ For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the executi
 
 ## Overview
 
-Audit one document or a documentation set from the inside, then deliver a prioritized findings report with repair decisions. The source of truth is the document's own goal, structure, terminology, claims, and cross-references — not the codebase.
+The source of truth is the document's own goal, structure, terminology, claims, and cross-references — not the codebase.
 
 ## Core Principle
 
@@ -19,7 +19,8 @@ A document is a coherent argument, and the audit reads it as one. Judge it for c
 ## Workflow
 
 1. Identify the document scope.
-   - Single document, related docs set, PRD pack, README plus docs, or generated spec set.
+   - The scope is exactly what the user points at: a single file, an arbitrary batch of files, a
+     PRD pack, README plus docs, or a generated spec set. Do not widen it to a directory uninvited.
    - Note the document's apparent audience, purpose, and expected decision/use.
 
 2. Build a document map.
@@ -67,3 +68,4 @@ A document is a coherent argument, and the audit reads it as one. Judge it for c
 - The truth source is the code: use `hai-audit-docs-against-code` to check docs against implementation, config, and API contracts. This skill never compares against code.
 - The document is a PRD that needs product-requirement crafting or repair (scope, acceptance, structure as a spec): use `hai-prd`.
 - The docs just need formatting and presentation cleanup, not consistency judgment: use `readme-beautifier`.
+- The user wants the document rewritten around the current conclusions, not a findings report: use `hai-rewrite-doc`. This skill diagnoses; it does not rewrite.

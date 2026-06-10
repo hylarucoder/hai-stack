@@ -2,11 +2,10 @@
 name: hai-razor
 description: |
   Audits whether each requirement, workflow step, role, field, state, module, layer, abstraction,
-  or rule deserves to exist and returns a razor verdict: an evidence table, a
+  or rule deserves to exist and returns a razor verdict: a
   Keep/Merge/Defer/Delete/Replace/Prove-first classification of every concept, the strongest
-  survival argument for anything cut, the complexity that must be preserved, a concrete cut/proof
-  list, and — for full audits — before/after Mermaid diagrams plus an HTML report. Use whenever the
-  user wants to apply Occam's razor, simplify or trim a PRD / architecture / workflow / data model /
+  survival argument for anything cut, and a concrete cut/proof list. Use whenever the user wants
+  to apply Occam's razor, simplify or trim a PRD / architecture / workflow / data model /
   state machine, challenge whether something is necessary, or spot fake requirements, premature
   abstractions, or over-engineering — even if they never say "razor." Trigger on 用奥卡姆剃刀, 剃刀一下,
   砍需求, 砍掉没用的东西, 收一收复杂度, 这个字段/状态/模块/分层有必要吗, 这个抽象是不是多余, 是不是伪需求,
