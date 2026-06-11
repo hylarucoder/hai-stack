@@ -22,7 +22,7 @@ if any — they are the strongest evidence.>
 
 ## 判定要诚实（不计违规）
 <Candidates examined and exonerated, each with the rule that exonerated it
-(idiomatic package-qualified name / forward contract with live consumer /
+(idiomatic module-qualified name / forward contract with live consumer /
 information-carrying projection / adjudicated by ADR-x). This section prevents
 re-litigation and "unify everything" overreach.>
 
@@ -44,7 +44,7 @@ Rules of the format:
 - Number findings S1, S2, … and keep numbers stable across follow-up sweeps of the same scope
   (append, don't renumber).
 - Every finding cites file:line for *all* sites, not just one example.
-- Severity ordering: caused-incident > persisted/user-visible wire > cross-stack seam > intra-package.
+- Severity ordering: caused-incident > persisted/user-visible wire > cross-stack seam > intra-module.
 - Dispositions must name a real destination: a same-day fix, a specific plan phase, or a named
   decision for the user. "待优化" with no owner is not a disposition.
 - If quick wins are executed in the same session, mark them ✅ with the date inside the report —

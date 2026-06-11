@@ -1,7 +1,8 @@
 # Detection Cookbook — per-symptom search recipes
 
 Adapt the patterns to the repo's languages. The examples assume Go backend + TS frontend +
-SQL migrations, but every class has an analog in other stacks.
+SQL migrations, but every class has an analog in other stacks. Language-specific idioms and
+exemptions live in the Language notes section at the bottom.
 
 ## 1. Multi-source literals
 
@@ -91,9 +92,34 @@ SQL migrations, but every class has an analog in other stacks.
 ## Cross-stack seam checklist (where to aim all of the above)
 
 - Raw SQL strings and CHECK constraints vs language enums
-- Hand-written wire schemas (Zod/JSON Schema/OpenAPI) vs producing structs
-- `map[string]any` envelopes crossing package/layer boundaries (suspension payloads,
+- Hand-written wire schemas (Zod/JSON Schema/OpenAPI) vs producing types
+- Untyped envelopes crossing package/layer boundaries (suspension payloads,
   evidence/metadata bags, magic request keys)
 - Generated artifacts and their generators (is everything claimed-generated actually generated?)
 - Docs that claim authority (glossaries, registries) vs the code they describe
 - Test fixtures vs current wire vocabulary
+
+## Language notes — idioms and exemptions per stack
+
+### Go
+
+- Untyped envelopes look like `map[string]any` / `map[string]interface{}` built with bare
+  string keys; grep map literals whose fields copy a typed value (`Foo: x.Foo` inside a map build).
+- Package-qualified generic names (`stream.Message` vs `processor.Message`) are the stdlib's own
+  `bytes.Buffer` / `http.Client` pattern — exempt unless they share a semantic domain (class #8).
+- Port/impl package pairs and per-plugin packages are layout conventions, not shape proliferation.
+- Round-trip tells for class #9: `json.Marshal` + `json.Unmarshal` on the same type within one
+  call path; struct↔map↔struct shuffles at layer boundaries.
+
+### TypeScript
+
+- Untyped envelopes look like `Record<string, unknown>` / `any` bags / index signatures; the
+  class-2 regression tell is an `as` cast or a spread that flattens a typed object at a seam.
+- Hand-written Zod / JSON Schema / OpenAPI fragments mirroring a server type are the canonical
+  shape-proliferation site — prefer generating one from the other (`z.infer`, openapi-typescript).
+- The same union-of-literals re-declared per layer (`'active' | 'archived'` in three files) is a
+  class-1 multi-source literal even though no `enum` keyword appears.
+- Interfaces re-declared per layer with one optional-field diff are class-7 pure-subset pairs;
+  prefer `Pick` / `Omit` / `Partial` over a hand-copied interface.
+- Round-trip tells for class #9: `JSON.parse(JSON.stringify(x))` clones, `toJSON`/`fromJSON`
+  pairs inside one process, DTO↔domain mappers stacked per layer.

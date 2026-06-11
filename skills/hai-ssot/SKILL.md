@@ -31,8 +31,9 @@ disposition. The skill is a diagnostic with a strong opinion about treatment, no
 
 SSOT violations cluster, almost without exception, **at boundaries the type system cannot
 reach**: language↔database (string literals in raw SQL and CHECK constraints), language↔wire
-(hand-written schemas mirroring structs), layer↔layer (`map[string]any` envelopes with bare
-string keys), code↔docs, production↔fixture. Inside one compiler's reach, multi-source dies
+(hand-written schemas mirroring the producing types), layer↔layer (untyped payload envelopes —
+`Record<string, unknown>`, `map[string]any`, bare dicts — keyed by raw strings), code↔docs,
+production↔fixture. Inside one compiler's reach, multi-source dies
 naturally — a second definition is a compile error or an obvious dead symbol. Outside it,
 multi-source is the *equilibrium state*: every producer hand-builds, every consumer hand-gropes,
 every layer re-copies the strings it needs.
@@ -51,30 +52,31 @@ Read `references/detection-cookbook.md` for concrete search recipes per class be
 
 | # | Symptom | One-line definition | Canonical tell |
 |---|---|---|---|
-| 1 | **Multi-source literals** | One wire string / enum value defined independently in N places | Same quoted literal in two packages; a private const shadowing a public one |
-| 2 | **Shape proliferation** | One concept carried by N struct/schema shapes across seams | Hand-written schema on one side of a wire mirroring a struct on the other; typed→map "regressions" where a struct gets flattened back into a map at a seam |
+| 1 | **Multi-source literals** | One wire string / enum value defined independently in N places | Same quoted literal in two modules; a private const shadowing a public one |
+| 2 | **Shape proliferation** | One concept carried by N type/schema shapes across seams | Hand-written schema on one side of a wire mirroring the producing type on the other; typed→untyped "regressions" where a typed object gets flattened back into a string-keyed map at a seam |
 | 3 | **Word overload** | One word meaning N different things (the mirror of #1) | The domain's most valuable word (e.g. "memory" as product moat) also used for infrastructure ("in-memory"); a term with 2-3 documented senses |
 | 4 | **Legacy-vocabulary mapping layers** | Old vocabulary survives inside display/fixture mapping functions after a wire rename — and the mappings themselves get copy-pasted | The same old→new word map appearing in two files; fixtures asserting retired vocabulary |
 | 5 | **Dual-pathway behavior forks** | The same operation behaves differently depending on which entry path/host ran it | A CLI path skipping the safety pipeline the server path runs; one caller passing explicit-empty where another gets defaults |
 | 6 | **Scattered defaults** | The same fallback value born independently at multiple layers | A default directory/timeout/limit defined as a constant in one layer AND as an inline fallback in another, neither referencing the other |
 | 7 | **Pure-subset shape pairs** | Type B = type A minus k fields, plus a field-by-field copy converter | A converter function that only copies fields; the "information" carried by the second shape is merely hiding fields |
-| 8 | **Same-name-different-shape** | Two exported types with the same name in the same semantic domain but different fields | `RunSnapshot` in two sibling packages meaning related-but-different things |
+| 8 | **Same-name-different-shape** | Two exported types with the same name in the same semantic domain but different fields | `RunSnapshot` in two sibling modules meaning related-but-different things |
 | 9 | **Redundant conversion chains** | One concept reshaped at multiple hops along a single call path, where the intermediate shapes add no information | A value converted A→B→C on its way through layers; round-trips (A→B→A); typed→string→typed relays where a value is serialized and re-parsed inside one process. Kill question per hop: "what information does this shape add?" — no answer means the hop merges |
 | 10 | **Re-implemented derivations** | The same rule — validation, normalization, parsing, a derived field — implemented independently at N layers, each a drift point | The same regex/threshold/branching duplicated with small diffs; a date string parsed at three layers; `isActive`/`displayName` computed differently in two views |
 
 Severity logic: a violation that has **already caused a production symptom** (silent empty
 rendering, correctness bug, wrong cursor) outranks everything; next, violations on persisted or
-user-visible wire; then cross-team/cross-stack seams; intra-package duplication last.
+user-visible wire; then cross-team/cross-stack seams; intra-module duplication last.
 
 ## Honest Adjudication — what NOT to flag
 
 Findings are leads, not verdicts. Run these checks before a finding enters the report; record
 exonerated candidates in a "not counted" note so the next sweeper doesn't re-litigate:
 
-- **Package-qualified generic names are idiomatic, not violations.** `stream.Message` vs
-  `processor.Message` is the `bytes.Buffer` / `http.Client` pattern. Flag same-name types only
-  when they share a semantic domain and confuse a cross-package reader (class #8), or collide in
-  one file.
+- **Module-qualified generic names are idiomatic, not violations.** A short generic type name
+  qualified by its module (`stream.Message` vs `processor.Message`) is the standard-library
+  pattern in every module system (see the cookbook's language notes for per-language exemplars).
+  Flag same-name types only when they share a semantic domain and confuse a cross-module reader
+  (class #8), or collide in one file.
 - **Forward contracts are alive even with zero producers.** A registry entry / enum value with no
   backend producer may be consumed by a frontend switch as a forward contract. Grep every consumer
   surface (web, contract, seeds) before calling anything dead. Disposition for these: annotate and
@@ -91,11 +93,11 @@ exonerated candidates in a "not counted" note so the next sweeper doesn't re-lit
   input, or a DB constraint backing an app-level check, is deliberate redundancy across trust
   levels. Class #10 flags re-implemented rules at the *same* trust level — two layers behind the
   same boundary each owning their own copy of the regex, threshold, or parse.
-- **Port/impl package pairs and per-plugin packages are conventions**, not fragmentation. Don't
+- **Port/impl module pairs and per-plugin modules are conventions**, not fragmentation. Don't
   recommend flattening them in an SSOT report.
-- **Deliberate, adjudicated dual vocabularies can exist** (e.g. an ADR chose a flat result struct
+- **Deliberate, adjudicated dual vocabularies can exist** (e.g. an ADR chose a flat result type
   with a closed discriminator). Check decision records before flagging; contrast honestly — a
-  4-field struct with a closed-set kind is not the same disease as a 9-field union with no
+  4-field type with a closed-set kind is not the same disease as a 9-field union with no
   discriminator semantics.
 
 The credibility of the whole report rests on this section. One overreaching finding ("unify all
@@ -107,7 +109,7 @@ Every confirmed finding routes to exactly one recipe; the recipe determines the 
 
 | Recipe | When | Notes |
 |---|---|---|
-| **Codegen** | One side can mechanically generate the other (struct → schema, registry → enum file) | Strongest fix; pairs with a *currency test* (guards "forgot to regenerate" — that is a constructive gap a compiler can't close, so the test is legitimate) |
+| **Codegen** | One side can mechanically generate the other (type → schema, registry → enum file) | Strongest fix; pairs with a *currency test* (guards "forgot to regenerate" — that is a constructive gap a compiler can't close, so the test is legitimate) |
 | **Parity guard** | Both sides are real artifacts that cannot share a source (language enum vs DB CHECK constraint) | Include a *red drill*: deliberately desync once and confirm the guard fires |
 | **Constant promotion** | Bare string keys in map envelopes crossing layers | Promote to a named constant next to its siblings; both writer and reader reference it |
 | **Typed payload** | Shape proliferation / map regressions at seams | Often a phase of a larger contract plan; don't band-aid per-field |
@@ -122,8 +124,8 @@ Every confirmed finding routes to exactly one recipe; the recipe determines the 
 1. **Scope.** Agree on the sweep surface (a module, a contract plane, the whole repo). Note any
    prior sweeps/plans to avoid re-finding adjudicated items.
 2. **Map the seams first.** List the type-system-unreachable boundaries in scope (which wires,
-   which DB constraints, which map envelopes, which generated artifacts). The Core Law says the
-   findings live there.
+   which DB constraints, which untyped envelopes, which generated artifacts). The Core Law says
+   the findings live there.
 3. **Hunt per symptom class** using the cookbook greps. For each candidate, capture file:line for
    *every* definition/use site — counts matter ("this literal is defined in exactly 2 places",
    "adding one event touches 6 files" is the change-amplification number that lands the point).

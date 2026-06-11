@@ -8,12 +8,12 @@
 
 ## 核心规律
 
-违规几乎全部聚集在**类型系统够不到的边界**：语言↔数据库（SQL 字面量、CHECK 约束）、语言↔wire（手写 schema 镜像 struct）、层↔层（map 信封裸键）、代码↔文档、生产↔fixture。编译器可达处单源是常态；不可达处多源是均衡态。推论：从跨栈接缝开打；每个"对拍/pin 测试"都标记着一处违规或一处已施治。
+违规几乎全部聚集在**类型系统够不到的边界**：语言↔数据库（SQL 字面量、CHECK 约束）、语言↔wire（手写 schema 镜像生产端类型）、层↔层（无类型信封裸键——`Record<string, unknown>`、`map[string]any`、裸 dict）、代码↔文档、生产↔fixture。编译器可达处单源是常态；不可达处多源是均衡态。推论：从跨栈接缝开打；每个"对拍/pin 测试"都标记着一处违规或一处已施治。
 
 ## 十类症状
 
 1. **多源字面量** — 同一 wire 字符串在 N 处独立定义
-2. **形状增生** — 同一概念 N 个形状；最恶劣形态是 typed→map 逆向退化
+2. **形状增生** — 同一概念 N 个形状；最恶劣形态是 typed→无类型 map 的逆向退化
 3. **同词异义** — 一个词 N 个意思（多源的镜像病）
 4. **旧词映射层续命** — wire 改名后旧词退守显示/fixture 映射层，映射自己又被复制
 5. **双通道行为分叉** — 同一操作不同入口行为不同（如 CLI 跳过 server 的安全管道）
@@ -25,12 +25,12 @@
 
 ## 诚实判定（不计违规）
 
-- 包限定重名（`stream.Message` vs `processor.Message`）是 Go 惯例（`bytes.Buffer` 同款）
+- 模块限定的通用重名（`stream.Message` vs `processor.Message`）是任何模块体系的标准库惯例（各语言范例见 cookbook 的 Language notes）
 - 零 producer 的注册项可能是前端 forward contract——grep 全部消费面后才许判死
 - 已持久化的 wire 字面量冻结：修定义点，永不改值
 - 携带信息的形状变化（加 seq、藏字段、换受众词汇）是正当投影；转换链逐跳单独判，一条链里可以一跳正当两跳多余
 - 信任边界处的重复校验是防御不是病（server 复核 client 输入、DB 约束兜底应用层校验）；第 10 类只抓**同一信任级**内的重复实现
-- 端口/实现分包、per-plugin 包是惯例不是碎片
+- 端口/实现分模块、per-plugin 模块是惯例不是碎片
 - 有 ADR 背书的刻意双轨先查决策记录再下结论
 
 **报告的公信力一半来自"不计违规"清单**——一条过度扩张的 finding 会让读者忽略真问题。
@@ -41,7 +41,7 @@ codegen（+currency test）/ 对拍守卫（含红色演练）/ 常量升格 / t
 
 ## 参考文件
 
-- `references/detection-cookbook.md` — 每类症状的具体 grep 食谱 + 跨栈接缝清单
+- `references/detection-cookbook.md` — 每类症状的具体 grep 食谱 + 跨栈接缝清单 + 各语言惯例与豁免（Go / TypeScript）
 - `references/output-template.md` — 报告模板（总规律 / S# 清单 / 不计违规 / 正面范本 / 处置汇总）
 
 ## 交接
