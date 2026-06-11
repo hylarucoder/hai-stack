@@ -1,7 +1,7 @@
 # hai-stack
 
 <p>
-  <img src="https://img.shields.io/badge/skills-19-2563eb" alt="skills" />
+  <img src="https://img.shields.io/badge/skills-20-2563eb" alt="skills" />
   <img src="https://img.shields.io/badge/for-Claude%20Code%20%2F%20Codex-8A2BE2" alt="for Claude Code / Codex" />
   <a href="LICENSE"><img src="https://img.shields.io/github/license/hylarucoder/hai-stack?color=22c55e" alt="license" /></a>
   <a href="https://github.com/hylarucoder/hai-stack/stargazers"><img src="https://img.shields.io/github/stars/hylarucoder/hai-stack?style=social" alt="stars" /></a>
@@ -88,7 +88,7 @@ Idea → Frame → PRD → Goal → Architecture → TDD → Audit → Report
 | 名称 | 用途 | 收益 |
 | --- | --- | --- |
 | `hai-idea` | 判断一个想法值不值得做，给出 **做 / 先验证 / 重塑 / 延后 / 砍掉** 的明确结论和评分卡 | 先判断价值和机会成本，别让"听起来有趣"的点子白白吃掉时间 |
-| `geju` | 打开格局：给出高位方向 thesis、该删该合该拆的 kill-list、保守 vs 干净 vs 分阶段的选项和验证路径 | 治怂——先看清系统该成为什么，别被兼容和重构成本吓住 |
+| `geju` | 打开格局：给出高位方向 thesis、该删该合该拆的 kill-list、保守 vs 干净 vs 分阶段的选项和验证路径，收尾一张收益账单讲清为什么值得 | 治怂——先看清系统该成为什么，别被兼容和重构成本吓住 |
 | `goudi` | 苟帝：把宏大方案压成最小可验证的第一步，给出砍掉清单、成功/失败信号和止损规则 | 治飘——保留野心，但先证明它能落地 |
 | `hai-razor` | 用奥卡姆剃刀逐个审需求/字段/状态/模块/层，判定保留 / 合并 / 删除 / 延后 | 治繁——砍掉不能自证必要的概念，不误伤真正承担责任的复杂度 |
 
@@ -108,7 +108,7 @@ Idea → Frame → PRD → Goal → Architecture → TDD → Audit → Report
 | `hai-naming` | 命名顾问：给出 3-5 个候选 + 推荐名 + 三阶段推理链；做命名审查时给改名清单 | 好命名就是好设计，减少"读代码猜意图"的成本 |
 | `react-component-diagnosis` | 从 7 个维度给单个 React 组件出结构化体检报告，基于逐行读代码而非表面评价 | 一次诊断定位组件的结构性问题，避免反复重构 |
 | `clean-code-reviewer` | 基于《代码整洁之道》从 7 个维度出带严重度和重构建议的报告，只改实现不改行为 | 系统化代码体检，而不是凭经验零散挑问题 |
-| `ast-grep-rule-crafter` | 写 ast-grep YAML 规则做结构化搜索 / lint / 自动改写，附正反样例和验证命令 | 把一次性手工查改变成可复用的 lint/codemod，杜绝同类问题再犯 |
+| `hai-ast-grep` | 用 ast-grep 做结构化搜索 / 批量改写 / lint 守护：一次性搜索给 pattern 和命令，可复用场景产出带正反样例和验证命令的 YAML 规则 | 搜索和重构按语法树匹配而非文本正则，误报漏报大幅减少；可复用规则杜绝同类问题再犯 |
 
 ### 验证与一致性 · 用反复验证抵抗幻觉
 
@@ -118,6 +118,7 @@ Idea → Frame → PRD → Goal → Architecture → TDD → Audit → Report
 | `hai-audit-docs-internally` | 审一份/一组文档内部的冲突、过期、术语漂移和重复，给 P0-P3 修复清单和修复顺序 | 先让文档自身自洽，别让读者被互相打架的段落误导 |
 | `hai-audit-docs-against-code` | 对照代码、配置和接口契约审文档，给出 P0-P3 的过时与不一致清单和最小修复 | 文档与实现保持同步，新人不再被过时说明误导 |
 | `hai-rewrite-doc` | 逐块核实漂移腐烂的文档：核实通过的保留原文，核实不过的直接移除，输出重写全文 + 保留/删除/待定处置表 + 遗留问题 | 核实即移除——不把错误内容修补成"看起来对"的版本，每个判定都有核实依据 |
+| `hai-ssot` | 诊断代码库的单一数据源（SSOT）违规：十类症状逐一排查，产出带 file:line 证据、诚实判定和治理配方的编号 findings 报告 | 多源定义、形状漂移、冗余转换在出事故前被点名；"不计违规"清单保住报告公信力 |
 
 ### 展示与交付 · 把结论变成能传播的产物
 
