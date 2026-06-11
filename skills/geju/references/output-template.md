@@ -45,4 +45,11 @@ Use this template when the user wants the design space opened up and conservativ
 
 ## Falsifier
 <What evidence would prove this hypothesis wrong or force a different direction.>
+
+## Payoff Ledger（收益账单）
+<Closing table for the audience: why this direction is worth its price. Every row traces back to a Bold Take or kill-list item; rows with only generic benefits get cut.>
+
+| Move | Price paid now | What it buys | When the payoff shows |
+|------|----------------|--------------|-----------------------|
+| <delete / merge / split / rebuild X> | <migration cost, diff size, relearning> | <specific pain removed or capability unlocked> | <the moment or signal where the gain becomes visible> |
 ```

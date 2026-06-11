@@ -3,8 +3,8 @@ name: geju
 description: |
   Produces a bold, high-altitude direction judgment (格局判断): a sharp thesis on the right target
   model, a kill-list of what to delete / merge / split / reframe, a Conservative-vs-Clean-vs-Staged
-  options table, and a verification path (first proof point + falsifier) that keeps the bold call
-  testable. Use whenever the user wants to think bigger, open the design space, or challenge a
+  options table, a verification path (first proof point + falsifier) that keeps the bold call
+  testable, and a closing payoff ledger (收益账单) showing why the direction is worth its price. Use whenever the user wants to think bigger, open the design space, or challenge a
   conservative / incremental / over-compatible proposal — proactively, even when unnamed. Triggers:
   打开格局, 格局太小, 你格局小了, 拔高一点, 站高一点, 别太保守, 太碎了, 别老想着兼容,
   别被重构难度绑架, 大方向; and English "too incremental / too safe", "play it bigger",
@@ -117,6 +117,7 @@ Produce a 格局判断 with these sections (see `references/output-template.md` 
 - **What Not To Do** — local optimizations, shims, or detail traps to avoid.
 - **First Proof Point** — the smallest artifact that proves the direction.
 - **Falsifier** — what evidence would prove the thesis wrong.
+- **Payoff Ledger (收益账单)** — the closing table that justifies the direction to the audience: each major move (drawn from the Bold Takes / kill list) with the price paid now, the concrete pain it removes or capability it unlocks, and when that payoff becomes visible. Generic benefits ("cleaner", "more maintainable") are banned — every row must name a specific pain or unlock, or the row gets cut.
 
 Output discipline that the sections do not already enforce:
 
