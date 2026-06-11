@@ -1,12 +1,12 @@
 ---
-name: ast-grep-rule-crafter
+name: hai-ast-grep
 description: |
-  Produces a ready-to-run ast-grep YAML rule that searches, lints, or auto-rewrites code via tree-sitter AST patterns, delivered with positive + negative fixtures and an exact validation command. Use for lint rules, codemods, code modernizations, and API migrations with auto-fix. Trigger whenever the user mentions ast-grep, sg scan, sgconfig, tree-sitter patterns, AST matching, structural search-and-replace, or a codemod — and ALSO when they describe the task without naming the tool, e.g. "find every call to X and rewrite it", "replace all console.log with logger across the repo", "write a lint rule for this pattern", "upgrade all usages of the old SDK", or "migrate this API everywhere". Chinese triggers: 写 ast-grep 规则, 结构化搜索替换, 批量改写代码, 代码迁移规则, codemod, 写个 lint 规则, 语法树匹配, 自动改写代码.
+  Produces a ready-to-run ast-grep pattern or YAML rule that structurally searches, lints, or auto-rewrites code via tree-sitter AST matching, validated against positive + negative fixtures. Trigger on ast-grep, sg scan, sgconfig, tree-sitter, AST matching, structural search-and-replace, codemod — and ALSO on these tasks unnamed: (1) structural search — "list every call site of X before I refactor", "find async functions that never await", or whenever grep/regex over/under-matches (hits comments/strings, misses formatting variants); (2) batch rewrite — "replace all console.log with logger", "rename this function everywhere", "change this signature at every call site", "migrate this API repo-wide"; (3) guard — "write a lint rule for this", "ban this usage in CI". Chinese triggers: 写 ast-grep 规则, 结构化搜索, 结构化搜索替换, 语法树匹配, 按语法找代码, 找出所有调用 X 的地方, 哪些地方用了这个 API, 重构前先找全调用点, grep 误报太多, 正则匹配不准, 批量改写代码, 批量重命名, 全局改函数签名, 改参数顺序, 升级旧 API, codemod, 写个 lint 规则, 禁止这种写法, 自动改写代码.
 ---
 
-# ast-grep Rule Crafter
+# hai-ast-grep
 
-ast-grep uses tree-sitter to parse code into AST, enabling precise pattern matching. Rules are defined in YAML for linting, searching, and rewriting code. The job is not "write a pattern" — it is to ship a rule that has been validated against a positive AND a negative fixture, so it catches what it should and nothing it shouldn't.
+ast-grep uses tree-sitter to parse code into AST, enabling precise pattern matching. Reach for it whenever a search or refactor depends on syntax structure: one-off searches and rewrites run straight from the CLI, reusable lint/codemod rules are written in YAML. Either way the job is not "write a pattern" — it is to ship a pattern or rule validated against a positive AND a negative case, so it catches what it should and nothing it shouldn't.
 
 ## Project Configuration
 
@@ -38,6 +38,36 @@ ast-grep scan --config path/to/sgconfig.yml  # explicit config
 ```
 
 > **Note**: the `ast-grep scan` command requires `sgconfig.yml`, while `ast-grep run -p` works standalone.
+
+## Everyday CLI Usage (no rule file)
+
+Most day-to-day search and refactor work never needs YAML or sgconfig — `ast-grep run` (the default subcommand) does it directly:
+
+```bash
+# Search: every fetch call site, regardless of formatting
+ast-grep run -p 'fetch($URL)' -l ts src/
+
+# Search with context lines, or machine-readable output for a report
+ast-grep run -p 'console.log($$$)' -C 2 src/
+ast-grep run -p 'console.log($$$)' --json=stream src/
+
+# One-off rewrite: review each match interactively (-i), or apply all (-U)
+ast-grep run -p 'console.log($$$A)' -r 'logger.log($$$A)' -l ts -i src/
+ast-grep run -p 'oldFn($A, $B)' -r 'newFn($B, $A)' -l ts -U src/
+```
+
+Flags that matter:
+
+| Flag | Meaning |
+|------|---------|
+| `-p <pattern>` | the AST pattern to match |
+| `-r <template>` | rewrite template — in `run`; in `scan`, `-r` means rule FILE, don't mix them up |
+| `-l <lang>` | language (`ts`, `tsx`, `py`, `go`, `rs`…); inferred from file extensions when omitted |
+| `-i` | interactive accept/reject per match — default this before any mass rewrite |
+| `-U` | apply all rewrites; without it matches are only reported |
+| `-C <n>` / `--json` | context lines / JSON output |
+
+Deliver the pattern, the exact command, and a match summary. Escalate to a YAML rule only when the match needs `constraints` / `not` / `inside` narrowing, or will be re-run (CI guard, reusable codemod).
 
 ## Rule Workflow
 
@@ -145,9 +175,9 @@ Bash, C, Cpp, CSharp, Css, Elixir, Go, Haskell, Hcl, Html, Java, JavaScript, Jso
 
 ## Use a Different Skill When
 
-ast-grep is the right hammer only for structural, AST-level pattern matching plus mechanical rewrite across many files. Route elsewhere when:
+ast-grep is the right hammer only when the match depends on syntax structure — search, lint, or rewrite. Route elsewhere when:
 
-- **Plain text or regex find-and-replace** with no syntax-tree shape (rename a string literal, swap a URL) — just do a normal edit / `sed`; an AST rule is overkill.
+- **Plain text or regex find-and-replace** with no syntax-tree shape (rename a string literal, swap a URL, find a unique identifier that grep already nails) — just use grep / a normal edit / `sed`; an AST pattern is overkill.
 - **One-off edit in a single file** — edit it directly; a rule only pays off across many call sites.
 - **Type-aware or semantic refactor** (driven by what a value's type is, not its syntax — e.g. eliminate `any`) — use `ts-type-safety-reviewer`. ast-grep matches syntax, not types.
 - **Subjective code-quality review** ("is this clean / well-named / over-engineered", code smells) — use `clean-code-reviewer`; for a behavior-preserving cleanup pass use `code-simplifier`.
