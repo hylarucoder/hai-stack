@@ -1,9 +1,8 @@
 # Architecture Review Output Template
 
-Use this template when returning a markdown architecture or design review. It is the canonical
-shape referenced from `SKILL.md` (Output section); the inline skeleton there is a summary of this.
-Keep findings evidence-led and focused on complexity reduction. Adapt section depth to the review
-scope, but keep the section set and order.
+Use this canonical template for standard and full Markdown reviews. Keep findings evidence-led and
+focused on complexity reduction. Quick answers may collapse sections while preserving the map,
+decision, evidence, main tradeoff, and next step.
 
 ```markdown
 # Architecture Review: <scope>

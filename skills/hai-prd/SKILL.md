@@ -1,15 +1,7 @@
 ---
 name: hai-prd
 description: |
-  Produces a PRD recommendation, draft, or document-level diagnosis: decides whether a PRD is even
-  needed (vs a goal, design doc, or task), drafts one from a product problem, audits/repairs an
-  existing PRD for drift and unverifiable acceptance, or judges whether to split / merge it. Use
-  whenever the user mentions a PRD, product requirements, requirements doc, or spec — writing,
-  rewriting, refining, auditing, scoping, or splitting/merging one — even if they never say "PRD".
-  Be pushy: trigger on casual asks like "turn this into a spec", "draft requirements for X", "is
-  this PRD too big", "this PRD is a mess", "do we even need a PRD for this", "one PRD or two". Also
-  on 写 PRD, 帮我写需求文档, 需求文档, 产品需求文档, PRD 拆分, PRD 合并, 这个 PRD 要不要拆,
-  PRD 粒度, 帮我改需求文档.
+  Decides whether a PRD is needed, drafts one from a product problem, repairs an existing PRD, or judges its split/merge boundary. Use for PRDs, product requirements, requirement specs, scope, user-visible behavior, and acceptance criteria（写 PRD、需求文档、PRD 拆分或打磨）. Use hai-goal for execution phases, hai-architecture for technical design, entity-model-auditor for field placement, and document-audit skills when the task is consistency diagnosis rather than product shaping.
 ---
 
 # Hai PRD
@@ -51,7 +43,7 @@ First decide the artifact type — a PRD is one option among several:
 | Architecture, module boundaries, or technical tradeoffs are the main need | `hai-architecture` |
 | The main question is whether the idea is worth doing at all | `hai-idea` |
 | The work is a code task, bugfix, or test-first implementation | `hai-tdd` or task note |
-| The work is documentation consistency auditing | doc-audit skill (vs code or internal) |
+| The work is documentation consistency auditing | `hai-audit-docs-internally` or `hai-audit-docs-against-code` |
 
 Ask:
 
@@ -133,21 +125,9 @@ lifecycle / aggregate view / platform extension), and the new-feature decision f
 
 ## Output
 
-Map the active mode to its template section, then fill only the relevant sections:
-
-```markdown
-# Hai PRD: <topic or document name>
-## Mode               (Need PRD / Design PRD / Craft PRD / Scope PRD)
-## PRD Necessity       — Need PRD: recommend PRD / hai-goal / design doc / task / no separate artifact
-## PRD Draft           — Design PRD: target outcome, problem, users, scope, requirements, acceptance
-## Existing PRD Diagnosis — Craft PRD: main drift, conflicts, remove/keep/rewrite, acceptance repairs
-## PRD Scope Assessment — Scope PRD: six-test signals, split/merge recommendation, suggested boundaries
-## Remaining Open Questions
-## Next Step
-```
-
-Read `references/output-template.md` before finalizing. Do not mechanically emit every section —
-output only the mode(s) relevant to the question.
+Read `references/output-template.md` and fill only the active mode's sections. Do not mechanically
+emit every mode or duplicate the template here. A necessity check can be brief; a draft or repair
+must carry enough product behavior and acceptance detail to stand alone.
 
 ## Use a different skill when
 

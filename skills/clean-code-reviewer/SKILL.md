@@ -1,6 +1,6 @@
 ---
 name: clean-code-reviewer
-description: Produces a severity-rated (高/中/低) Clean Code findings report across 7 dimensions (naming, function size/SRP, duplication/DRY, over-engineering/YAGNI, magic numbers, structural clarity, project conventions), each with a location and a behavior-preserving refactor suggestion — never changing functionality. Use whenever the user asks for a code review, quality check, refactor advice, or code-smell / Clean Code analysis, OR points at a file/function/diff and asks if it is well-written, too long, too repetitive, over-engineered, or poorly named — even casually, and even if they never say "review" ("I just wrote this, look it over", "does this look good before I commit"). Trigger on 代码体检, 代码质量, 重构检查, 代码审查, 这段代码写得怎么样, 帮我看看代码有没有问题, 有没有坏味道, 这函数是不是太长了, 命名规范吗, 魔法数字, 重复代码, 过度设计, and English like "is this code clean", "any code smells", "check this file".
+description: Reviews file- and function-level code quality and returns severity-ranked, behavior-preserving refactor findings across naming, responsibility, duplication, unnecessary abstraction, constants, clarity, and project conventions. Use for code smells, maintainability checks, or “is this code clean?”. Prefer react-component-diagnosis for one React component and hai-architecture for module or system boundaries. This skill diagnoses; it does not apply refactors.
 ---
 
 # Clean Code Review
@@ -43,8 +43,10 @@ const data1 = fetchUser();   // ❌  →  const userProfile = fetchUser();  // �
 ### 2. Function Problems (Small Functions + SRP)
 
 Detection signals:
-- Function exceeds **100 lines**
-- More than **3 parameters** (use a parameter object instead)
+- Function length makes its responsibility or control flow hard to explain; line count is evidence,
+  not a verdict
+- A parameter list forces callers to remember several related values or their order; introduce a
+  parameter object only when it creates a real concept
 - Function does multiple things (violates Single Responsibility)
 - Function name implies read-only but it has side effects
 
@@ -65,8 +67,11 @@ Detection signals:
 ### 5. Magic Numbers (Avoid Hardcoding)
 
 Detection signals:
-- Bare numbers with no explanation (`retryCount > 3`, `setTimeout(fn, 86400000)`)
+- Bare numbers or strings whose meaning is domain-specific or repeated
 - Hardcoded strings, status codes, time constants
+
+Do not flag universally obvious local values such as `0`, `1`, array indexes, or a one-off dimension
+whose meaning is already clear from the expression.
 
 ```typescript
 if (retryCount > 3) {}   // ❌  →  const MAX_RETRY_COUNT = 3; if (retryCount > MAX_RETRY_COUNT) {}  // ✅
@@ -77,7 +82,7 @@ if (retryCount > 3) {}   // ❌  →  const MAX_RETRY_COUNT = 3; if (retryCount 
 Detection signals:
 - Nested ternary operators
 - Overly compact one-liners
-- Deep conditional nesting (**> 3 levels**) — prefer guard clauses with early returns
+- Conditional nesting that obscures the main path or forces unrelated conditions into one mental stack; prefer guard clauses when they clarify it
 
 ### 7. Project Conventions (Consistency)
 
@@ -101,30 +106,10 @@ Use 高 / 中 / 低 as the literal severity labels in the report — they are pa
 
 ## Output
 
-Emit a Summary first, then P-numbered findings sorted by severity, then patterns worth keeping and any tests needed to refactor safely. Skeleton (read [references/output-template.md](references/output-template.md) before finalizing — it is the full, canonical shape):
-
-```markdown
-# Clean Code Review: <scope>
-
-## Summary
-<the highest-leverage maintainability risk, one paragraph>
-
-## Findings
-
-### P1: <issue title>
-- **原则**: <命名 / 单一职责 / DRY / YAGNI / 魔法数字 / 结构清晰度 / 项目规范>
-- **位置**: `<file>:<line>`
-- **级别**: 高 / 中 / 低
-- **问题**: <what makes the code harder to read, change, or test>
-- **建议**: <behavior-preserving refactor direction>
-- **Why now**: <risk if left as-is>
-
-## Good Patterns To Keep
-- <implementation choice worth preserving>
-
-## Test Gaps
-- <tests needed to protect behavior during the refactor>
-```
+Emit a summary first, then P-numbered findings sorted by severity, followed by patterns worth
+keeping and tests needed to refactor safely. Read
+[references/output-template.md](references/output-template.md) before finalizing; it is the single
+canonical report shape. Scale the number of findings to the scope instead of filling every category.
 
 ## References
 
@@ -132,20 +117,11 @@ Emit a Summary first, then P-numbered findings sorted by severity, then patterns
 - [references/detailed-examples.md](references/detailed-examples.md) — full ❌/✅ worked cases for the 5 core dimensions (naming, functions, DRY, YAGNI, magic numbers); read when you need richer cases or are unsure a finding qualifies.
 - [references/language-patterns.md](references/language-patterns.md) — language-specific smells for TypeScript/JavaScript, Python, and Go; consult when the codebase is primarily one of these languages.
 
-## Multi-Agent Parallel
-
-When parallelizing across subagents, split the work along one axis, then dedupe and reconcile severity ratings when merging:
-
-1. **By check dimension** — one agent per dimension (7 total)
-2. **By module/directory** — one agent per module
-3. **By language** — one agent each for TypeScript, Python, Go
-4. **By file type** — components, hooks, utility functions, type definitions
-
 ## Use a different skill when
 
 This skill reports file/function-level Clean Code findings and does not modify code. Route elsewhere when:
 
 - **Architecture / module boundaries / abstraction quality** (system-level, APoSD) → `hai-architecture`.
-- **Eliminating `any` / TypeScript type safety** → `ts-type-safety-reviewer`.
-- **Actually applying the refactors** (not just reporting) → `code-simplifier`.
-- **React component design** (consumer API, data flow, testability) → `component-diagnosis` / `react-component-diagnosis`.
+- **Eliminating `any` / TypeScript type safety** → use an available type-safety skill or compiler workflow.
+- **Actually applying the refactors** (not just reporting) → use an available implementation/refactoring workflow.
+- **React component design** (consumer API, data flow, testability) → `react-component-diagnosis`.

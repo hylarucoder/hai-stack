@@ -1,207 +1,83 @@
 ---
 name: hai-naming
 description: |
-  Produces 3-5 candidate names with one recommended final name, the three-stage reasoning
-  trail behind it (research-stage / top-of-head / final-after-reading), and — for reviews — a
-  priority-ordered rename list with old->new and migration scope. Use when the user asks how
-  to name or rename anything (concept, variable, function, prop, module, type, file, domain
-  entity, event, or abstraction), wants a naming review or audit, or says a name feels vague,
-  stiff, misleading, inconsistent, too long, too generic, or hard to choose — even if they only
-  mention it in passing while reviewing code. Be pushy: trigger on "what should I call this",
-  "better name for X", "this name sucks", "rename this var", "whats a good name", "review my
-  naming". Chinese triggers: 起名, 命名, 取名, 改名, 名字不好,
-  这个叫什么好, 取个名字, 换个名, 这名字怎么样, 名字太长, 命名规范, 命名审查, 变量名/函数名怎么取.
+  Recommends names for concepts, identifiers, modules, files, entities, events, or product terms, or audits an existing naming set for misleading vocabulary and viewpoint drift. Use for “what should I call this?”, rename requests, or naming reviews（起名、命名、改名、名字不清楚）. Give a concise answer for one local name; use the full vocabulary map and migration scope only for cross-module or public naming audits. Route boundary problems exposed by naming to hai-architecture.
 ---
 
 # Hai Naming
 
 For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the execution source of truth.
 
-## Overview
+## Purpose
 
-Treat naming as architecture expressed in language: a good name reflects the whole context, the
-core actor's viewpoint, and the role the concept plays in the system. A name decides whether a
-reader can understand the call flow, responsibility boundary, and operating subject without
-translating between competing perspectives.
+Treat naming as a model of the system, not a thesaurus exercise. A useful name tells the intended
+reader what the concept is, who owns it, and how it differs from its neighbors without forcing them
+to reconstruct hidden context.
 
-Do not turn naming into a mechanical debate about conventions. Conventions matter, but only
-after the concept, responsibility, and system vocabulary are clear.
+## Choose the mode
 
-## Three-Stage Naming
+- **Quick naming**: one local variable, function, prop, file, or concept. Give three to five
+  candidates, recommend one, and explain the decisive distinction briefly.
+- **Naming audit**: public or cross-module vocabulary, several related names, or a rename with
+  migration impact. Build a vocabulary map, trace the call flow, and return prioritized renames.
 
-Every recommendation exposes three stages instead of only showing the final answer — this makes
-the reasoning path visible, not just the verdict:
+Do not force an audit-sized reasoning trail onto a local identifier question.
 
-1. **Research-stage naming**: the rough name from quick context gathering — existing vocabulary,
-   neighboring concepts, initial constraints. Shows what the current system seems to teach
-   before deep reading.
-2. **Top-of-head naming**: the intuitive, fast, "拍脑袋" name from first-principles sense of the
-   concept. Allowed to be slightly bold, raw, or imperfect; its value is exposing the first
-   mental model before existing wording biases it.
-3. **Final naming after reading**: the recommended name after reading the relevant docs, code,
-   call flow, product context, or system vocabulary. This is the name to ship unless a stated
-   constraint blocks it.
+## Decision rules
 
-If the three names differ, explain what changed your mind. If they converge, explain why the
-name stayed stable after deeper reading.
+1. **Name in context.** Read the declaration, callers, neighboring concepts, layer, audience, and
+   lifecycle available in the user's scope. Never invent a global model from one isolated snippet.
+2. **Choose a viewpoint.** Product names describe user intent, domain names describe durable
+   concepts, runtime names describe execution responsibility, and adapter names describe the
+   boundary crossed. Keep the viewpoint stable until a real boundary changes it.
+3. **Preserve decisive information.** Shorten only when the surrounding expression carries the
+   omitted meaning. Public and cross-module names should usually be more explicit than local ones.
+4. **Use one word per concept.** The same concept keeps one term; different concepts do not share a
+   convenient generic word.
+5. **Name ownership, not incidental mechanics.** `Manager`, `Service`, `Helper`, `Data`, `Info`,
+   `Context`, `get`, and `build` are acceptable only when they accurately express the local model.
+6. **Treat naming friction as evidence.** If every candidate needs a paragraph of explanation, the
+   concept may mix responsibilities or viewpoints. Recommend a design clarification instead of more
+   synonyms.
 
-## Core Stance
-
-These six principles are the judgment content; the Workflow and checks below reference them.
-
-### 1. Name inside the whole context
-
-Never name from an isolated snippet if broader context is available. First understand:
-
-- The concrete scenario where a reader meets the name: reading a module, calling an API, editing
-  a workflow, debugging a state transition, or using a product surface.
-- The product/domain concept the name represents.
-- The core operating subject: who or what acts, decides, owns state, or experiences the workflow.
-- The layer and audience: product UI, domain model, API contract, persistence, runtime
-  internals, tests, or tooling.
-- Neighboring concepts and existing vocabulary.
-- Lifecycle: how the thing is created, used, transformed, completed, archived, failed, retired.
-- Boundaries: what this concept includes, excludes, owns, and delegates.
-
-A name that sounds good locally can be wrong globally if it hides the main actor, duplicates an
-existing concept, or names an implementation detail instead of the domain role.
-
-### 2. Preserve information before shortening
-
-Do not shorten names just to make them shorter. Brevity is only useful when the surrounding
-context already carries the omitted information without forcing the reader to reconstruct it.
-
-Prefer a longer explicit name when it prevents information compression, especially for:
-
-- Exported functions, public APIs, domain entities, files, modules, events, workflow states, and
-  cross-module types.
-- Names that distinguish adjacent concepts: product vs domain, user work vs infrastructure
-  execution, draft vs persisted state, request vs result, configuration vs runtime state.
-- Code a reader is likely to enter from search results, stack traces, tests, docs, generated
-  clients, or API contracts.
-
-Short names are acceptable only when the scope is tiny and the missing words are immediately
-visible in the same expression or block. If a reader has to infer a noun from the folder, a prior
-paragraph, or tribal knowledge, the name is over-compressed.
-
-### 3. Use the current core actor's viewpoint
-
-Pick one viewpoint the naming set is organized around, then keep it stable across the module,
-call chain, and related API surface. Do not name one function from module A's viewpoint and the
-next from module B's viewpoint if they belong to the same conceptual flow — a hidden viewpoint
-shift is worse than a slightly longer name.
-
-Identify the viewpoint anchor before proposing or reviewing names:
-
-- Product layer: name by what the user sees and intends.
-- Domain layer: name by the durable business concept and its invariants.
-- Runtime/infrastructure layer: name by execution responsibility, state transition, protocol role.
-- Adapter/integration layer: name by the boundary being bridged.
-
-If a name is hard to judge, ask: "From whose perspective is this name supposed to be obvious?"
-If two adjacent names answer differently without crossing a real boundary, the naming is
-inconsistent. When a real boundary is crossed, make the shift explicit through adapter, mapper,
-handler, port, DTO, event, or boundary-specific vocabulary.
-
-### 4. Follow the whole call flow
-
-Check names against how the concept is called, passed, transformed, and returned — not only at
-declaration sites. Trace: who creates or receives the value, which module owns the decision,
-which module merely adapts/maps/forwards/stores/renders it, what the caller expects from the
-name before opening the implementation, and where the perspective legitimately changes.
-
-Names in one flow should read like one sentence from one stable viewpoint. If reading a call
-chain forces the reader to switch between "what A sends", "what B receives", "what C stores", and
-"what the UI displays" without explicit boundaries, the names are not aligned.
-
-### 5. Name the concept, not the rule
-
-`fetch`, `get`, `load`, `create`, `build`, `manager`, `service`, `config`, and `context` are not
-automatically good or bad; their quality depends on what they mean in this codebase. Prefer a
-name that captures the real concept over one that merely satisfies a generic convention. If the
-project has a strong local vocabulary, follow it unless it actively misleads readers. Suffixes
-like `Manager`, `Service`, `Helper`, `Util`, `Data`, `Info`, or `Context` are often a way to
-avoid deciding what the thing actually owns.
-
-### 6. Let naming expose design problems
-
-When all candidate names feel awkward, do not keep generating synonyms — diagnose the design:
-
-- Is one module mixing product, domain, and infrastructure concepts?
-- Is one call flow switching viewpoints without an explicit boundary?
-- Is the thing named by what it does today instead of what it owns?
-- Are two different concepts sharing one name?
-- Is one concept split across too many files?
-- Is the current "thing" only a pass-through, glue layer, or temporary workflow step?
-
-A fast trigger for this diagnosis: if a name needs a paragraph of explanation, or a hidden
-backstory, to make sense, the concept or boundary is probably wrong — or the name is
-over-compressed. Treat that friction as a design signal, not a wording problem.
-
-Say so when the better answer is a design adjustment before a rename, and route per "Hand off
-when" below.
+Read `references/principles.md` when a public or cross-module decision needs the expanded context,
+call-flow, symmetry, lifecycle, or migration checks.
 
 ## Workflow
 
-**Mode 1 — Name a concept:**
+### Quick naming
 
-1. Produce the **research-stage name** from quick research context.
-2. Produce the **top-of-head name** from first principles, before overfitting to existing wording.
-3. Deep-read the call flow and concept, then produce the **final name after reading** (anchor one
-   viewpoint per stance #3; decide what must stay visible per stance #2).
-4. Propose 3-5 candidates per the rules in the template (include one vocabulary-aligned, one
-   clean-concept, one explicit name for boundary-crossing concepts).
-5. Recommend the final name and explain why the rejected ones are weaker; if none is satisfactory,
-   recommend the design clarification needed first.
+1. State the concept, reader, layer, and nearest competing term.
+2. Inspect the surrounding code or text the user supplied.
+3. Generate three to five candidates that differ meaningfully, not cosmetically.
+4. Recommend one and explain why the closest alternative loses.
+5. Flag a design problem only when the evidence actually makes naming unstable.
 
-**Mode 2 — Review or rename existing names:**
+### Naming audit
 
-1. Read the surrounding system, then build a small vocabulary map (actors, workflows, calling/
-   called modules, layer-specific names for the same concept, overloaded terms).
-2. For each important rename, show the three-stage path.
-3. Flag names that harm understanding (wrong actor, mixed viewpoints, flattened concepts,
-   over-compression, leaked implementation, stale legacy term, too generic, locally-consistent-
-   but-globally-misleading).
-4. Suggest changes in priority order — high-impact exported/API/domain names before small locals.
-
-The expanded per-step detail lives in `references/output-template.md`.
+1. Read the relevant declarations, callers, contracts, docs, and persisted/wire names.
+2. Map actors, concepts, lifecycle states, layer-specific vocabulary, and overloaded terms.
+3. Identify wrong viewpoint, lost information, stale vocabulary, collisions, and inconsistency.
+4. Prioritize public/API/domain names before small locals.
+5. For each rename, state `old -> new`, evidence, conceptual repair, affected surfaces, and whether
+   compatibility is required by a real contract.
+6. Separate the recommended vocabulary from the migration plan.
 
 ## Output
 
-Mode 1 fills `Context Read` / `Concept` / `Three-Stage Naming` / `What Changed After Reading` /
-`Candidates` / `Recommendation`. Mode 2 fills `Vocabulary Map` / `Findings` (each `oldName ->
-suggestedName` with location, three-stage path, problem, better model, viewpoint repair,
-information restored, impact). Read `references/output-template.md` for the full fill-in blocks
-before finalizing.
+Use the matching mode in `references/output-template.md`. A quick answer should remain conversational
+and compact. An audit must include evidence and migration scope, but it does not need to expose a
+performative “top-of-head” reasoning chain. Explain only what changed after reading when that change
+affects the recommendation.
 
-## Practical checks
+## Use a different skill when
 
-Mechanical checks the principles above do not already cover — use as checks, not laws:
+- The name is awkward because module ownership or abstraction is wrong → `hai-architecture`.
+- The question is whether a field should exist or where it belongs → `entity-model-auditor`.
+- The user wants a bold direction change rather than a name → `geju`.
+- The scope is an entire React component API, not one identifier → `react-component-diagnosis`.
 
-- **Symmetry**: paired operations should read as peers (start/stop, open/close, encode/decode);
-  asymmetric pair names imply the operations are not actually inverses, misleading the reader.
-- **Part of speech**: entities read as nouns, actions as verbs, predicates as questions — so the
-  reader can tell what a name returns without opening it.
-- **Consistency**: the same concept uses the same word; different concepts do not share one word.
-- **Lifecycle states**: state names should match real transitions, not arbitrary UI or
-  implementation phases.
+## Not this skill
 
-## Hand off when
-
-- The awkward name is really a module-boundary / abstraction problem (stance #6) — route to
-  **hai-architecture** to fix the design before the rename.
-- The concept is a data-model field question (should it exist, store vs compute, column vs jsonb)
-  — route to **entity-model-auditor**.
-- The user actually wants a bold direction change, not a name — route to **geju**.
-- The question is a whole React component's API surface, not one prop or identifier — route to
-  **react-component-diagnosis**; naming a single prop stays here.
-
-## What this skill is NOT
-
-- Not a linter. Casing and style conventions are project-level constraints, not the center of the
-  naming decision.
-- Not a thesaurus. Do not solve unclear concepts by generating prettier synonyms.
-- Not a rigid naming standard. Strong local vocabulary and architectural clarity beat generic
-  formulas.
-- Not only about identifiers. Product terms, API resources, domain entities, event names,
-  workflow states, document titles, and file names all shape the system model.
+Do not act as a casing linter, rigid naming standard, or synonym generator. Project conventions
+constrain the answer, but conceptual clarity decides it.

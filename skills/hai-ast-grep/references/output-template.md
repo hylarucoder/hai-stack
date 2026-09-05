@@ -28,7 +28,7 @@ fix: <replacement>
 ## Validation
 - **Positive fixture**: <code that should match>
 - **Negative fixture**: <code that should not match>
-- **Command run**: `ast-grep scan --rule <rule-file>`
+- **Command run**: `ast-grep scan -r <rule-file> <target>`
 - **Result**: <matches found / fixture behavior>
 
 ## Notes

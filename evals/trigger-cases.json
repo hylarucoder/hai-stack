@@ -1,0 +1,158 @@
+[
+  {
+    "id": "idea-worth-doing",
+    "prompt": "我想给内部 CLI 加一个 AI 命令推荐器，但不确定是不是伪需求，值得投入两周吗？",
+    "expected_skills": ["hai-idea"],
+    "excluded_skills": ["hai-goal", "hai-prd"]
+  },
+  {
+    "id": "geju-open-frame",
+    "prompt": "这个迁移方案全是兼容层，我觉得太保守了。把格局打开，假设没有历史包袱会怎么设计？",
+    "expected_skills": ["geju"],
+    "excluded_skills": ["goudi", "hai-idea"]
+  },
+  {
+    "id": "goudi-ground-plan",
+    "prompt": "方向我认可，但方案还是太飘。给我最小可验证第一步、失败信号和止损规则。",
+    "expected_skills": ["goudi"],
+    "excluded_skills": ["geju", "hai-goal"]
+  },
+  {
+    "id": "razor-delete-concepts",
+    "prompt": "这个状态机有 12 个状态，逐个判断哪些真的需要独立存在，哪些应该合并或删除。",
+    "expected_skills": ["hai-razor"],
+    "excluded_skills": ["hai-architecture", "hai-prd"]
+  },
+  {
+    "id": "prd-draft",
+    "prompt": "帮我把这个用户问题写成 PRD，重点定清范围、失败状态和可验证验收。",
+    "expected_skills": ["hai-prd"],
+    "excluded_skills": ["hai-goal"]
+  },
+  {
+    "id": "goal-multiphase",
+    "prompt": "这个迁移会跨 schema、API、前端和文档，先拆成阶段和带 proof 的 todo，再决定能不能开工。",
+    "expected_skills": ["hai-goal"],
+    "excluded_skills": ["hai-tdd"]
+  },
+  {
+    "id": "goal-small-clear-task",
+    "prompt": "把 README 里的旧链接改成新链接，然后检查链接格式。",
+    "expected_skills": [],
+    "excluded_skills": ["hai-goal", "hai-tdd", "hai-ast-grep"]
+  },
+  {
+    "id": "entity-field-placement",
+    "prompt": "对照这份 PRD 和 Prisma model，判断 status 要存还是算、theme 应该是列还是 JSON。",
+    "expected_skills": ["entity-model-auditor"],
+    "excluded_skills": ["hai-prd", "hai-razor"]
+  },
+  {
+    "id": "architecture-bounded-boundary",
+    "prompt": "review 一下 packages/runtime 和 packages/agent 的边界：这两个模块该合并还是继续拆？",
+    "expected_skills": ["hai-architecture"],
+    "excluded_skills": ["hai-complexity", "clean-code-reviewer"]
+  },
+  {
+    "id": "complexity-whole-repo",
+    "prompt": "从 server 和 worker 的运行入口开始追，这个仓库为什么改一个 retry 逻辑会牵动那么多地方？做全局复杂度审计。",
+    "expected_skills": ["hai-complexity"],
+    "excluded_skills": ["hai-architecture", "clean-code-reviewer"]
+  },
+  {
+    "id": "naming-local",
+    "prompt": "这个函数把草稿转成可发送消息，叫 buildData 太糊了，给我几个更好的名字。",
+    "expected_skills": ["hai-naming"],
+    "excluded_skills": ["clean-code-reviewer", "react-component-diagnosis"]
+  },
+  {
+    "id": "naming-public-audit",
+    "prompt": "API、数据库和 UI 分别叫 run、job、task，帮我做一次跨层命名审查并给迁移范围。",
+    "expected_skills": ["hai-naming"],
+    "excluded_skills": ["hai-ssot"]
+  },
+  {
+    "id": "react-component",
+    "prompt": "帮我诊断 EditorPanel.tsx，重点看 props API、useEffect 链和为什么每次输入都整棵树 re-render。",
+    "expected_skills": ["react-component-diagnosis"],
+    "excluded_skills": ["clean-code-reviewer", "hai-architecture"]
+  },
+  {
+    "id": "clean-code-local",
+    "prompt": "看看 src/parser.ts 这几个函数有没有命名、重复、职责和魔法值方面的 code smell。",
+    "expected_skills": ["clean-code-reviewer"],
+    "excluded_skills": ["react-component-diagnosis", "hai-architecture"]
+  },
+  {
+    "id": "ast-structural-search",
+    "prompt": "找出所有第二个参数是对象字面量的 track(event, options) 调用，别命中注释和字符串，并给 ast-grep 正反样例。",
+    "expected_skills": ["hai-ast-grep"],
+    "excluded_skills": ["clean-code-reviewer"]
+  },
+  {
+    "id": "ast-plain-text-near-miss",
+    "prompt": "把仓库里唯一出现的 https://old.example.com 文本换成新地址。",
+    "expected_skills": [],
+    "excluded_skills": ["hai-ast-grep"]
+  },
+  {
+    "id": "tdd-behavior",
+    "prompt": "修复重试达到上限后仍继续发请求的 bug，用测试先复现失败，再写最小修复。",
+    "expected_skills": ["hai-tdd"],
+    "excluded_skills": ["hai-goal"]
+  },
+  {
+    "id": "tdd-structural-near-miss",
+    "prompt": "把 InternalRun 类型移动到 runtime 包并更新 imports，保证编译和现有测试通过。",
+    "expected_skills": [],
+    "excluded_skills": ["hai-tdd", "hai-goal"]
+  },
+  {
+    "id": "docs-internal",
+    "prompt": "只看这两份 spec 本身，找出术语漂移、重复段落和前后冲突，不要对照代码。",
+    "expected_skills": ["hai-audit-docs-internally"],
+    "excluded_skills": ["hai-audit-docs-against-code", "hai-rewrite-doc"]
+  },
+  {
+    "id": "docs-against-code",
+    "prompt": "核对 README 的环境变量、CLI 命令和 API 返回字段是否还和当前代码一致。",
+    "expected_skills": ["hai-audit-docs-against-code"],
+    "excluded_skills": ["readme-beautifier", "hai-audit-docs-internally"]
+  },
+  {
+    "id": "rewrite-rotten-doc",
+    "prompt": "这份设计文档经过几轮讨论已经烂了。按当前结论逐块核实，保留真的、替换有权威来源的、其余删掉后重写。",
+    "expected_skills": ["hai-rewrite-doc"],
+    "excluded_skills": ["hai-audit-docs-internally", "readme-beautifier"]
+  },
+  {
+    "id": "ssot-drift",
+    "prompt": "event kind 在后端 enum、数据库 CHECK 和前端 switch 各写了一份，会不会漂移？请做 SSOT 诊断。",
+    "expected_skills": ["hai-ssot"],
+    "excluded_skills": ["hai-naming", "hai-architecture"]
+  },
+  {
+    "id": "visual-report",
+    "prompt": "把这份完整架构评审做成多 section HTML 汇报页，保留证据、选项和风险，不要压成摘要图。",
+    "expected_skills": ["hai-visual-report"],
+    "excluded_skills": ["create-visual-card"]
+  },
+  {
+    "id": "visual-card",
+    "prompt": "把这五条读书笔记排成一张可发朋友圈的知识卡，交付 PNG 和 HTML。",
+    "expected_skills": ["create-visual-card"],
+    "excluded_skills": ["hai-visual-report"]
+  },
+  {
+    "id": "readme-format",
+    "prompt": "README 排版太乱了，只整理标题层级、列表、代码块和空白，不改变任何内容。",
+    "expected_skills": ["readme-beautifier"],
+    "excluded_skills": ["hai-audit-docs-against-code", "hai-rewrite-doc"]
+  },
+  {
+    "id": "readme-accuracy-near-miss",
+    "prompt": "README 看起来很整齐，但我怀疑安装命令过时了，请对照实现检查准确性。",
+    "expected_skills": ["hai-audit-docs-against-code"],
+    "excluded_skills": ["readme-beautifier"]
+  }
+]

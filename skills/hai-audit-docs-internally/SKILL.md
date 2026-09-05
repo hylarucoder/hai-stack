@@ -1,7 +1,7 @@
 ---
 name: hai-audit-docs-internally
 description: |
-  Audits a document or doc set from the inside and produces a prioritized findings report (P0-P3) of internal conflicts, stale content, terminology drift, duplication, and misplaced or unsupported claims, plus update/move/merge/remove/split decisions and a suggested repair order. Use this whenever the user wants docs sanity-checked or cleaned up for self-consistency without comparing against code, even when they never say "audit": contradictory or duplicate sections, stale assumptions, unclear structure, or a PRD/spec that should hang together. Trigger on casual and Chinese phrasings too: 文档自相矛盾, 文档前后不一致, 文档内部冲突, 审一下这份文档, 帮我审审这个 PRD, 文档体检, "these two sections disagree", "is this spec consistent", "the docs repeat themselves". If the truth source is the code, use hai-audit-docs-against-code instead.
+  Audits a document or document set for internal conflicts, terminology drift, duplicated or misplaced content, unsupported claims, and explicitly stale signals, then recommends update/move/merge/remove/split actions in repair order. Use for document self-consistency checks（文档前后不一致、内部冲突、重复内容）when no external implementation is the truth source. Use hai-audit-docs-against-code when claims must be checked against code or contracts.
 ---
 
 # Hai Audit Docs Internally
@@ -34,7 +34,9 @@ A document is a coherent argument, and the audit reads it as one. Judge it for c
    - **Terminology drift**: the same concept uses different names, or one name means different things.
    - **Lifecycle conflict**: statuses, phases, dates, or dependencies do not line up.
    - **Acceptance conflict**: success criteria do not prove the stated goal.
-   - **Stale signal**: text references old decisions, old names, old dates, deprecated sections, or superseded assumptions.
+   - **Stale signal**: the document itself contains dates, statuses, replacement notices,
+     decision order, or cross-references proving that text is superseded. Without such evidence,
+     label it unsupported or needs decision—not stale.
    - **Redundant content**: repeated paragraphs, examples, or checklists should be merged or removed.
    - **Misplaced content**: implementation detail, policy, background, or task planning lives in the wrong document section.
    - **Unsupported claim**: a strong claim lacks evidence, owner, source, or decision record.

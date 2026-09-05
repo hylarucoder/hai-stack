@@ -1,7 +1,7 @@
 ---
 name: readme-beautifier
 description: |
-  Produces a restructured, consistently formatted, professional-looking README (or similar markdown project doc such as CONTRIBUTING.md, docs/index.md, 项目说明.md) plus a short change summary — content untouched: nothing added, nothing removed, only structure and formatting fixed (heading hierarchy, lists, code blocks, tables, spacing). Use whenever the user asks to beautify, tidy, reorganize, reformat, format, or fix a README — and be pushy: fire even when the user just dumps a messy README and says 太乱了 / 看下 / 帮我弄一下, without ever saying "beautify". Triggers: 美化 README, README 美化, 整理 README, README 排版, README 格式化, README 太乱了, 看下我这个 README, beautify README, fix/format/clean up/tidy/polish/reformat README, reorganize readme, my readme looks messy/ugly, make my README look professional.
+  Reformats and restructures a README or similar Markdown project document without changing its factual content, voice, or scope, then summarizes formatting-only edits. Use when the user asks to beautify, tidy, organize, or professionally format a README（README 美化、排版、格式化、太乱了）. Use document-audit skills to judge correctness or consistency, and hai-rewrite-doc when meaning or claims must change.
 ---
 
 # Readme Beautifier
@@ -41,15 +41,16 @@ Ordered from highest to lowest priority. Fix an item only when the problem actua
 
 ### 2. One-line description
 
-- Place a single sentence right under the project name that says what the project is and does.
-- A `>` blockquote or a plain paragraph both work, but it must exist.
-- If the original has one buried in the middle, move it to the top.
+- If the original contains a one-line project description, place it directly under the project
+  name; a blockquote or plain paragraph both work.
+- If none exists, report that as an out-of-scope content gap. Do not invent one.
 
 ### 3. Section structure
 
 - Give every section a single clear responsibility; do not mix topics.
 - A common sensible order: what it is → quick start → usage → configuration → directory layout → contributing → license.
-- Delete empty sections (heading with no content) or add one explanatory sentence.
+- Preserve empty sections and flag them as out-of-scope content gaps; deleting or filling them
+  changes content.
 
 ### 4. List formatting
 
@@ -94,8 +95,8 @@ Ordered from highest to lowest priority. Fix an item only when the problem actua
 
 ### 10. Table of contents (TOC)
 
-- Suggest adding a TOC when there are more than 6 sections; do not add one at 6 or fewer.
-- Build the TOC as a link list pointing to the headings' anchors.
+- Suggest adding a TOC when there are more than 6 sections, but do not add one unless the user also
+  authorizes content additions.
 - If the original already has a TOC with broken anchors, repair it rather than delete it.
 
 ## Do not
@@ -117,23 +118,14 @@ This skill handles only formatting and structure, never whether the content is c
 
 ## Output
 
-Normal path: output the complete beautified README content directly, followed by a short summary.
+When the user targets a local file, edit that file and return its path plus a short summary; do not
+repeat a long README in chat. When the README was pasted without a writable target, return the full
+beautified content followed by the summary.
 
-```markdown
-<full beautified README.md content>
+Use `references/output-template.md` for both file and pasted-content delivery shapes and for the
+already-clean case.
 
----
-
-**Beautification summary**
-
-Changed the following:
-- ...
-
-Suggested follow-up additions (out of scope for this pass):
-- ...
-```
-
-For the output format when the README is already clean and needs no changes (the check summary), see the end of [references/output-template.md](references/output-template.md). Both complete delivery templates live in that file — compare against it before finalizing.
+Do not duplicate its output schema here.
 
 ## Edge cases
 

@@ -55,6 +55,17 @@ Use this section when rewriting an existing plan; omit it for a fresh goal docum
 |------|--------|--------|-------------------|
 | <assumption or decision> | assumed / unresolved / confirmed | <why it matters> | <how to resolve> |
 
+## Progress Management (multi-phase or multi-session execution only; otherwise omit)
+- **Update rule**: Check off a nested todo as soon as its proof is satisfied; check off a phase only after its exit proof passes.
+- **Reprioritization rule**: Whenever a phase completes or this document is reopened for continued work, re-evaluate priority before continuing. If a cleaner, higher-leverage, or dependency-unblocked item can finish the goal sooner, move it earlier and record why.
+- **Phase checklist**:
+  - [ ] Phase 1: <phase name>
+    - [ ] <proof-bearing nested todo>
+    - [ ] <proof-bearing nested todo>
+  - [ ] Phase 2: <phase name>
+    - [ ] <proof-bearing nested todo>
+    - [ ] <proof-bearing nested todo>
+
 ## Phases
 
 ### Phase 1: <phase name>
@@ -63,10 +74,13 @@ Use this section when rewriting an existing plan; omit it for a fresh goal docum
 - **Phase rules**:
   - <allowed / not allowed / compatibility / doc sync / validation rule>
 - **Todos**:
-  - [ ] <action>
+  - [ ] <action or small phase>
     - **Surface**: <doc/code/API/UI/test/etc.>
     - **Proof**: <test, command, review, artifact, trace, or behavior>
     - **Depends on**: <dependency or none>
+    - **Sub-todos**:
+      - [ ] <smaller action checked off when done>
+      - [ ] <smaller action checked off when done>
 - **Exit proof**: <how phase completion is verified>
 - **Stop condition**: <what should pause execution>
 
@@ -76,7 +90,7 @@ Use this section when rewriting an existing plan; omit it for a fresh goal docum
 - **Phase rules**:
   - <rule>
 - **Todos**:
-  - [ ] <action with surface and proof>
+  - [ ] <action or small phase with surface, proof, depends-on, and optional sub-todos>
 - **Exit proof**: <proof>
 - **Stop condition**: <condition>
 

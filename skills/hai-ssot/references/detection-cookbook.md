@@ -123,3 +123,11 @@ exemptions live in the Language notes section at the bottom.
   prefer `Pick` / `Omit` / `Partial` over a hand-copied interface.
 - Round-trip tells for class #9: `JSON.parse(JSON.stringify(x))` clones, `toJSON`/`fromJSON`
   pairs inside one process, DTO↔domain mappers stacked per layer.
+
+## 键集子集聚类（concept fracture 检测，2026-06-11 增补）
+
+字符串键反复出现时，先别急着常量化/读侧收编——它可能是**一个概念被拆碎**的指纹。做法：把同一事件/payload 家族的全部构造器键集列成表，按共享核心键聚类。N 个形互为纯子集、判别子其实是事件类型/调用方时 = 一个概念 N 个形（shape proliferation 的概念级形态），治法是**单家族 struct（omitempty 全字段）+ 类型当判别子**，而不是给每个碎片各铸一个正式 struct。
+
+伴生检查：payload 是否携带信封/外层已有的身份键（如 runId vs subject_id 列）——同一事实每条记录出生两次；存量 wire 冻结豁免，新增立"身份键不进 payload"规矩。
+
+实例：everme store 4 个 params struct + 7 个 map 构造器 + timeline 第 5 形，全是"run 生命周期事件事实集"一个概念的子集。

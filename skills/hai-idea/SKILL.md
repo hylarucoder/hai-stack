@@ -1,7 +1,7 @@
 ---
 name: hai-idea
 description: |
-  Evaluates whether an idea deserves attention and returns a clear verdict — Do / Validate first / Reframe / Defer / Kill — with a dimension-by-dimension scorecard, the strongest objection, a stronger reframe, and the cheapest validation test. Use whenever the user wonders if an idea, feature, product, or project is good, worth doing, worth their time, a distraction, or a fake need; wants two or more ideas compared and ranked; or asks whether to build, ship, kill, postpone, or reframe — even when said casually, never as an explicit "evaluate this". Trigger on 想法是不是好主意, 我有个想法, 帮我看看这个想法, 这个点子怎么样, 值不值得做, 值得投入吗, 要不要做, 该不该做, 这个需求要不要接, 是否应该验证, 该不该砍掉, 是不是伪需求, 是不是在瞎折腾, 哪个更值得做, and casual English like "should I build this", "is this worth my time", "worth doing? or kill it".
+  Evaluates whether an idea, feature, product, or project deserves attention and returns one verdict—Do, Validate first, Reframe, Defer, or Kill—plus the strongest objection and cheapest decision-changing test. Use when the user asks whether something is worth doing, is a fake need or distraction, should be built/killed/postponed, or which idea to prioritize（值不值得做、是不是伪需求、要不要砍）. Use hai-goal after the decision to proceed is made.
 ---
 
 # Hai Idea
@@ -32,6 +32,9 @@ Evaluate only the dimensions that affect the decision:
 - **Cost**: what does it consume: time, focus, architecture complexity, coordination, maintenance, reputation, or money?
 - **Risk**: how could it fail, mislead, regress, create lock-in, or make later work harder?
 - **Proof path**: what evidence would make the idea clearly stronger or weaker?
+
+Use qualitative ratings to expose uncertainty; do not average them into a pseudo-precise numeric
+score. One decisive blocker or proof can outweigh several mild positives.
 
 ## Workflow
 

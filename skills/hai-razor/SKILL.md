@@ -1,16 +1,7 @@
 ---
 name: hai-razor
 description: |
-  Audits whether each requirement, workflow step, role, field, state, module, layer, abstraction,
-  or rule deserves to exist and returns a razor verdict: a
-  Keep/Merge/Defer/Delete/Replace/Prove-first classification of every concept, the strongest
-  survival argument for anything cut, and a concrete cut/proof list. Use whenever the user wants
-  to apply Occam's razor, simplify or trim a PRD / architecture / workflow / data model /
-  state machine, challenge whether something is necessary, or spot fake requirements, premature
-  abstractions, or over-engineering — even if they never say "razor." Trigger on 用奥卡姆剃刀, 剃刀一下,
-  砍需求, 砍掉没用的东西, 收一收复杂度, 这个字段/状态/模块/分层有必要吗, 这个抽象是不是多余, 是不是伪需求,
-  是不是过度设计, 这步能不能去掉, 这些角色/状态是不是太多了, and English like "is this over-engineered",
-  "do we really need this layer", "this feels bloated, what can we delete", "too many fields".
+  Tests whether each requirement, step, role, field, state, module, layer, abstraction, or rule deserves independent existence, then classifies it as Keep, Merge, Defer, Delete, Replace, or Prove first. Use when the explicit decision is what can be removed or collapsed（奥卡姆剃刀、砍需求、这个字段/状态/层有必要吗、是否过度设计）. Use hai-prd to shape product requirements and hai-architecture to redesign module boundaries after the cuts are known.
 ---
 
 # Hai Razor
@@ -75,15 +66,14 @@ concept exactly one verdict.
    evidence from inference — if a claim is plausible but unproven, label it an assumption or "prove
    first." Prefer concrete evidence about current behavior over imagined future extensibility. Every
    keep/cut/merge/defer/replace verdict needs a reason grounded in evidence, or an explicit statement
-   that evidence is missing.
+   that evidence is missing. For code-level over-engineering signals such as defensive over-checking,
+   speculative parameters, pass-through layers, reimplemented standard behavior, or ceremonial
+   error handling, consult `references/llm-complexity-tells.md` and apply its behavior-preservation
+   gate before recommending a cut.
 
-3. **Map the current chain when the cut is structural.** If the recommendation changes a substantial
-   workflow, process, module chain, state machine, service boundary, or architecture flow, include
-   before/after Mermaid diagrams — because a structural cut silently relocates responsibility, and a
-   reviewer needs to see who now owns it. The before diagram shows existing actors, modules, steps,
-   state/data flow, and where complexity currently lives; the after diagram shows what is deleted,
-   merged, deferred, or moved, and who absorbs the rest. Skip diagrams only for small local audits
-   where a table is clearer than a flow map.
+3. **Map the current chain when the cut is structural.** Show before/after responsibility when a
+   workflow, state machine, module chain, or service boundary materially changes. Use Mermaid only
+   when it makes the ownership move clearer than a table or short explanation.
 
 4. **Run the deletion test.** For each concept ask: if this disappears, what concretely breaks?
    Distinguish "something feels less complete" from "a user goal, invariant, operation, safety
@@ -105,11 +95,9 @@ concept exactly one verdict.
    acceptance. Add a guardrail: naming, test, doc boundary, acceptance criterion, architecture note,
    or follow-up proof.
 
-9. **Emit an HTML artifact for full audits.** Path: `/tmp/hai-razor-<slug>/index.html`. After the
-   Markdown answer, write a restrained, scannable report covering the verdict, evidence, before/after
-   diagrams, Razor Map, cut/merge list, preserved complexity, risks, guardrails, and next steps.
-   Skip it for a small local audit where HTML adds more ceremony than value, and say why. When one is
-   written, return its absolute path.
+9. **Render only when requested.** The default deliverable is Markdown. If the user explicitly asks
+   for HTML or a visual report, hand the completed judgment to `hai-visual-report`; do not duplicate
+   its rendering workflow here.
 
 ## Output
 
@@ -123,9 +111,8 @@ Read `references/output-template.md` before finalizing. The answer must contain,
 - The complexity that must be preserved.
 - A concrete cut list or prove-first list, plus risks and guardrails.
 
-For full audits, also produce the HTML report per Workflow step 9. Before/after Mermaid diagrams are
-required whenever the recommendation changes a substantial workflow, process, module chain, state
-machine, service boundary, or architecture flow.
+For structural cuts, include before/after ownership only when it materially improves understanding.
+HTML remains opt-in and belongs to `hai-visual-report`.
 
 ## Use a different skill when
 

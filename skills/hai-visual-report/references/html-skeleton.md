@@ -1,6 +1,6 @@
 # Hai Visual Report — HTML Skeleton
 
-Read this at the start of the write phase. It is a minimal, complete `.html` scaffold for the eight blocks in the Report Content Model (Header, Verdict, Structure Map, Core Sections, Decision Matrix, Timeline / Phases, Risks and Proof, Next Move). Fill in the empty sections; drop a block only with a stated reason.
+Read this at the start of the write phase. It is a minimal, complete `.html` scaffold for the eight blocks in the Report Content Model (Header, Verdict, Structure Map, Core Sections, Decision Matrix, Timeline / Phases, Risks and Proof, Next Move). These blocks are scaffolding around the content, not a template to compress it into — the Core Sections carry the source's substance (reworded or reformatted for readability, not cut to a summary), and you typically repeat that block once per theme in the document. Fill in the sections; drop a block only with a stated reason.
 
 It uses Tailwind CDN and Mermaid CDN so the file stays a single portable artifact — no build step. Keep the quiet, professional report style; use cards only for repeated findings, options, risks, metrics, or callouts. Use Chinese UI copy for Chinese requests and English for English; keep code identifiers unchanged.
 
@@ -26,29 +26,34 @@ It uses Tailwind CDN and Mermaid CDN so the file stays a single portable artifac
       <p class="mt-2 text-slate-500">Scope · Generated YYYY-MM-DD</p>
     </header>
 
-    <!-- 2. Verdict -->
+    <!-- 2. Verdict (optional — only if the SOURCE states a conclusion; surface it, don't author a new summary) -->
     <section class="rounded-lg bg-white border border-slate-200 p-6">
       <h2 class="text-sm font-medium uppercase tracking-wide text-slate-400">Verdict</h2>
-      <p class="mt-2 text-xl font-medium">ONE-SENTENCE CONCLUSION</p>
+      <p class="mt-2 text-xl font-medium">THE SOURCE'S OWN CONCLUSION — OMIT THIS BLOCK IF IT HAS NONE</p>
     </section>
 
     <!-- 3. Structure Map (reader's coordinate system — keep near the top) -->
+    <!-- Mermaid label safety: any label with punctuation MUST be double-quoted, especially "/".
+         e.g. C["Timeline / Phases"], never C[Timeline / Phases]. If still broken, use #47; for "/". -->
     <section>
       <h2 class="text-xl font-semibold mb-4">Structure Map</h2>
       <div class="rounded-lg bg-white border border-slate-200 p-6 overflow-x-auto">
         <pre class="mermaid">
 flowchart TD
-  A[Actor] --> B[Relationship]
-  B --> C[Outcome]
+  A["Actor"] --> B["Relationship"]
+  B --> C["Outcome / Result"]
         </pre>
       </div>
     </section>
 
-    <!-- 4. Core Sections (one per theme; each carries a chart/table/matrix/stepper/callout/checklist) -->
+    <!-- 4. Core Sections — repeat once per theme in the source. Carry its substance here.
+         Add a visual only when it clarifies a relationship, comparison, sequence, hierarchy,
+         or evidence set. -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Core Section</h2>
-      <div class="rounded-lg bg-white border border-slate-200 p-6">
-        <p>Body. Include at least one visual object.</p>
+      <h2 class="text-xl font-semibold mb-4">Source Section Title</h2>
+      <div class="rounded-lg bg-white border border-slate-200 p-6 space-y-4">
+        <p>Body text carrying this section's substance — key points emphasized, not reduced to a one-liner.</p>
+        <!-- + a chart / table / matrix / stepper / callout / checklist that helps the reader navigate this section -->
       </div>
     </section>
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai Complexity"
+  short_description: "Core-chain complexity audit"
+  default_prompt: "Use $hai-complexity to audit this repository's complexity from structure, runtime entrypoints, core call chains, state, configuration, and tests."

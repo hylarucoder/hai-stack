@@ -1,19 +1,7 @@
 ---
 name: hai-ssot
 description: >-
-  Diagnoses single-source-of-truth (SSOT) violations and produces a numbered findings report —
-  file:line evidence, honest adjudication (real violation vs idiomatic false positive),
-  severity, and disposition per finding, plus a treatment-recipe table. Covers ten symptom classes:
-  multi-source literals, shape proliferation, word overload, legacy-vocabulary mapping layers,
-  dual-pathway behavior forks, scattered defaults, pure-subset shape pairs,
-  same-name-different-shape types, redundant conversion chains, and re-implemented
-  derivations. Use whenever the user suspects duplicated definitions, drift between layers,
-  redundant converting or re-validating, or inconsistency — even casually:
-  "这两个地方会不会不同步", "加一个 X 要改几处", "这个常量好像定义了两遍", "前后端形状对不上",
-  "形状可以统一吗", "没有单一数据源", "SSOT", "双源", "漂移", "字面量重复", "同名异形",
-  "这个类型转来转去", "转换了好几次", "没必要转这么多次", "到处都在校验/解析这个",
-  "为什么有两个一样的 struct", "check for drift", "single source of truth", "defined twice",
-  "converted back and forth", "do these stay in sync".
+  Diagnoses single-source-of-truth violations—duplicated literals or rules, shape drift, scattered defaults, redundant conversion chains, overloaded vocabulary, and behavior forks—with file:line evidence, false-positive adjudication, and a treatment recipe. Use when the user suspects definitions may diverge, adding one concept requires edits in many places, layers repeatedly convert or validate the same value, or asks about SSOT/双源/漂移/同名异形. Use hai-architecture when the root decision is module ownership rather than duplicated authority.
 ---
 
 # Hai SSOT
@@ -29,18 +17,15 @@ disposition. The skill is a diagnostic with a strong opinion about treatment, no
 
 ## The Core Law
 
-SSOT violations cluster, almost without exception, **at boundaries the type system cannot
-reach**: language↔database (string literals in raw SQL and CHECK constraints), language↔wire
-(hand-written schemas mirroring the producing types), layer↔layer (untyped payload envelopes —
-`Record<string, unknown>`, `map[string]any`, bare dicts — keyed by raw strings), code↔docs,
-production↔fixture. Inside one compiler's reach, multi-source dies
-naturally — a second definition is a compile error or an obvious dead symbol. Outside it,
-multi-source is the *equilibrium state*: every producer hand-builds, every consumer hand-gropes,
-every layer re-copies the strings it needs.
+SSOT violations are especially likely at boundaries a single type system cannot protect:
+language↔database, language↔wire, typed↔untyped payloads, code↔docs, and production↔fixtures.
+They also occur inside one language when modules independently redeclare constants, shapes,
+defaults, or derivations; compilers do not prevent semantically duplicated authorities.
 
 Two corollaries that direct the hunt:
 
-1. Start at the cross-stack seams; don't burn time grepping for intra-language duplication.
+1. Start at the cross-stack seams because risk is high there, then follow each concept through its
+   intra-language definitions and consumers.
 2. A test that pins two copies equal ("parity test", "pin test", "currency test") is a flag:
    either the copy should not exist (eliminate it, then delete the test), or both sides are
    genuinely real artifacts that cannot share a source (then the test IS the correct treatment).
@@ -48,7 +33,8 @@ Two corollaries that direct the hunt:
 
 ## The Ten Symptom Classes
 
-Read `references/detection-cookbook.md` for concrete search recipes per class before sweeping.
+Use the symptom table to choose likely classes, then read only those class recipes in
+`references/detection-cookbook.md` before searching.
 
 | # | Symptom | One-line definition | Canonical tell |
 |---|---|---|---|
@@ -123,9 +109,9 @@ Every confirmed finding routes to exactly one recipe; the recipe determines the 
 
 1. **Scope.** Agree on the sweep surface (a module, a contract plane, the whole repo). Note any
    prior sweeps/plans to avoid re-finding adjudicated items.
-2. **Map the seams first.** List the type-system-unreachable boundaries in scope (which wires,
-   which DB constraints, which untyped envelopes, which generated artifacts). The Core Law says
-   the findings live there.
+2. **Map the seams first.** List type-system-unreachable boundaries, then the internal modules that
+   independently define or derive the same concepts. Seams are priority entrypoints, not the only
+   possible location of findings.
 3. **Hunt per symptom class** using the cookbook greps. For each candidate, capture file:line for
    *every* definition/use site — counts matter ("this literal is defined in exactly 2 places",
    "adding one event touches 6 files" is the change-amplification number that lands the point).

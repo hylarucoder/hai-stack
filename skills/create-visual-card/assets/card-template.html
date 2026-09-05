@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&family=Oswald:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --card-width: 1024px;
+    --color-accent: #d4440f;
+    --color-bg: #f5f3ed;
+    --color-text: #1a1a1a;
+    --color-muted: #555;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--color-bg); }
+  .card { width: var(--card-width); max-width: 100%; margin: 0 auto; background: var(--color-bg); padding: 50px; }
+  .card::before { content: ''; position: fixed; inset: 0; opacity: 0.04; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .main-title { font-family: 'Noto Serif SC', serif; font-size: 80px; font-weight: 900; line-height: 1; color: #0a0a0a; letter-spacing: -0.04em; }
+  .accent-bar { height: 6px; width: 100px; background: var(--color-accent); margin: 10px 0; }
+  .body { font-family: 'Inter', 'Noto Sans SC', sans-serif; font-size: 19px; line-height: 1.6; color: var(--color-text); }
+  .tag { font-size: 13px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-muted); }
+  .caption { font-size: 15px; line-height: 1.5; color: var(--color-muted); }
+</style>
+</head>
+<body>
+<div class="card">
+  <!-- Build the card content here. -->
+</div>
+</body>
+</html>

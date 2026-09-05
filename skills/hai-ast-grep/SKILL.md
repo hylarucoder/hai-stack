@@ -1,7 +1,7 @@
 ---
 name: hai-ast-grep
 description: |
-  Produces a ready-to-run ast-grep pattern or YAML rule that structurally searches, lints, or auto-rewrites code via tree-sitter AST matching, validated against positive + negative fixtures. Trigger on ast-grep, sg scan, sgconfig, tree-sitter, AST matching, structural search-and-replace, codemod — and ALSO on these tasks unnamed: (1) structural search — "list every call site of X before I refactor", "find async functions that never await", or whenever grep/regex over/under-matches (hits comments/strings, misses formatting variants); (2) batch rewrite — "replace all console.log with logger", "rename this function everywhere", "change this signature at every call site", "migrate this API repo-wide"; (3) guard — "write a lint rule for this", "ban this usage in CI". Chinese triggers: 写 ast-grep 规则, 结构化搜索, 结构化搜索替换, 语法树匹配, 按语法找代码, 找出所有调用 X 的地方, 哪些地方用了这个 API, 重构前先找全调用点, grep 误报太多, 正则匹配不准, 批量改写代码, 批量重命名, 全局改函数签名, 改参数顺序, 升级旧 API, codemod, 写个 lint 规则, 禁止这种写法, 自动改写代码.
+  Produces a ready-to-run ast-grep command or reusable YAML lint/codemod rule, validated against positive and negative fixtures. Use when search or rewrite depends on syntax structure: finding all call shapes, avoiding regex matches in comments/strings, batch-changing signatures, or enforcing a structural rule（结构化搜索、批量改写、写 lint 规则）. Do not use for plain-text replacement or type-semantic refactors that require a compiler/type checker.
 ---
 
 # hai-ast-grep
@@ -10,34 +10,8 @@ ast-grep uses tree-sitter to parse code into AST, enabling precise pattern match
 
 ## Project Configuration
 
-Project-level batch scanning via `ast-grep scan` requires an `sgconfig.yml` config file; one-off pattern tests via `ast-grep run -p '<pattern>'` do not.
-
-```yaml
-# sgconfig.yml (project root)
-ruleDirs:
-  - rules          # rule directory; recursively loads all .yml files
-```
-
-Typical project structure:
-
-```
-my-project/
-├── sgconfig.yml
-├── rules/
-│   ├── no-console.yml
-│   └── custom/
-│       └── team-rules.yml
-└── src/
-```
-
-Run a project scan:
-
-```bash
-ast-grep scan              # auto-discovers sgconfig.yml
-ast-grep scan --config path/to/sgconfig.yml  # explicit config
-```
-
-> **Note**: the `ast-grep scan` command requires `sgconfig.yml`, while `ast-grep run -p` works standalone.
+One-off `ast-grep run` commands need no project config. Reusable project scans use `sgconfig.yml`
+and rule directories; read `references/project-setup.md` only when creating or changing that setup.
 
 ## Everyday CLI Usage (no rule file)
 
@@ -108,9 +82,10 @@ ast-grep scan -r rules/no-console-log.yml --update-all src/
 
 ### Development Flow (canonical workflow — follow these steps)
 
-1. **Explore** the pattern via CLI before writing YAML: `ast-grep -p 'console.log($ARG)' src/`. Inspect node types with `--debug-query ast` when the pattern won't match:
+1. **Explore** the pattern via CLI before writing YAML:
+   `ast-grep run -p 'console.log($ARG)' src/`. Inspect node types with `--debug-query ast` when the pattern won't match:
    ```bash
-   ast-grep -p 'console.log($ARG)' --debug-query ast
+   ast-grep run -p 'console.log($ARG)' --debug-query ast
    ```
 2. **Write** the rule file (`.yml`) — start with the lint form (pattern + message + severity).
 3. **Validate against a POSITIVE fixture** — code that should match: `ast-grep scan -r rule.yml fixtures/`. Confirm it matches.
@@ -118,31 +93,12 @@ ast-grep scan -r rules/no-console-log.yml --update-all src/
 5. **Add `fix:`** only if a mechanical rewrite is wanted, then dry-run before `--update-all`.
 6. **Deliver** using the deliverable shape below (and `references/output-template.md`) — never hand back a bare YAML block.
 
-## Essential Syntax
+## Syntax references
 
-Cheat sheet for fast in-context lookup. Full syntax in [references/rule-syntax.md](references/rule-syntax.md#pattern-syntax).
-
-| Element | Syntax | Example |
-|---------|--------|---------|
-| Single node | `$VAR` | `console.log($MSG)` |
-| Multiple nodes | `$$$ARGS` | `fn($$$ARGS)` |
-| Same content | Use same name | `$A == $A` |
-| Non-capturing | `$_VAR` | `$_FN($_FN)` |
-| Capture unnamed | `$$VAR` | `async function $$NAME() {}` |
-
-## Core Rules Quick Reference
-
-Cheat sheet. Full atomic / composite / relational rules in [references/rule-syntax.md](references/rule-syntax.md).
-
-| Type | Purpose | Example |
-|------|---------|---------|
-| `pattern` | Match code structure | `pattern: if ($COND) {}` |
-| `kind` | Match AST node type | `kind: function_declaration` |
-| `all` | Match ALL conditions | `all: [pattern: X, kind: Y]` |
-| `any` | Match ANY condition | `any: [pattern: var $A, pattern: let $A]` |
-| `not` | Exclude matches | `not: {pattern: safe_call()}` |
-| `has` | Must have child | `has: {kind: return_statement}` |
-| `inside` | Must be in ancestor | `inside: {kind: class_body}` |
+Use `$VAR` for one node and `$$$ARGS` for multiple nodes. For `kind`, `regex`, `all`, `any`, `not`,
+`has`, `inside`, transforms, and fix configuration, read
+[references/rule-syntax.md](references/rule-syntax.md). For language-specific starting points, read
+[references/common-patterns.md](references/common-patterns.md).
 
 ## Deliverable Shape
 
@@ -151,27 +107,11 @@ Hand back the rule in this shape — not a bare YAML block. These are the five h
 - **Goal** — what code pattern this finds or rewrites.
 - **Rule** — the `.yml` (id, language, rule, message, severity).
 - **Fix, if applicable** — the added `fix:` line.
-- **Validation** — positive fixture (should match), negative fixture (should NOT match), the exact command run (`ast-grep scan --rule <file>` or `-r <file> src/`), and the result.
+- **Validation** — positive fixture, negative fixture, exact `ast-grep run` or
+  `ast-grep scan -r <rule-file>` command, and result.
 - **Notes** — false positives avoided (how), and known limits (cases intentionally not covered).
 
-## Detailed References
-
-**Complete syntax guide**: See [references/rule-syntax.md](references/rule-syntax.md)
-- Atomic rules (pattern, kind, regex, nthChild, range)
-- Composite rules (all, any, not, matches)
-- Relational rules (has, inside, follows, precedes)
-- Transform and fixConfig
-
-**Language-specific patterns**: See [references/common-patterns.md](references/common-patterns.md)
-- JavaScript/TypeScript examples
-- Python examples
-- Go and Rust examples
-
-**Output template**: See [references/output-template.md](references/output-template.md) — the full, copy-pasteable version of the Deliverable Shape above (positive/negative fixtures, exact validation command, known-limits field).
-
-## Supported Languages
-
-Bash, C, Cpp, CSharp, Css, Elixir, Go, Haskell, Hcl, Html, Java, JavaScript, Json, Kotlin, Lua, Nix, Php, Python, Ruby, Rust, Scala, Solidity, Swift, Tsx, TypeScript, Yaml
+The canonical delivery shape is `references/output-template.md`; do not invent a second schema.
 
 ## Use a Different Skill When
 
@@ -179,6 +119,6 @@ ast-grep is the right hammer only when the match depends on syntax structure —
 
 - **Plain text or regex find-and-replace** with no syntax-tree shape (rename a string literal, swap a URL, find a unique identifier that grep already nails) — just use grep / a normal edit / `sed`; an AST pattern is overkill.
 - **One-off edit in a single file** — edit it directly; a rule only pays off across many call sites.
-- **Type-aware or semantic refactor** (driven by what a value's type is, not its syntax — e.g. eliminate `any`) — use `ts-type-safety-reviewer`. ast-grep matches syntax, not types.
-- **Subjective code-quality review** ("is this clean / well-named / over-engineered", code smells) — use `clean-code-reviewer`; for a behavior-preserving cleanup pass use `code-simplifier`.
+- **Type-aware or semantic refactor** (driven by types rather than syntax) — use the compiler or an available type-safety workflow.
+- **Subjective code-quality review** — use `clean-code-reviewer`; for implementation, use an available refactoring workflow.
 - **Pure formatting / whitespace / import order** — that is a formatter's job (Prettier, Biome, gofmt), not a structural rule.

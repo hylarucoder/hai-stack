@@ -8,8 +8,8 @@
 ## Report Type
 <idea / requirement / goal / review / architecture-style / custom> — <一句话说明>
 
-## Core Judgment
-<这份报告最想让读者记住的判断。>
+## Source Fidelity
+<原文若有自己的结论就写在这里，否则 "n/a"；再确认实质已承载下来、未压成摘要。>
 
 ## Visual Structure
 - **Map**: <Mermaid graph / flow / system map / none and why>
@@ -19,11 +19,16 @@
 
 ## Generated File
 - **HTML**: `<absolute path>`
+- **Preview PNG**: `<absolute path, or unavailable with reason>`
 
 ## QA Checks
 - **HTML generated**: yes / no
+- **Browser render inspected**: pass / issue / unavailable because <reason>
+- **Substance preserved (same understanding as source, not reduced to a summary)**: pass / issue
+- **Readability enhanced — key points emphasized, visuals aid rather than replace content**: pass / issue
 - **Mermaid included or intentionally omitted**: yes / no / omitted because <reason>
-- **Verdict visible near top**: pass / issue
+- **Source conclusion surfaced when present**: pass / issue / n/a
+- **Map near top**: pass / intentionally omitted because <reason> / issue
 - **Readable structure**: pass / issue
 - **No single-card misuse**: pass / issue
 - **Facts vs assumptions separated**: pass / issue

@@ -29,7 +29,7 @@ PRD 是带可验证验收的产品论证，不是功能清单。下面三条规�
 | 主要需求是架构、模块边界或技术权衡 | `hai-architecture` |
 | 主要问题是这件事到底值不值得做 | `hai-idea` |
 | 这是代码任务、bugfix 或测试先行实现 | `hai-tdd` 或任务说明 |
-| 这是文档一致性审计 | 文档审计 skill（对比代码 / 内部自检） |
+| 这是文档一致性审计 | `hai-audit-docs-internally` 或 `hai-audit-docs-against-code` |
 
 要问：
 
@@ -89,20 +89,7 @@ PRD 是带可验证验收的产品论证，不是功能清单。下面三条规�
 
 ## 输出
 
-把当前模式对应到模板段落，只填相关段落：
-
-```markdown
-# Hai PRD: <主题或文档名>
-## Mode                  （Need PRD / Design PRD / Craft PRD / Scope PRD）
-## PRD Necessity          — Need PRD：推荐 PRD / hai-goal / design doc / 任务 / 不单独产物
-## PRD Draft              — Design PRD：目标结果、问题、用户、范围、需求、验收
-## Existing PRD Diagnosis  — Craft PRD：主要漂移、冲突、删/留/重写、验收改进
-## PRD Scope Assessment    — Scope PRD：六维测试信号、拆/合建议、建议边界
-## Remaining Open Questions
-## Next Step
-```
-
-定稿前读 `references/output-template.md`。不要机械输出全部 section，只输出和当前问题相关的模式。
+读取 `references/output-template.md`，只填写当前模式对应的章节，不要在主指令里复制模板。是否需要 PRD 的判断可以很短；草案或修复必须保留足够的产品行为与验收信息，能够独立阅读。
 
 ## 何时改用别的 skill
 

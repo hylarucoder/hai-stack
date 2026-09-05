@@ -1,7 +1,7 @@
 # hai-stack
 
 <p>
-  <img src="https://img.shields.io/badge/skills-20-2563eb" alt="skills" />
+  <img src="https://img.shields.io/badge/skills-21-2563eb" alt="skills" />
   <img src="https://img.shields.io/badge/for-Claude%20Code%20%2F%20Codex-8A2BE2" alt="for Claude Code / Codex" />
   <a href="LICENSE"><img src="https://img.shields.io/github/license/hylarucoder/hai-stack?color=22c55e" alt="license" /></a>
   <a href="https://github.com/hylarucoder/hai-stack/stargazers"><img src="https://img.shields.io/github/stars/hylarucoder/hai-stack?style=social" alt="stars" /></a>
@@ -43,7 +43,7 @@ Idea → Frame → PRD → Goal → Architecture → TDD → Audit → Report
 | **Frame** | 方案是太怂、太飘，还是太繁？ | `geju` / `goudi` / `hai-razor` |
 | **PRD** | 需要 PRD 吗？边界和粒度怎么定？ | `hai-prd` |
 | **Goal** | 动手前，目标、阶段和验证是什么？ | `hai-goal` |
-| **Architecture** | 复杂度藏在正确的边界里吗？ | `hai-architecture` |
+| **Architecture** | 复杂度藏在正确的边界里吗？全仓运行链为什么难改？ | `hai-architecture` / `hai-complexity` |
 | **TDD** | 行为先被测试定义，再被实现了吗？ | `hai-tdd` |
 | **Audit** | 文档内部一致吗？文档和代码一致吗？ | `hai-audit-docs-internally` / `hai-audit-docs-against-code` |
 | **Report** | 关键判断能被清楚展示和复用吗？ | `hai-visual-report` / `create-visual-card` |
@@ -72,7 +72,7 @@ Idea → Frame → PRD → Goal → Architecture → TDD → Audit → Report
 - **减少方案偏差**——用 `geju` 打开格局、`goudi` 压实落地、`hai-razor` 砍掉冗余。
 - **减少需求返工**——用 `hai-prd` 判断是否需要 PRD、粒度是否合理、验收是否可验证。
 - **减少中途改向的浪费**——用 `hai-goal` 把目标、阶段和 proof 写清楚再动手。
-- **减少陷入局部最优的架构决策**——用 `hai-architecture` 从复杂度、边界和信息隐藏审视系统。
+- **减少陷入局部最优的架构决策**——用 `hai-architecture` 审明确边界，用 `hai-complexity` 从运行入口追全仓复杂度。
 - **减少"补测试式自我安慰"**——用 `hai-tdd` 先看测试失败，再写最小实现。
 - **减少文档失真**——用文档审计技能保持文档内部一致、并与代码同步。
 - **减少"结论写完就沉没"**——用 `hai-visual-report` 和 `create-visual-card` 把复杂内容变成能展示的产物。
@@ -105,6 +105,7 @@ Idea → Frame → PRD → Goal → Architecture → TDD → Audit → Report
 | 名称 | 用途 | 收益 |
 | --- | --- | --- |
 | `hai-architecture` | 基于 APoSD/Ousterhout 做架构审查：架构图、复杂度痛点、多镜头评审、why-not 备选和红蓝对抗 | 在架构决策阶段发现系统性复杂度，而不是停在局部代码风格 |
+| `hai-complexity` | 从运行入口追踪全仓或大子系统的核心调用链、状态/配置流、依赖和测试保护 | 找到真正让仓库难改的运行链复杂度中心；明确区别于单个边界决策的架构审查 |
 | `hai-naming` | 命名顾问：给出 3-5 个候选 + 推荐名 + 三阶段推理链；做命名审查时给改名清单 | 好命名就是好设计，减少"读代码猜意图"的成本 |
 | `react-component-diagnosis` | 从 7 个维度给单个 React 组件出结构化体检报告，基于逐行读代码而非表面评价 | 一次诊断定位组件的结构性问题，避免反复重构 |
 | `clean-code-reviewer` | 基于《代码整洁之道》从 7 个维度出带严重度和重构建议的报告，只改实现不改行为 | 系统化代码体检，而不是凭经验零散挑问题 |
@@ -132,7 +133,7 @@ Idea → Frame → PRD → Goal → Architecture → TDD → Audit → Report
 
 ## 快速安装
 
-克隆仓库后，运行 `make link` 即可将所有技能以符号链接方式安装到 `~/.claude/skills/` 和 `~/.codex/skills/`：
+克隆仓库后，运行 `make link` 即可将所有技能以符号链接方式安装到 `~/.claude/skills/` 和 `~/.agents/skills/`：
 
 ```bash
 git clone https://github.com/hylarucoder/hai-stack.git
@@ -163,6 +164,7 @@ make unlink   # 移除所有符号链接
 帮我判断这个需求需不需要 PRD，要不要拆
 先别一边跑一边看，帮我写一份 goal document 再开始
 帮我从架构层面 review 一下这个模块的设计
+帮我从运行入口开始，审计一下这个仓库为什么这么难改
 帮我诊断一下这个 React 组件的架构质量
 这个变量叫什么名字好？帮我起个名
 这个功能用 TDD 来做，先写失败测试
@@ -200,4 +202,17 @@ skills/<skill-name>/
 
 ## 运行要求
 
-仓库本身依赖很少：只是阅读和使用技能，不需要安装任何东西。要把 HTML 报告/卡片截成 PNG 时，需要 Node.js 和 Playwright。
+仓库本身依赖很少：只是阅读和使用技能，不需要安装任何东西。要把 HTML 报告或卡片渲染成 PNG，安装可选的 Playwright 工具链：
+
+```bash
+npm install
+npx playwright install chromium
+```
+
+仓库级静态检查：
+
+```bash
+make validate
+```
+
+相邻 skill 的触发边界回归样例在 `evals/trigger-cases.json`；修改 description 后应在目标模型/宿主中重跑这些场景。

@@ -1,18 +1,7 @@
 ---
 name: hai-rewrite-doc
 description: |
-  Verifies a drifted, patched-over document block by block — against the current conclusions, the
-  codebase, and anything else checkable — then rewrites it around the evidence: blocks that
-  survive verification keep their original wording, blocks that fail are removed (never repaired
-  into a plausible-looking fix), and the result ships as the rewritten document plus a
-  disposition table (keep / delete / undecided, each citing the check) and an open-questions
-  list. Use whenever a document has accumulated
-  messy, doubtful claims through rounds of discussion and the user wants it verified and cleaned,
-  not patched again. Trigger on 重写这份文档, 这文档已经烂了, 文档已经不对了, 逐条核实这份文档,
-  把不对的内容删掉, 按最新结论重写, 文档跟讨论结论对不上, 别再缝缝补补了, 推倒重写, and English
-  like "rewrite this doc", "verify this doc and strip what's wrong", "this doc has drifted". For
-  a findings report without a rewrite use hai-audit-docs-internally; if the document is a PRD use
-  hai-prd; if it is a plan or goal document use hai-goal.
+  Rebuilds a drifted, repeatedly patched document from verified current conclusions. It inventories old blocks, preserves verified wording, removes disproved material, writes authoritative replacement coverage only from verified sources, and reports keep/delete/replace/undecided dispositions. Use when the user wants a rotten document verified and rewritten rather than patched again（按最新结论重写、逐条核实、推倒重写）. Use hai-prd for PRDs, hai-goal for plans, and a document-audit skill when no rewrite is requested.
 ---
 
 # Hai Rewrite Doc
@@ -25,17 +14,15 @@ Take one document that has rotted through rounds of discussion and patching, ver
 block, and rewrite it around what survives. The old document is raw material and evidence —
 never the base to patch.
 
-The default stance toward old content is **preservation**: every block gets verified, what
-passes keeps its original wording, and only what fails verification is removed. The skill's
-value is catching the many small wrong claims a messy document hides — one by one, with the
-check on record — not composing a prettier document.
+The default stance toward old content is **preservation**: every block gets verified and what
+passes keeps its wording. A failed block is never patched from guesswork; delete it, or replace its
+coverage only when the anchor or another authoritative source supplies the correction.
 
-Verification runs at two levels: **macro** (the document's frame — frontmatter/YAML metadata,
-title, stated purpose) and **micro** (every individual point). Both levels carry the same rule:
-fail means removal.
+Verification runs at two levels: **macro** (frontmatter, title, purpose) and **micro** (individual
+claims, tables, commands, and examples). Both use the same evidence rules.
 
-Deliver three things: the rewritten document, a disposition verdict for every block of the old
-one, and the open questions that cannot be verified without the user.
+Deliver the rewritten document, a disposition verdict for every old block, and the open questions
+that cannot be verified without the user.
 
 ## Core Principle
 
@@ -52,11 +39,10 @@ anchor, the codebase, a config file, a schema, a runnable command — must actua
 before it is kept or deleted. A claim that cannot be checked is never silently kept or dropped;
 it goes to Open Questions.
 
-**Verification failure means removal, not repair.** The instinct to fix a failing block — to
-explain why it failed and write a corrected version — is exactly how rot enters: the "fix" is a
-guess wearing a fix's clothes, and it reads as authoritative. Remove the block. If its topic
-still needs covering, that coverage comes from the anchor; if the anchor has nothing to say, the
-gap goes to Open Questions for the user to fill deliberately.
+**Verification failure forbids guessed repair.** A disproved block cannot be paraphrased into a
+plausible-looking correction. Delete it when the topic is no longer needed; use **Replace** when a
+verified anchor, contract, code path, or other named authority supplies the correct coverage; use
+**Undecided** when no authority settles it.
 
 ## Workflow
 
@@ -90,10 +76,9 @@ gap goes to Open Questions for the user to fill deliberately.
 
 5. **Give every block exactly one verdict:**
    - **Keep** — verified still true; reuse it with the original wording and voice.
-   - **Delete** — failed verification: verified wrong, contradicts the anchor, or is patch
-     residue nobody can explain. Cite the check that failed. Do not rewrite it into a version
-     that would pass — remove it; any replacement coverage comes from the anchor, not from the
-     failed block.
+   - **Delete** — failed verification and no longer needed. Cite the failed check.
+   - **Replace** — the old block failed, but a named authoritative source supplies necessary,
+     verified replacement coverage. Cite both the failure and replacement source.
    - **Undecided** — unverifiable without the user; park it in Open Questions. Never silently
      keep or drop it.
 
@@ -109,21 +94,12 @@ gap goes to Open Questions for the user to fill deliberately.
    represented; everything in the new document traces to the anchor or to a Keep verdict.
    Anything that fails this check gets fixed or moved to Open Questions.
 
-## Output
+## Output and file safety
 
-Replace the original file in place — version control and the disposition table carry the
-history; a sibling copy just becomes the next piece of patch residue. Write to a separate file
-only when the user explicitly asks to keep the original untouched. The reply carries the rest:
-
-```markdown
-# Hai Rewrite Doc: <document>
-## Anchor               — numbered current conclusions the rewrite derives from
-## Rewritten Document   — path to the rewritten file (inline only when the document is short)
-## Disposition Table    — old block → Keep / Delete / Undecided, each citing the check it passed or failed
-## Open Questions       — what the anchor cannot settle, and which section each one blocks
-```
-
-Read `references/output-template.md` before finalizing.
+Read `references/output-template.md` before finalizing. Edit the original in place only when the
+user explicitly targeted that file for modification and a recoverable history such as version
+control exists. Otherwise write a clearly named sibling or user-specified output and leave the
+source untouched. Report the actual path and whether the original changed.
 
 ## Use a different skill when
 
@@ -142,7 +118,7 @@ Read `references/output-template.md` before finalizing.
 - Not a patch merger — it never produces "the old doc plus the latest edits".
 - Not a summarizer — the output is a full working document, not a digest.
 - Not a fresh composition — verified-true content is preserved, not paraphrased.
-- Not a repair shop — a failing block is removed, never patched into a passing one.
+- Not a guess-based repair shop — replacement text must trace to a verified authority.
 - Not silent — nothing from the old document disappears without a line in the disposition table.
 
 ## Common Mistakes
@@ -152,8 +128,7 @@ Read `references/output-template.md` before finalizing.
 - Passing a list wholesale — a list passes only when every item in it passed individually.
 - Skipping the frame because it "looks structural" — stale frontmatter/YAML metadata fails and
   gets removed like any other block.
-- Repairing a failing block instead of removing it — explaining why it failed and writing a
-  "corrected" version reintroduces guesses; failure means removal.
+- Repairing a failing block from intuition. Delete it or replace it from a cited authority.
 - Deleting without citing the check that failed; a Delete verdict is earned, not asserted.
 - Treating "it was discussed once" as consensus; only the latest standing decision counts.
 - Silently dropping blocks instead of recording a Delete verdict.

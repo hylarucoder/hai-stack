@@ -1,6 +1,22 @@
 # Goudi Output Template
 
-Use this template when a proposal needs to be grounded, shrunk into a proof point, or pressure-tested for feasibility.
+Use the compact form for a quick feasibility question. Use the full form for a substantial proposal
+or explicitly requested report.
+
+## Compact form
+
+```markdown
+## Landing Judgment
+<go / shrink / pause / reject / validate first>, because <reason>.
+
+## Minimum Viable Move
+<one proof-producing action and what it excludes>
+
+## Signals
+<success, failure, and stop rule>
+```
+
+## Full form
 
 ```markdown
 # 落地审判：<topic>

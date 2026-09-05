@@ -1,6 +1,25 @@
 # Geju Output Template
 
-Use this template when the user wants the design space opened up and conservative local thinking challenged.
+Use the compact form for a quick direction question. Use the full form below for a substantial
+proposal or an explicitly requested report.
+
+## Compact form
+
+```markdown
+## Thesis
+<bold, falsifiable direction>
+
+## The Trap
+<inherited constraint and whether it is real>
+
+## Direction
+<target model plus what to delete, merge, split, or preserve>
+
+## Proof
+<first proof point and falsifier>
+```
+
+## Full form
 
 ```markdown
 # 格局判断：<topic>

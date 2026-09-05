@@ -1,16 +1,7 @@
 ---
 name: hai-goal
 description: |
-  Produces a written goal document before execution starts — a verifiable target, boundary,
-  current state, phased route, per-phase rules, todos with proof, a dry-run, and a Go / No-Go
-  judgment — instead of coding while watching to see if it works. Use whenever the user wants to
-  start, go, implement, ship, build, or move forward; gives a vague intent that needs a concrete
-  goal; asks to break work into phases or todos; or hands over an existing plan plus a target and
-  wants it rewritten and re-anchored around that target. Trigger even when they never say "goal"
-  or "plan": 开始干, 开搞, 我们开始吧, 先别急着写代码先定个目标, 把这个拆成阶段, 拆 todo, 落地方案,
-  执行计划, 怎么落地, 立个目标, 围绕X重新规划, 重写这个计划, "lets just ship this", "gonna start
-  building now", or just a one-line intent plus "do it". To first decide whether the work is even
-  worth doing, use hai-idea instead.
+  Creates or rewrites a goal document for ambiguous, multi-phase, high-risk, or explicitly planned execution: verifiable outcome, boundary, current state, phases, proof-bearing todos, dry-run, and Go/No-Go. Use when the user asks for a goal, plan, phases, todos, or to re-anchor an existing plan（定目标、拆阶段、执行计划）. Do not interpose it on a small implementation whose outcome and verification are already clear; use hai-tdd once a behavior slice is ready.
 ---
 
 # Hai Goal
@@ -19,19 +10,17 @@ For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the executi
 
 ## Overview
 
-Use this skill before meaningful execution. Its job is to stop "running while watching" and first
-write a goal document: a concrete, goal-oriented plan that defines what should become true, how to
-phase the work, what rules govern each phase, and how completion will be verified. It also handles
-a second common case — the user already has a plan but names a target and asks you to rewrite the
-plan around that target — by preserving useful material, discarding local noise, reprioritizing
-phases, and producing a stronger goal document.
+Use this skill when execution is ambiguous, spans meaningful phases, carries material risk, or the
+user explicitly asks for a plan. It turns the work into a verifiable target, boundary, route, and
+proof. It also rewrites an existing plan around a newly stated target. A small task with an obvious
+outcome and verification should proceed directly without ceremony.
 
 ## Core Principle
 
 Write the goal before you go.
 
-Do not start by coding, editing, or loosely exploring while hoping execution will clarify the
-target. The "run and watch" failure mode — which this skill exists to prevent — looks like:
+When this skill's trigger conditions apply, do not start implementation while hoping execution will
+clarify the target. The "run and watch" failure mode looks like:
 
 - Start implementation before the target is stable.
 - Discover missing decisions halfway through.
@@ -40,9 +29,8 @@ target. The "run and watch" failure mode — which this skill exists to prevent 
 - Forget to define what counts as done.
 - Treat validation as an afterthought.
 
-Most work should first become a written goal document with a verifiable goal, boundaries, phases,
-rules, todos, dependencies, and proof. When a plan already exists, the target takes priority over
-the old plan shape.
+Complex or unclear work should first become a goal document with boundaries, phases, dependencies,
+and proof. When a plan already exists, the target takes priority over the old plan shape.
 
 ## The Goal Document
 
@@ -54,6 +42,7 @@ A goal document is a runnable plan for execution. It answers:
 - **Route**: what phases get us there?
 - **Rules**: what constraints or working agreements govern each phase?
 - **Todos**: what concrete tasks belong in each phase?
+- **Progress management**: for multi-phase execution, what checklist should stay current?
 - **Verification**: how do we prove each phase, and the whole goal, is done?
 - **Stop conditions**: when should we pause, ask, or revise the plan?
 
@@ -107,36 +96,23 @@ is provided.
    execute without guessing, mark dependencies and blockers that affect order, and keep unrelated
    cleanup out unless the phase goal requires it.
 
-8. **Dry-run the route.** Walk the phases in order without executing them; look for missing
+8. **Add progress management when execution will continue across phases or sessions.** Use one
+   phase checklist with nested proof-bearing todos. Mark a phase complete only after its exit proof
+   passes, and record any reprioritization instead of silently following stale order. Omit this
+   machinery for a short one-session plan.
+
+9. **Dry-run the route.** Walk the phases in order without executing them; look for missing
    prerequisites, circular dependencies, vague todos, and unverified assumptions; revise the goal
    document before any real work. This step is what separates a goal document from generic planning.
 
-9. **Decide whether to Go.** If the route is coherent, execution can start. If it carries unresolved
+10. **Decide whether to Go.** If the route is coherent, execution can start. If it carries unresolved
    decisions, resolve them with the right skill first (see below) and re-run the dry-run.
 
 ## Output
 
-Return a goal document, not just advice. Inline skeleton (fill every section in
-`references/output-template.md`):
-
-```markdown
-# Goal Document: <work name>
-## Go / No-Go            — Go / No-Go / Go after decisions, plus reason
-## Target Outcome
-## Goal Definition       — boundary, non-goals, deferred, verification rule, evidence source, pass criteria, confidence note, judgment owner (who/what declares it done)
-## Current State
-## Plan Rewrite Notes    — rewrite case only
-## Drift Diagnosis       — rewrite case only
-## Priority Rationale
-## Assumptions and Open Decisions
-## Phases                — per phase: purpose, entry condition, phase rules, todos (action/surface/proof/depends-on), exit proof, stop condition
-## Dry-Run Findings
-## Final Validation
-## First Execution Step
-```
-
-Read `references/output-template.md` before finalizing. Omit **Plan Rewrite Notes** and **Drift
-Diagnosis** for a fresh goal document.
+Return a goal document, not generic advice. Fill `references/output-template.md` and omit conditional
+sections that do not apply: rewrite notes for a fresh goal, and progress tracking for a short plan.
+Do not duplicate the template inside the main instructions.
 
 ## Use a different skill when
 

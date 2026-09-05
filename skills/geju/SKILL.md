@@ -1,15 +1,7 @@
 ---
 name: geju
 description: |
-  Produces a bold, high-altitude direction judgment (格局判断): a sharp thesis on the right target
-  model, a kill-list of what to delete / merge / split / reframe, a Conservative-vs-Clean-vs-Staged
-  options table, a verification path (first proof point + falsifier) that keeps the bold call
-  testable, and a closing payoff ledger (收益账单) showing why the direction is worth its price. Use whenever the user wants to think bigger, open the design space, or challenge a
-  conservative / incremental / over-compatible proposal — proactively, even when unnamed. Triggers:
-  打开格局, 格局太小, 你格局小了, 拔高一点, 站高一点, 别太保守, 太碎了, 别老想着兼容,
-  别被重构难度绑架, 大方向; and English "too incremental / too safe", "play it bigger",
-  "greenfield this", "what if there were no legacy". Once the bold direction needs feasibility /
-  landing pressure-testing, route to goudi.
+  Challenges an overly conservative, incremental, or compatibility-led proposal with a bold target model, a concrete kill/merge/split list, materially different options, and a falsifiable first proof point. Use when the user asks to think bigger, open the design space, or imagine the clean target without legacy constraints（打开格局、别太保守、不要被兼容绑架）. Use goudi to pressure-test how the chosen direction lands, and hai-idea to decide whether the idea deserves doing at all.
 ---
 
 # Geju
@@ -30,49 +22,11 @@ Refactor difficulty, compatibility fear, existing implementation shape, and loca
 
 ## Ways To Open The Frame
 
-The eight moves below are the skill's catalog. Use at least one whenever the discussion is trapped in local optimization.
-
-### 1. End-State Backcasting
-
-Ask: "If this system were already excellent six months from now, what would be true?" Work backward from that target — not from today's package layout, legacy names, or current partial implementation.
-
-### 2. Zero-Legacy Thought Experiment
-
-Ask: "If we started today with no old callers, what would we build?" Compare the clean target with the legacy-preserving path. This exposes which compatibility work is real and which is inertia.
-
-### 3. Kill The Wrong Concept
-
-Sometimes the right move is not to rename, split, or patch a concept — it is to delete the concept because it encodes the wrong model. Look for concepts that exist only because of history:
-
-- Duplicate names for one lifecycle.
-- Transitional wrappers with no real contract.
-- "Manager", "service", "context", or "config" objects that hide responsibility.
-- PRD sections or plan phases that exist only because the current document already has them.
-
-### 4. Ten-Times Question
-
-Ask: "If this had to support 10x more usage, complexity, teams, or product surface, what would obviously break?" Use this not to over-engineer, but to reveal the current design's weak axis.
-
-### 5. Constraint Inversion
-
-Instead of "how do we work around this constraint?", ask "what if this constraint were removed?" Then decide whether the constraint deserves to survive.
-
-### 6. Non-Negotiable Principles
-
-Before discussing implementation, name 2-4 principles the design must not violate, e.g.:
-
-- The document is the source of truth.
-- One concept has one lifecycle owner.
-- Internal legacy names do not get compatibility shims.
-- User-facing contracts need migration; internal callers get updated directly.
-
-### 7. Tasteful Deletion
-
-Deletion is a design act. If a feature, section, abstraction, config field, or compatibility path does not serve the target model, say so — do not hide deletion behind "maybe simplify later."
-
-### 8. Hypothesis First, Verification Second
-
-Say the bold hypothesis before overfitting to caveats. Then make it testable: What evidence would confirm this direction? What would disprove it? What is the cheapest proof point? What should we inspect before committing? What risk would make this take irresponsible?
+Choose one or two moves that expose the trapped assumption; do not perform the whole catalog. The
+available moves are end-state backcasting, zero-legacy thought experiment, killing the wrong
+concept, the ten-times question, constraint inversion, non-negotiable principles, tasteful
+deletion, and hypothesis-first verification. Read `references/frame-opening-moves.md` when a move
+needs fuller guidance or examples.
 
 ## What To Fight
 
@@ -105,19 +59,22 @@ These are the failure modes that keep an answer small. Each gets countered by th
 
 ## Output
 
-Produce a 格局判断 with these sections (see `references/output-template.md` for the copy-pasteable skeleton — read it before finalizing):
+Produce a 格局判断 using `references/output-template.md`. For a quick direction question, keep the
+same decision fields but collapse them into Thesis / Trap / Direction / Proof. Use the full section
+set only for a substantial proposal or when the user asks for a report.
 
 - **Thesis** — sharp, high-leverage, in 1-3 sentences; not presented as guaranteed truth.
 - **Confidence** — level (high / medium / low) plus why not certain.
 - **The Trap** — the inherited constraint, whether it is real, and why.
 - **High-格局 Direction** — the clean target model.
-- **Frame-Opening Move** — which move you used and what it reveals.
+- **Frame-Opening Move** — which one or two moves you used and what they reveal.
 - **Bold Takes** — defensible bold claims; what to delete / merge / split / rename; what not to preserve.
 - **Options** — the Conservative path / Clean target / Staged clean path table with a verdict per row.
 - **What Not To Do** — local optimizations, shims, or detail traps to avoid.
 - **First Proof Point** — the smallest artifact that proves the direction.
 - **Falsifier** — what evidence would prove the thesis wrong.
-- **Payoff Ledger (收益账单)** — the closing table that justifies the direction to the audience: each major move (drawn from the Bold Takes / kill list) with the price paid now, the concrete pain it removes or capability it unlocks, and when that payoff becomes visible. Generic benefits ("cleaner", "more maintainable") are banned — every row must name a specific pain or unlock, or the row gets cut.
+- **Payoff Ledger (收益账单)** — include for full reports: price paid now, specific pain removed or
+  capability unlocked, and when the payoff becomes visible.
 
 Output discipline that the sections do not already enforce:
 

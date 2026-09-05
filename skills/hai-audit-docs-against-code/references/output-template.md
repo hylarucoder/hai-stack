@@ -53,7 +53,7 @@
 - **影响**: [会如何误导用户/调用方/开发者？可能产生什么后果？]
 - **建议（最小修正）**: [改「文档」还是「代码」？给出最小可行修正方向]
 - **修复收益**: [改完后的具体收益，例如降低误用风险、减少排障成本、提升 onboarding 效率、避免错误集成]
-- **关联原则**: [以代码为真 / 合同优先 / 安全默认收紧 / 按场景审计 / 说明修复收益]
+- **关联原则**: [先定权威来源 / 区分当前与目标行为 / 安全默认收紧 / 按场景审计 / 说明修复收益]
 ```
 
 ## 审核结论（结尾汇总）
@@ -96,51 +96,5 @@
 | 对外通知 | 是/否 | [具体说明] |
 ```
 
----
-
-## 示例问题项
-
-### 1. contextIsolation 安全配置与文档描述不一致
-
-- **严重级别**: P0
-- **位置**:
-  - 文档: `docs/security.md:45`
-  - 代码: `src/main/window.ts:23`
-- **证据**:
-  - 文档片段:
-    ```
-    所有渲染进程均启用 contextIsolation，确保 preload 脚本与页面脚本隔离
-    ```
-  - 代码片段:
-    ```typescript
-    webPreferences: {
-      contextIsolation: false, // 实际未启用
-      nodeIntegration: true
-    }
-    ```
-- **影响**: 用户/审计人员会误认为应用已启用安全隔离，实际存在 XSS 攻击风险
-- **建议（最小修正）**: 修改代码，将 `contextIsolation` 设为 `true`，并通过 preload 脚本暴露必要 API
-- **修复收益**: 安全文档与实际防护能力一致，减少审计误判，并降低渲染进程暴露 Node 能力带来的攻击面
-- **关联原则**: 安全默认收紧、以代码为真
-
----
-
-### 2. API 端点 /api/users 返回字段与文档不一致
-
-- **严重级别**: P1
-- **位置**:
-  - 文档: `docs/api.md:120`
-  - 代码: `src/routes/users.ts:45`
-- **证据**:
-  - 文档片段:
-    ```
-    返回字段: id, name, email, createdAt, updatedAt
-    ```
-  - 代码片段:
-    ```typescript
-    return { id, name, email, created_at, updated_at }; // snake_case
-    ```
-- **影响**: 前端按文档使用 camelCase 会取不到值
-- **建议（最小修正）**: 更新文档，标注实际字段名为 snake_case
-- **修复收益**: 调用方可按文档直接读取字段，减少前端联调时因命名不一致产生的定位成本
-- **关联原则**: 以代码为真、合同优先
+For calibrated examples that distinguish current behavior from intended behavior, read
+`worked-examples.md` only when needed.

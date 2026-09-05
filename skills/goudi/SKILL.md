@@ -1,7 +1,7 @@
 ---
 name: goudi
 description: |
-  Pressure-tests an ambitious proposal and returns a grounded landing judgment (go / shrink / pause / reject / validate-first) with one minimum-viable first move, an explicit cut list, success/failure signals, and a stop rule. Use whenever a discussion has more vision than executable grounding, or the user asks how to land/ship a bold idea, define the smallest first step, scope down, pressure-test feasibility, price risk, or set a stop/rollback rule — even if they never name the skill. Triggers on 苟帝, 落地, 先落地, 怎么落地, 别太飘, 太理想化, 收一收, 砍范围, 可执行, 可验证, 最小可行, MVP, 止损, 回滚, 风险有多大, and on "make this real / be realistic / what do I do first / is this plan feasible" — including right after a geju or architecture session. Use geju instead when the goal is to open the frame and think bigger.
+  Pressure-tests an ambitious proposal and returns a landing judgment, one minimum viable proof, explicit cuts, success/failure signals, and a stop rule. Use when a direction has more vision than executable grounding or the user asks how to land it, reduce first-step scope, price risk, or define rollback（落地、别太飘、最小可行、止损）. Use geju when the goal is to open the frame rather than ground an existing direction.
 ---
 
 # Goudi
@@ -58,11 +58,12 @@ Do not let `goudi` erase the bold target. Compress the first step, not the ambit
 
 ## Output
 
-Produce the answer using `references/output-template.md` — load it before drafting. It fixes the section order: Landing Judgment / Bold Direction Kept / Reality Check / Minimum Viable Move / Verification / Cut List / Stop Rule / Next Move.
+Produce the answer using `references/output-template.md`. Use its compact form for a quick
+feasibility question and the full section order for a substantial proposal or requested report.
 
 Beyond the template's per-field shape, hold these constraints:
 
-- Lead with the verdict — go / shrink / pause / reject / validate first — not with the analysis.
+- Lead with exactly one verdict — go / shrink / pause / reject / validate first — not with the analysis.
 - Name real constraints separately from anxiety or inertia.
 - Preserve the bold target when it is useful, but do not let it replace execution.
 - The default is a smaller proof, not paralysis. Do not turn `goudi` into "do nothing."

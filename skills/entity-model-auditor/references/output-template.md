@@ -15,7 +15,7 @@ Table-level fields (Classification = table column). 8-column audit table:
 
 | Target field | Type | Classification | Field nature | Existence justification | Current field | Current source | Change |
 |--------------|------|----------------|--------------|-------------------------|---------------|----------------|--------|
-| `<field>` | string/int/enum/jsonb | table column | — | system necessary / non-redundant / user-perceptible / questioned | `<current>` or — | DB column / not implemented | — / rename / new / move / remove / connect API |
+| `<field>` | string/int/enum/jsonb | table column | — | goal/invariant/contract/audit/observable behavior, plus non-duplication; or questioned | `<current>` or — | DB column / not implemented | — / rename / new / move / remove / connect API |
 
 ## 2. Config Fields
 

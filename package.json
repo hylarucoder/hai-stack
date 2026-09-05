@@ -1,0 +1,10 @@
+{
+  "name": "hai-stack-tooling",
+  "private": true,
+  "scripts": {
+    "check:renderers": "node --check skills/create-visual-card/scripts/screenshot.mjs && node --check skills/hai-visual-report/scripts/lint_mermaid.js && node --check skills/hai-visual-report/scripts/render_report.mjs"
+  },
+  "devDependencies": {
+    "playwright": ">=1.45.0 <2"
+  }
+}
