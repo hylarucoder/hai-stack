@@ -103,8 +103,9 @@ source untouched. Report the actual path and whether the original changed.
 
 ## Use a different skill when
 
-- The user wants a findings report, not a rewritten document — use `hai-audit-docs-internally`.
-- The truth source is the code, not the discussion — use `hai-audit-docs-against-code`.
+- The user wants a findings report, not a rewritten document — use `hai-audit-docs`.
+- A code-backed rewrite stays here when reconstruction is requested; use `hai-audit-docs`
+  only for an audit or bounded repair. Reuse its evidence rather than repeating verification.
 - The document is a PRD — use `hai-prd`; its Craft mode owns PRD repair and rewrite.
 - The document is a plan or goal document — use `hai-goal`; its rewrite mode re-anchors plans
   around a target.

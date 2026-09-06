@@ -50,3 +50,10 @@ Goal document 要回答：
 - 模块边界或结构未定：`hai-architecture`。
 - 已进入可验证行为实现：`hai-tdd`。
 - 重写的不是计划/目标文档：`hai-rewrite-doc`。
+
+## 执行交接
+
+阶段已经明确且用户要求实施时，继续完成改动和适量验证，不停在计划交付。可测试行为使用
+`hai-tdd`；结构、配置、样式改动用编译、已有测试和针对性运行检查。完成后用
+`code-review-and-quality` 审查变更，`write-technical-acceptance-report` 按风险证明目标
+（低风险使用简版），复用本轮已有证据，不无理由重复检查。

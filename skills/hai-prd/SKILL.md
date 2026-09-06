@@ -43,7 +43,7 @@ First decide the artifact type — a PRD is one option among several:
 | Architecture, module boundaries, or technical tradeoffs are the main need | `hai-architecture` |
 | The main question is whether the idea is worth doing at all | `hai-idea` |
 | The work is a code task, bugfix, or test-first implementation | `hai-tdd` or task note |
-| The work is documentation consistency auditing | `hai-audit-docs-internally` or `hai-audit-docs-against-code` |
+| The work is documentation consistency auditing | `hai-audit-docs` |
 
 Ask:
 

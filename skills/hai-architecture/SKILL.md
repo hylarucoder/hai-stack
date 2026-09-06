@@ -1,7 +1,7 @@
 ---
 name: hai-architecture
 description: |
-  Reviews a bounded architecture or design decision using APoSD/Ousterhout principles, with an evidence-backed boundary map, complexity center, viable alternatives, and ranked findings. Use for module/package boundaries, ownership, dependency direction, information hiding, abstraction depth, error boundaries, or split-versus-merge decisions（架构审查、模块边界、依赖方向）. Use hai-complexity for a whole-repository audit traced from runtime entrypoints, and clean-code-reviewer for local code smells.
+  Investigates architecture and software change complexity, from whole-repository runtime paths to a bounded module/design decision. Use for 系统太绕、复杂度审计、调用链/配置太散、架构审查、模块边界、拆分合并, or why a repo is hard to change. Select global investigation or bounded design mode; return traced evidence, the complexity center, alternatives, and a first proof. Use hai-debug for an unexplained malfunction and code-review-and-quality for reviewing a change or local code smells.
 ---
 
 # Hai Architecture
@@ -13,6 +13,17 @@ For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the executi
 Review existing architecture or guide one design decision through the lens of managing complexity.
 Find the boundary where change amplification, cognitive load, or unknown unknowns concentrate, then
 recommend the smallest structural move that makes the system easier to understand and change.
+
+## Select the work mode
+
+- **Global investigation**: the cause or boundary of change friction is unclear, or the request
+  spans a repository/large subsystem. Read `references/global-audit.md` and follow its entrypoint,
+  call-chain, state/config, and test tracing procedure. Converge on important paths after mapping
+  the entrypoint families; do not substitute a local smell review.
+- **Bounded review/design**: a module, package boundary, or design choice is already identified.
+  Follow the workflow below, inspecting its direct callers, contracts, and tests.
+- A request can move from global investigation into a bounded decision. Reuse collected evidence;
+  do not rerun two full reviews or ask the user to choose an internal mode.
 
 ## Evidence gate
 
@@ -103,17 +114,16 @@ not call a repository-wide sweep complete after reading one attractive file.
 ## Output
 
 Match the user's language and keep code identifiers unchanged. For standard/full Markdown reviews,
-fill `references/output-template.md`; for a quick answer, preserve its decision fields without
+fill `references/output-template.md` in bounded mode; use `references/global-output-template.md` in global mode; for a quick answer, preserve its decision fields without
 emitting empty sections. When the user explicitly asks for HTML, also read
 `references/html-report.md`. Language-specific guidance is available in
 `references/go-patterns.md` and `references/typescript-patterns.md`.
 
 ## Use a different skill when
 
-- Whole-repository operational complexity traced from entrypoints through state/config/tests →
-  `hai-complexity`.
+- An unexplained malfunction needing reproduction and causal evidence → `hai-debug`.
 - One React component's API, data flow, effects, or rerenders → `react-component-diagnosis`.
-- Local naming, duplication, function, or style smells → `clean-code-reviewer` or `hai-naming`.
+- Local naming, duplication, function, or style smells → `code-review-and-quality` or `hai-naming`.
 - Product requirements rather than technical design → `hai-prd`.
 
 ## Not this skill

@@ -120,5 +120,5 @@ ast-grep is the right hammer only when the match depends on syntax structure —
 - **Plain text or regex find-and-replace** with no syntax-tree shape (rename a string literal, swap a URL, find a unique identifier that grep already nails) — just use grep / a normal edit / `sed`; an AST pattern is overkill.
 - **One-off edit in a single file** — edit it directly; a rule only pays off across many call sites.
 - **Type-aware or semantic refactor** (driven by types rather than syntax) — use the compiler or an available type-safety workflow.
-- **Subjective code-quality review** — use `clean-code-reviewer`; for implementation, use an available refactoring workflow.
+- **Subjective code-quality review** — use `code-review-and-quality`; for implementation, use an available refactoring workflow.
 - **Pure formatting / whitespace / import order** — that is a formatter's job (Prettier, Biome, gofmt), not a structural rule.

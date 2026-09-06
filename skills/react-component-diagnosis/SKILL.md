@@ -1,7 +1,7 @@
 ---
 name: react-component-diagnosis
 description: |
-  Diagnoses one React component or component directory across consumer API, data flow, testability, extensibility, performance, mental model, and boundaries/contracts, with code evidence and prioritized recommendations. Use when the user points to a component or .tsx file and asks about props/API design, effects, rerenders, architecture, or refactor need（组件诊断、props 设计、为什么 re-render）. Use clean-code-reviewer for non-React files and hai-architecture when the scope crosses multiple system modules.
+  Diagnoses one React component or component directory across consumer API, data flow, testability, extensibility, performance, mental model, and boundaries/contracts, with code evidence and prioritized recommendations. Use when the user points to a component or .tsx file and asks about props/API design, effects, rerenders, architecture, or refactor need（组件诊断、props 设计、为什么 re-render）. Use code-review-and-quality for non-React files and hai-architecture when the scope crosses multiple system modules.
 ---
 
 # React Component Diagnosis
@@ -73,7 +73,7 @@ diagram only when the multi-step data/effect flow is otherwise hard to understan
 
 ## Use a different skill when
 
-- Non-React file/function code smells → `clean-code-reviewer`.
+- Non-React file/function code smells → `code-review-and-quality`.
 - Multiple modules, package boundaries, or system ownership → `hai-architecture`.
 - One identifier or prop name only → `hai-naming`.
 - Type-safety-only work → an available TypeScript type-safety skill.

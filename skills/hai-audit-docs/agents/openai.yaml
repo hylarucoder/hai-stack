@@ -1,0 +1,7 @@
+interface:
+  display_name: "Hai Audit Docs"
+  short_description: "Audit document claims against their sources"
+  default_prompt: "Use $hai-audit-docs to check these documents against the relevant evidence and distinguish findings from requested repairs."
+
+policy:
+  allow_implicit_invocation: true

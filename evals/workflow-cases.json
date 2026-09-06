@@ -1,0 +1,51 @@
+{
+  "skill_name": "hai-stack-workflows",
+  "evals": [
+    {
+      "id": 1,
+      "name": "document-authority",
+      "prompt": "检查 evals/fixtures/iteration/docs 里的 README 和批准的 spec，结合 runner.js 判断哪些文档主张有冲突或过时、应该修哪一侧。只检查，不改原文件。",
+      "files": [
+        "evals/fixtures/iteration/docs"
+      ],
+      "expected_output": "Correct the current timeout claim, retain approved future retry requirement, separate missing evidence from implementation gaps.",
+      "expectations": [
+        "Identifies README timeout 30 versus implementation constant 10.",
+        "Preserves the approved future two-retry requirement and identifies an implementation gap.",
+        "Reports retry configurability as unsupported or needing clarification.",
+        "Does not modify fixture files."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "global-runtime-investigation",
+      "prompt": "evals/fixtures/iteration/runtime 是一个独立小系统。改重试规则时总要查好几个地方，从实际入口开始调查为什么难改，给证据、可选调整和第一验证点。只调查，不改代码。",
+      "files": [
+        "evals/fixtures/iteration/runtime"
+      ],
+      "expected_output": "Trace both entrypoints to task execution, config semantics and tests; compare options with first proof.",
+      "expectations": [
+        "Traces server and worker through execute and retry state.",
+        "Identifies divergent config defaults or empty-string semantics.",
+        "Inspects test protection and reports its limits.",
+        "Provides materially different options and a concrete first verification point.",
+        "Does not modify fixture files."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "debug-flag",
+      "prompt": "evals/fixtures/iteration/debug 里关闭重试后仍然重试，observations.md 有观察记录。帮我定位原因，只诊断，不改 retry.js 或其他 fixture。允许隔离本地验证，不使用网络。",
+      "files": [
+        "evals/fixtures/iteration/debug"
+      ],
+      "expected_output": "Demonstrate string false truthiness causing an extra send and preserve diagnose-only scope.",
+      "expectations": [
+        "Runs a local reproduction contrasting unset and string false.",
+        "Explains Boolean('false') is true and the second-send causal path.",
+        "Separates actual verification from recommended repair.",
+        "Does not modify fixture files."
+      ]
+    }
+  ]
+}

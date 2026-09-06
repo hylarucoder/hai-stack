@@ -1,0 +1,7 @@
+interface:
+  display_name: "Hai Debug"
+  short_description: "Diagnose failures with causal evidence"
+  default_prompt: "Use $hai-debug to investigate this failure, distinguish evidence from hypotheses, and complete a verified repair if requested."
+
+policy:
+  allow_implicit_invocation: true

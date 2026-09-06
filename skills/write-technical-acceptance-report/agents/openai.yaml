@@ -1,0 +1,4 @@
+interface:
+  display_name: "Technical Acceptance Report"
+  short_description: "Build evidence-backed technical acceptance reports"
+  default_prompt: "Use $write-technical-acceptance-report to produce a detailed, evidence-backed acceptance report and regression plan for the current change."

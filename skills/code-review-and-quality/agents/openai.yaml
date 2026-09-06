@@ -1,0 +1,7 @@
+interface:
+  display_name: "Code Review and Quality"
+  short_description: "Review changes and local code quality"
+  default_prompt: "Use $code-review-and-quality to review this change and report evidence-backed defects, verification gaps, and a scoped verdict."
+
+policy:
+  allow_implicit_invocation: true

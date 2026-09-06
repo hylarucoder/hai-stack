@@ -6,6 +6,13 @@
 
 用 APoSD / Ousterhout 的复杂度视角，审查既有架构或指导一个明确的设计决策。先找到 change amplification、认知负担或 unknown unknowns 聚集的边界，再推荐能让系统更易理解、更易修改的结构动作。
 
+## 选择模式
+
+- **全局调查**：系统难改但边界不清，或涉及全仓/大子系统。读取 `references/global-audit.md`，先映射入口族，再追一至三条重要运行链，覆盖状态、配置、外部作用和测试保护。结论至少连接所有权、依赖、入口调用链、数据流、测试中的三个证据锚点。
+- **局部审查/设计**：已经明确模块边界或设计决策，执行下方工作流。
+- 全局调查可以自然收敛为局部决策，复用证据，不要求用户选择内部模式，也不重复两份完整报告。
+- 未解释的实际故障交给 `hai-debug`；代码变更评审交给 `code-review-and-quality`。
+
 ## 证据闸门
 
 提出架构判断之前：
@@ -75,9 +82,8 @@
 
 ## 输出与路由
 
-标准/完整审查使用 `references/output-template.md`；快速回答保留关键决策字段，不输出空章节。用户明确要 HTML 时再读取 `references/html-report.md`。Go 与 TypeScript 专项参考分别在 `references/go-patterns.md` 和 `references/typescript-patterns.md`。
+全局调查使用 `references/global-output-template.md`，保留入口族覆盖、调用链、状态/配置与测试证据。局部标准/完整审查使用 `references/output-template.md`；快速回答保留关键决策字段，不输出空章节。用户明确要 HTML 时再读取 `references/html-report.md`。Go 与 TypeScript 专项参考分别在 `references/go-patterns.md` 和 `references/typescript-patterns.md`。
 
-- 从运行入口追全仓复杂度：`hai-complexity`。
 - 单个 React 组件：`react-component-diagnosis`。
-- 局部 code smell 或命名：`clean-code-reviewer` / `hai-naming`。
+- 局部 code smell 或命名：`code-review-and-quality` / `hai-naming`。
 - 产品需求：`hai-prd`。

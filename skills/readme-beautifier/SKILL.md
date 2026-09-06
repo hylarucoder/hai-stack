@@ -111,8 +111,8 @@ Ordered from highest to lowest priority. Fix an item only when the problem actua
 
 This skill handles only formatting and structure, never whether the content is correct. Content-level problems are out of scope — this skill never changes meaning. When the user says "check my README", distinguish the intent:
 
-- The user wants to confirm the README matches the code / config / API, or whether it is stale → use **hai-audit-docs-against-code**.
-- The user wants an internal-consistency / stale-content audit of the docs themselves (internal contradictions, no code comparison) → use **hai-audit-docs-internally**.
+- The user wants to confirm the README matches the code / config / API, or whether it is stale → use **hai-audit-docs**.
+- The user wants an internal-consistency / stale-content audit of the docs themselves (internal contradictions, no code comparison) → use **hai-audit-docs**.
 - The user wants the content rewritten around the current conclusions because the doc drifted through rounds of discussion → use **hai-rewrite-doc**.
 - The user wants the layout beautified, the formatting unified, the structure straightened out → this skill.
 

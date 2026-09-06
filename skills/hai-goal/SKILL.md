@@ -1,7 +1,7 @@
 ---
 name: hai-goal
 description: |
-  Creates or rewrites a goal document for ambiguous, multi-phase, high-risk, or explicitly planned execution: verifiable outcome, boundary, current state, phases, proof-bearing todos, dry-run, and Go/No-Go. Use when the user asks for a goal, plan, phases, todos, or to re-anchor an existing plan（定目标、拆阶段、执行计划）. Do not interpose it on a small implementation whose outcome and verification are already clear; use hai-tdd once a behavior slice is ready.
+  Creates or rewrites a goal document for ambiguous, multi-phase, high-risk, or explicitly planned execution: verifiable outcome, boundary, current state, phases, proof-bearing todos, dry-run, and Go/No-Go. Use when the user asks for a goal, plan, phases, todos, or to re-anchor an existing plan（定目标、拆阶段、执行计划）. Do not interpose it on a small implementation whose outcome and verification are clear; hand ready work to normal execution, using hai-tdd only for suitable behavior changes.
 ---
 
 # Hai Goal
@@ -122,8 +122,13 @@ Do not duplicate the template inside the main instructions.
   return to write the goal.
 - **hai-architecture** — the route has unresolved structural or boundary decisions. Settle the
   design, then return.
-- **hai-tdd** — a phase is ready to implement. The goal document hands off to test-driven execution
-  inside each phase.
+- **Execution** — once a phase is ready and implementation is requested, continue through the
+  complete change and proportionate verification. Use **hai-tdd** for testable behavior; use
+  compiler checks, existing tests, and focused runtime checks for structural/config/style work.
+  Do not stop after producing a plan when the user already asked to implement.
+- **code-review-and-quality** — inspect completed changes for defects.
+- **write-technical-acceptance-report** — prove the outcome against acceptance; use compact mode
+  for low-risk work. Reuse existing current evidence instead of repeating checks without cause.
 - **hai-rewrite-doc** — the drifted artifact is a general document, not a plan or goal document.
   This skill's rewrite mode owns plans; anchor-first rewriting of everything else lives there.
 

@@ -29,7 +29,7 @@ PRD 是带可验证验收的产品论证，不是功能清单。下面三条规�
 | 主要需求是架构、模块边界或技术权衡 | `hai-architecture` |
 | 主要问题是这件事到底值不值得做 | `hai-idea` |
 | 这是代码任务、bugfix 或测试先行实现 | `hai-tdd` 或任务说明 |
-| 这是文档一致性审计 | `hai-audit-docs-internally` 或 `hai-audit-docs-against-code` |
+| 这是文档一致性审计 | `hai-audit-docs` |
 
 要问：
 

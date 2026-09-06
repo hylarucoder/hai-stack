@@ -49,6 +49,6 @@ description: |
 
 - 方向已定，需要落地压力测试：`goudi`。
 - 判断事情是否值得做：`hai-idea`。
-- 实现质量审查：`clean-code-reviewer`。
+- 实现质量审查：`code-review-and-quality`。
 - APoSD 架构边界审查：`hai-architecture`。
 - PRD：`hai-prd`。

@@ -85,6 +85,18 @@ end
 
 listed = readme.scan(/`([a-z0-9][a-z0-9-]+)`/).flatten.uniq
 skill_names = skill_files.map { |file| File.basename(File.dirname(file)) }
+retired = JSON.parse(File.read(File.join(ROOT, "scripts", "retired-skills.json")))
+retired.each do |old_name, replacement|
+  errors << "retired skill #{old_name} still has an active entry" if skill_names.include?(old_name)
+  errors << "retired skill #{old_name} points to missing #{replacement}" unless skill_names.include?(replacement)
+end
+Dir[File.join(SKILLS_ROOT, "**", "*.{md,yaml}")].each do |file|
+  retired.each_key do |old_name|
+    if File.read(file).match?(/(?<![a-z0-9-])#{Regexp.escape(old_name)}(?![a-z0-9-])/)
+      errors << "#{file.delete_prefix("#{ROOT}/")}: routes to retired skill #{old_name}"
+    end
+  end
+end
 missing_from_readme = skill_names - listed
 warnings << "README.md: skills not named in documentation: #{missing_from_readme.join(', ')}" unless missing_from_readme.empty?
 
@@ -102,6 +114,9 @@ begin
     overlap = expected & excluded
     errors << "evals/trigger-cases.json: #{item['id']} both expects and excludes: #{overlap.join(', ')}" unless overlap.empty?
     errors << "evals/trigger-cases.json: #{item['id']} has an empty prompt" if item["prompt"].to_s.strip.empty?
+    if item["expected_mode"] && !%w[internal implementation combined global bounded compact full].include?(item["expected_mode"])
+      errors << "evals/trigger-cases.json: #{item['id']} has an unknown mode"
+    end
   end
 
   uncovered = skill_names - trigger_cases.flat_map { |item| Array(item["expected_skills"]) }.uniq
@@ -110,6 +125,23 @@ rescue Errno::ENOENT
   errors << "evals/trigger-cases.json: missing trigger regression set"
 rescue JSON::ParserError => e
   errors << "evals/trigger-cases.json: invalid JSON (#{e.message})"
+end
+
+begin
+  workflow = JSON.parse(File.read(File.join(ROOT, "evals", "workflow-cases.json")))
+  ids = workflow.fetch("evals").map { |item| item.fetch("id") }
+  errors << "evals/workflow-cases.json: duplicate ids" unless ids.uniq.length == ids.length
+  workflow.fetch("evals").each do |item|
+    %w[prompt expected_output].each do |field|
+      errors << "workflow #{item['id']}: empty #{field}" if item[field].to_s.strip.empty?
+    end
+    errors << "workflow #{item['id']}: no expectations" if Array(item["expectations"]).empty?
+    Array(item["files"]).each do |path|
+      errors << "workflow #{item['id']}: missing fixture #{path}" unless File.exist?(File.join(ROOT, path))
+    end
+  end
+rescue Errno::ENOENT, JSON::ParserError, KeyError => e
+  errors << "evals/workflow-cases.json: #{e.message}"
 end
 
 if errors.empty?

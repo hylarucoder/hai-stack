@@ -111,5 +111,5 @@ storage/migration delta. Route elsewhere when the real problem is upstream:
 - **hai-naming** — the dispute is purely what to call a field/concept, not where it should live.
 - **hai-prd** — the PRD itself is the problem: scope is wrong, requirements conflict, or the
   fields are undecided because the product intent is undecided. Fix the PRD first, then audit.
-- **clean-code-reviewer / react-component-diagnosis** — the user wants general code-quality or
+- **code-review-and-quality / react-component-diagnosis** — the user wants general code-quality or
   component-design review, not a field-level data-model audit.

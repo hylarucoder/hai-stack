@@ -40,8 +40,8 @@
 
 ## 路由
 
-- 只要问题报告，不重写：`hai-audit-docs-internally`。
-- 权威来源主要是代码：`hai-audit-docs-against-code`。
+- 只要问题报告，不重写：`hai-audit-docs`。
+- 代码可以成为重写的权威来源；已要求全文重建时仍由本技能负责。仅审计或局部修复用 `hai-audit-docs`，复用其证据。
 - PRD：`hai-prd`。
 - 计划或 goal document：`hai-goal`。
 - 只改格式：`readme-beautifier`。
