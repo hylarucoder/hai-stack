@@ -1,4 +1,4 @@
-# Hai Visual Report — HTML Skeleton
+# Hai Visual Explainer — HTML Skeleton
 
 Read this at the start of the write phase. It is a minimal, complete `.html` scaffold for the eight blocks in the Report Content Model (Header, Verdict, Structure Map, Core Sections, Decision Matrix, Timeline / Phases, Risks and Proof, Next Move). These blocks are scaffolding around the content, not a template to compress it into — the Core Sections carry the source's substance (reworded or reformatted for readability, not cut to a summary), and you typically repeat that block once per theme in the document. Fill in the sections; drop a block only with a stated reason.
 

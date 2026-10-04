@@ -1,4 +1,0 @@
-interface:
-  display_name: "Hai Visual Report"
-  short_description: "Create visual HTML reports from ideas or requirements"
-  default_prompt: "Use $hai-visual-report to turn this idea, requirement, review, or plan into a structured visual HTML report."

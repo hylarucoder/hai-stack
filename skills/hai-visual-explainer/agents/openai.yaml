@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai Visual Explainer"
+  short_description: "Create HTML and PNG cards or multi-section reports"
+  default_prompt: "Use $hai-visual-explainer to turn this content into HTML and PNG, selecting card mode for one shareable frame or report mode for a multi-section document."

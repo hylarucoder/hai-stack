@@ -1,7 +1,7 @@
 ---
 name: hai-architecture
 description: |
-  Investigates architecture and software change complexity, from whole-repository runtime paths to a bounded module/design decision. Use for 系统太绕、复杂度审计、调用链/配置太散、架构审查、模块边界、拆分合并, or why a repo is hard to change. Select global investigation or bounded design mode; return traced evidence, the complexity center, alternatives, and a first proof. Use hai-debug for an unexplained malfunction and code-review-and-quality for reviewing a change or local code smells.
+  Investigates architecture and change complexity from repository runtime paths to bounded modules, React components, and shared contracts. Use for 系统太绕、架构审查、模块边界、组件诊断、props API、effect/re-render, or SSOT/双源/漂移、重复规则、多处默认值、同名异形. Select global or bounded mode; return traced evidence, the complexity center, alternatives, and a first proof. React and SSOT lenses retain scored diagnosis or adjudicated treatment reports. Use hai-debug for unexplained faults and code-review-and-quality for diff/local-smell reviews.
 ---
 
 # Hai Architecture
@@ -20,8 +20,13 @@ recommend the smallest structural move that makes the system easier to understan
   spans a repository/large subsystem. Read `references/global-audit.md` and follow its entrypoint,
   call-chain, state/config, and test tracing procedure. Converge on important paths after mapping
   the entrypoint families; do not substitute a local smell review.
-- **Bounded review/design**: a module, package boundary, or design choice is already identified.
-  Follow the workflow below, inspecting its direct callers, contracts, and tests.
+- **Bounded review/design**: a component, module, package boundary, or design choice is already identified.
+  Follow the workflow below, inspecting its direct callers, contracts, and tests. For React
+  components, read `references/react-patterns.md` for the seven dimensions and React-specific checks.
+- **SSOT is a lens within either mode**, not a separate sweep: for duplicated definitions, rules,
+  defaults, conversions, or vocabulary, read `references/ssot-patterns.md`, then only the relevant
+  recipes in `references/ssot-detection-cookbook.md`. A named concept/contract is bounded; a broad
+  repository sweep uses global investigation. Reuse the same evidence if ownership is the root cause.
 - A request can move from global investigation into a bounded decision. Reuse collected evidence;
   do not rerun two full reviews or ask the user to choose an internal mode.
 
@@ -35,7 +40,8 @@ Before making an architecture claim:
    boundaries.
 4. Compare a module's public surface with the complexity it actually hides before calling it deep
    or shallow.
-5. Label inference as unverified instead of presenting it as evidence.
+5. Count each root cause once; cross-reference related symptoms instead of multiplying findings.
+6. Label inference as unverified instead of presenting it as evidence.
 
 A fabricated finding costs more trust than several missed findings. Prefer one verified painful
 center over a checklist of plausible smells.
@@ -86,11 +92,14 @@ guidance, complexity vocabulary, or adversarial-review detail.
    boundary.
 4. Locate the highest-leverage complexity center.
 5. Select only the relevant lenses from `references/principles.md`; do not score every lens by
-   default.
+   default. A full React component diagnosis uses the seven-dimension output variant; a narrow
+   question uses only the relevant dimensions.
 6. Apply the deep-module and layer-cost tests.
-7. Check relevant red flags in `references/red-flags.md`; use
+7. For SSOT candidates, adjudicate legitimate projections, trust-boundary rechecks, generated
+   artifacts, and forward contracts before counting a violation; preserve persisted wire values.
+8. Check relevant red flags in `references/red-flags.md`; use
    `references/worked-example.md` when calibrating a difficult finding or false positive.
-8. Write a proportional report with evidence-backed findings ordered by impact.
+9. Write a proportional report with evidence-backed findings ordered by impact.
 
 ### Guide a design decision
 
@@ -117,17 +126,23 @@ Match the user's language and keep code identifiers unchanged. For standard/full
 fill `references/output-template.md` in bounded mode; use `references/global-output-template.md` in global mode; for a quick answer, preserve its decision fields without
 emitting empty sections. When the user explicitly asks for HTML, also read
 `references/html-report.md`. Language-specific guidance is available in
-`references/go-patterns.md` and `references/typescript-patterns.md`.
+`references/go-patterns.md`, `references/typescript-patterns.md`, and `references/react-patterns.md`.
+For a full React component diagnosis, use `references/react-output-template.md` instead of a second
+bounded report; preserve alternatives and first proof for nontrivial structural decisions.
+
+For an SSOT-focused review use `references/ssot-output-template.md`; for a mixed review embed its
+all-site evidence, not-counted candidates, treatment, and disposition fields in the main report.
+Global coverage remains required; do not write a second report for the same root cause.
+Diagnosis alone does not authorize edits; when fixes are requested, carry them through verification.
 
 ## Use a different skill when
 
 - An unexplained malfunction needing reproduction and causal evidence → `hai-debug`.
-- One React component's API, data flow, effects, or rerenders → `react-component-diagnosis`.
-- Local naming, duplication, function, or style smells → `code-review-and-quality` or `hai-naming`.
+- Local naming, function, or style smells without duplicated authority → `code-review-and-quality` or `hai-naming`.
 - Product requirements rather than technical design → `hai-prd`.
 
 ## Not this skill
 
 Do not use it as a formatter, feature-completeness audit, generic test advisor, or performance
-review unless performance architecture is the explicit decision. Keep the focus on design quality
+review unless performance architecture or a React render/effect path is the explicit decision. Keep the focus on design quality
 as it affects complexity.

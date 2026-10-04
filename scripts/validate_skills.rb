@@ -114,7 +114,7 @@ begin
     overlap = expected & excluded
     errors << "evals/trigger-cases.json: #{item['id']} both expects and excludes: #{overlap.join(', ')}" unless overlap.empty?
     errors << "evals/trigger-cases.json: #{item['id']} has an empty prompt" if item["prompt"].to_s.strip.empty?
-    if item["expected_mode"] && !%w[internal implementation combined global bounded compact full].include?(item["expected_mode"])
+    if item["expected_mode"] && !%w[internal implementation combined global bounded compact full card report].include?(item["expected_mode"])
       errors << "evals/trigger-cases.json: #{item['id']} has an unknown mode"
     end
   end

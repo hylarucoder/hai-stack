@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Simple Mermaid linter for hai-visual-report HTML files.
+ * Simple Mermaid linter for hai-visual-explainer HTML files.
  *
  * A zero-dependency static checker: no Puppeteer, no browser, no npm install.
  * It extracts every <pre class="mermaid"> block and runs cheap structural
@@ -14,7 +14,7 @@
  * Usage:
  *   node lint_mermaid.js <file.html | dir> [...more]
  *   node lint_mermaid.js report.html
- *   node lint_mermaid.js $TMPDIR/hai-visual-report-foo/
+ *   node lint_mermaid.js $TMPDIR/hai-visual-explainer-foo/
  *
  * Exit code: 0 if no errors (warnings allowed), 1 if any error.
  */

@@ -2,5 +2,9 @@
   "hai-complexity": "hai-architecture",
   "hai-audit-docs-internally": "hai-audit-docs",
   "hai-audit-docs-against-code": "hai-audit-docs",
-  "clean-code-reviewer": "code-review-and-quality"
+  "clean-code-reviewer": "code-review-and-quality",
+  "create-visual-card": "hai-visual-explainer",
+  "react-component-diagnosis": "hai-architecture",
+  "hai-visual-report": "hai-visual-explainer",
+  "hai-ssot": "hai-architecture"
 }

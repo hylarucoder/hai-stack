@@ -69,5 +69,5 @@ flowchart LR
 <If executable, list the cut list; if evidence is thin, list the prove-first items; if it needs landing, route to `hai-goal`.>
 
 ## HTML Artifact (only when explicitly requested)
-- **Path**: `<path returned by hai-visual-report>`
+- **Path**: `<path returned by hai-visual-explainer>`
 ```

@@ -1,9 +1,9 @@
-# Hai Visual Report 输出模板
+# Hai Visual Explainer 输出模板
 
-用于交付可视化 HTML 报告。HTML 路径必须是真实生成的文件路径。
+用于 report 模式交付可视化 HTML 报告。HTML 路径必须是真实生成的文件路径。
 
 ```markdown
-# Hai Visual Report Delivery
+# Hai Visual Explainer Delivery
 
 ## Report Type
 <idea / requirement / goal / review / architecture-style / custom> — <一句话说明>
@@ -30,7 +30,7 @@
 - **Source conclusion surfaced when present**: pass / issue / n/a
 - **Map near top**: pass / intentionally omitted because <reason> / issue
 - **Readable structure**: pass / issue
-- **No single-card misuse**: pass / issue
+- **Report mode matches requested scope**: pass / issue
 - **Facts vs assumptions separated**: pass / issue
 
 ## Notes

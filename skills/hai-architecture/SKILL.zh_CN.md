@@ -9,7 +9,8 @@
 ## 选择模式
 
 - **全局调查**：系统难改但边界不清，或涉及全仓/大子系统。读取 `references/global-audit.md`，先映射入口族，再追一至三条重要运行链，覆盖状态、配置、外部作用和测试保护。结论至少连接所有权、依赖、入口调用链、数据流、测试中的三个证据锚点。
-- **局部审查/设计**：已经明确模块边界或设计决策，执行下方工作流。
+- **局部审查/设计**：已经明确组件、模块边界或设计决策，执行下方工作流。React 组件读取 `references/react-patterns.md`，复用同一证据闸门和深模块判断。
+- **SSOT 是两个模式都可用的专项视角**：定义、规则、默认值、转换链或术语发生双源与漂移时，读取 `references/ssot-patterns.md`，再按症状读取 `references/ssot-detection-cookbook.md`。已知概念/契约走 bounded，全仓宽范围扫描走 global；发现所有权根因后继续同一审查，不另开一轮。
 - 全局调查可以自然收敛为局部决策，复用证据，不要求用户选择内部模式，也不重复两份完整报告。
 - 未解释的实际故障交给 `hai-debug`；代码变更评审交给 `code-review-and-quality`。
 
@@ -21,7 +22,8 @@
 2. 声称调用链或改动半径前，追踪 caller 和实现，并说明搜索依据。
 3. 阅读 ADR、依赖规则、架构测试和公共契约，理解团队声明的目标边界。
 4. 先比较模块公开接口与真正隐藏的复杂度，再判断深浅。
-5. 推断明确标记为未验证，不伪装成证据。
+5. 一个根因只算一次，相关症状交叉引用，不重复扣分。
+6. 推断明确标记为未验证，不伪装成证据。
 
 一条编造的 finding 比漏掉几条更伤信任。宁可找准一个有证据的复杂度中心，也不要堆满看起来合理的 smell。
 
@@ -59,10 +61,11 @@
 2. 通过证据闸门：读实现、调用方、契约、测试和相关决策。
 3. 画出参与者/模块、依赖或状态流、目标隐藏边界的简图。
 4. 找到最高杠杆的复杂度中心。
-5. 只选择 `references/principles.md` 中相关的 lens，不默认逐项打分。
+5. 只选择 `references/principles.md` 中相关的 lens，不默认逐项打分。完整 React 组件诊断使用七维评分变体；局部问题只检查相关维度。
 6. 应用深模块和层成本测试。
-7. 检查 `references/red-flags.md`；困难 finding 或误报用 `references/worked-example.md` 校准。
-8. 按影响排序，产出与规模相称的报告。
+7. SSOT 候选先裁决合理投影、信任边界重复校验、生成产物和前向契约，持久化 wire 值保持不变。
+8. 检查 `references/red-flags.md`；困难 finding 或误报用 `references/worked-example.md` 校准。
+9. 按影响排序，产出与规模相称的报告。
 
 ### 指导设计决策
 
@@ -84,6 +87,11 @@
 
 全局调查使用 `references/global-output-template.md`，保留入口族覆盖、调用链、状态/配置与测试证据。局部标准/完整审查使用 `references/output-template.md`；快速回答保留关键决策字段，不输出空章节。用户明确要 HTML 时再读取 `references/html-report.md`。Go 与 TypeScript 专项参考分别在 `references/go-patterns.md` 和 `references/typescript-patterns.md`。
 
-- 单个 React 组件：`react-component-diagnosis`。
-- 局部 code smell 或命名：`code-review-and-quality` / `hai-naming`。
+React 特有检查与七个维度位于 `references/react-patterns.md`。完整组件诊断用 `references/react-output-template.md` 代替通用局部报告，保留 API、数据流、可测试性、可扩展性、性能、心智模型、边界契约的评分及证据。非平凡结构建议仍比较选项并给出首个证明点；不重复输出两份报告。
+
+SSOT 专项报告使用 `references/ssot-output-template.md`，保留全部定义点证据、误报清单、健康范本、治理配方和处置归属。混合审查把这些字段嵌入主报告；global 仍须保留运行链等覆盖证据，一个根因只算一次。不因合并而丢失十类症状：字面量双源、形状膨胀、词语重载、旧词映射、行为分叉、默认值分散、纯子集形状、同名异形、冗余转换、重复派生规则。
+
+诊断本身不授权修改；已要求修复时继续实施和验证，不停在建议。
+
+- 不涉及权威双源的局部 code smell 或命名：`code-review-and-quality` / `hai-naming`。
 - 产品需求：`hai-prd`。

@@ -114,7 +114,7 @@
     ],
     "excluded_skills": [
       "code-review-and-quality",
-      "react-component-diagnosis"
+      "hai-architecture"
     ]
   },
   {
@@ -124,19 +124,19 @@
       "hai-naming"
     ],
     "excluded_skills": [
-      "hai-ssot"
+      "hai-architecture"
     ]
   },
   {
     "id": "react-component",
     "prompt": "帮我诊断 EditorPanel.tsx，重点看 props API、useEffect 链和为什么每次输入都整棵树 re-render。",
     "expected_skills": [
-      "react-component-diagnosis"
+      "hai-architecture"
     ],
     "excluded_skills": [
-      "code-review-and-quality",
-      "hai-architecture"
-    ]
+      "code-review-and-quality"
+    ],
+    "expected_mode": "bounded"
   },
   {
     "id": "clean-code-local",
@@ -145,7 +145,6 @@
       "code-review-and-quality"
     ],
     "excluded_skills": [
-      "react-component-diagnosis",
       "hai-architecture"
     ]
   },
@@ -223,32 +222,30 @@
     "id": "ssot-drift",
     "prompt": "event kind 在后端 enum、数据库 CHECK 和前端 switch 各写了一份，会不会漂移？请做 SSOT 诊断。",
     "expected_skills": [
-      "hai-ssot"
+      "hai-architecture"
     ],
     "excluded_skills": [
-      "hai-naming",
-      "hai-architecture"
-    ]
+      "hai-naming"
+    ],
+    "expected_mode": "bounded"
   },
   {
     "id": "visual-report",
     "prompt": "把这份完整架构评审做成多 section HTML 汇报页，保留证据、选项和风险，不要压成摘要图。",
     "expected_skills": [
-      "hai-visual-report"
+      "hai-visual-explainer"
     ],
-    "excluded_skills": [
-      "create-visual-card"
-    ]
+    "excluded_skills": [],
+    "expected_mode": "report"
   },
   {
     "id": "visual-card",
     "prompt": "把这五条读书笔记排成一张可发朋友圈的知识卡，交付 PNG 和 HTML。",
     "expected_skills": [
-      "create-visual-card"
+      "hai-visual-explainer"
     ],
-    "excluded_skills": [
-      "hai-visual-report"
-    ]
+    "excluded_skills": [],
+    "expected_mode": "card"
   },
   {
     "id": "readme-format",
@@ -416,5 +413,28 @@
       "hai-debug",
       "write-technical-acceptance-report"
     ]
+  },
+  {
+    "id": "ssot-global",
+    "prompt": "做一次全仓 SSOT 调查，从 API、worker、CLI 入口追默认值、状态类型和校验规则的多源定义，逐个裁决误报并给治理处置，不改代码。",
+    "expected_skills": [
+      "hai-architecture"
+    ],
+    "excluded_skills": [
+      "code-review-and-quality"
+    ],
+    "expected_mode": "global",
+    "expected_action": "diagnose-only"
+  },
+  {
+    "id": "ssot-legitimate-boundaries",
+    "prompt": "这个契约在客户端、服务端和数据库都校验，公开 DTO 又比内部类型少几个字段。帮我判断哪些是必要边界、哪些是真的双源，不要全部合并。",
+    "expected_skills": [
+      "hai-architecture"
+    ],
+    "excluded_skills": [
+      "code-review-and-quality"
+    ],
+    "expected_mode": "bounded"
   }
 ]

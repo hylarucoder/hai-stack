@@ -1,6 +1,9 @@
 # SSOT Findings Report Template
 
-Fill every section. The Not-Counted note and the Positive List are mandatory — they carry the
+Use this variant for SSOT-focused architecture reviews. Retain global investigation coverage when
+the scope is repository-wide; for mixed reviews embed these fields in the main report.
+
+Fill every section, writing "none found" when the evidence supports no entries. The Not-Counted note and the Positive List are mandatory — they carry the
 report's credibility and give fixes local precedents.
 
 ```markdown
@@ -30,6 +33,10 @@ re-litigation and "unify everything" overreach.>
 | 范本 | 机制 |
 |---|---|
 | <healthy pattern in this repo> | <codegen + currency test / parity guard / single table + derivation> |
+
+## 结构决策与验证
+<For nontrivial changes: materially different alternatives, why rejected, residual risk, and
+the first proof. For a parity guard, deliberately desync once to prove it fails.>
 
 ## 处置汇总
 | 项 | 治法 | 归属 | 状态 |

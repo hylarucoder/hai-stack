@@ -1,7 +1,7 @@
 interface:
   display_name: "Hai Architecture"
-  short_description: "Trace system complexity and review architecture"
-  default_prompt: "Use $hai-architecture to investigate this system's change complexity or review its identified design boundary, using traced runtime and contract evidence."
+  short_description: "Review architecture, React components, and SSOT drift"
+  default_prompt: "Use $hai-architecture to investigate this system's change complexity or review its identified module, React component, or shared-contract boundary, using traced runtime and contract evidence, with SSOT adjudication when definitions or rules can drift."
 
 policy:
   allow_implicit_invocation: true

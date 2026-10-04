@@ -1,19 +1,15 @@
----
-name: hai-ssot
-description: >-
-  Diagnoses single-source-of-truth violations—duplicated literals or rules, shape drift, scattered defaults, redundant conversion chains, overloaded vocabulary, and behavior forks—with file:line evidence, false-positive adjudication, and a treatment recipe. Use when the user suspects definitions may diverge, adding one concept requires edits in many places, layers repeatedly convert or validate the same value, or asks about SSOT/双源/漂移/同名异形. Use hai-architecture when the root decision is module ownership rather than duplicated authority.
----
+# SSOT Patterns for Architecture Reviews
 
-# Hai SSOT
+Use this lens in bounded mode for an identified concept/contract, or alongside global investigation
+for a repository-wide sweep. Apply the shared evidence gate and count each root cause once across
+SSOT, React, and module-boundary findings. Reuse the same ownership map, callers, and contracts.
 
-For Chinese readers, see `SKILL.zh_CN.md`. The English `SKILL.md` is the execution source of truth.
-
-## Overview
+## Purpose
 
 Hunt down places where one fact, one shape, or one word has more than one authoritative home —
 or where one name secretly serves several facts. Produce a findings report that an engineer can
 execute from: every finding numbered, evidenced, honestly adjudicated, and routed to a concrete
-disposition. The skill is a diagnostic with a strong opinion about treatment, not a linter.
+disposition. This lens is a diagnostic with a strong opinion about treatment, not a linter.
 
 ## The Core Law
 
@@ -34,7 +30,7 @@ Two corollaries that direct the hunt:
 ## The Ten Symptom Classes
 
 Use the symptom table to choose likely classes, then read only those class recipes in
-`references/detection-cookbook.md` before searching.
+`references/ssot-detection-cookbook.md` before searching.
 
 | # | Symptom | One-line definition | Canonical tell |
 |---|---|---|---|
@@ -105,9 +101,9 @@ Every confirmed finding routes to exactly one recipe; the recipe determines the 
 | **Adjudication** | Behavior forks | These need a *decision*, not a patch: unify the behavior, or promote the fork into an explicitly documented contract. Present both options with a default recommendation |
 | **Delete the pin** | After any recipe eliminates a copy, delete the parity test that was holding the copies together — its survival is evidence of remaining multi-source |
 
-## Workflow
+## Apply within the architecture workflow
 
-1. **Scope.** Agree on the sweep surface (a module, a contract plane, the whole repo). Note any
+1. **Scope.** Use the requested sweep surface (a module, a contract plane, the whole repo). Note any
    prior sweeps/plans to avoid re-finding adjudicated items.
 2. **Map the seams first.** List type-system-unreachable boundaries, then the internal modules that
    independently define or derive the same concepts. Seams are priority entrypoints, not the only
@@ -118,23 +114,24 @@ Every confirmed finding routes to exactly one recipe; the recipe determines the 
 4. **Verify producer AND consumer** for anything you might call dead or removable. The
    three-surface discipline: backend producers, frontend/contract consumers, seeds/fixtures.
 5. **Adjudicate honestly** (section above). Sort exonerated candidates into the "not counted" note.
-6. **Write the report** using `references/output-template.md`: numbered findings, evidence,
+6. **Write the report** using `references/ssot-output-template.md`: numbered findings, evidence,
    severity, recipe, disposition table, positive list ("already-healthy patterns to copy" —
    naming what the repo already does right makes the report constructive and gives fixes a local
    precedent to imitate).
-7. **Execute quick wins if asked** — constant promotions and literal de-duplications are usually
-   safe same-day (zero wire change, full test gate). Bigger recipes get routed to plans; behavior
-   forks get routed to the user as decisions.
+7. **Execute fixes only when requested.** Preserve persisted wire values and verify affected
+   consumers. For a larger migration, use `hai-goal` when an execution plan is needed; if
+   implementation is already authorized, continue through verification. An unresolved behavior
+   fork needs a contract decision before changing behavior.
 
-## Hand off when
 
-- The finding's root cause is a module-boundary or layering problem → **hai-architecture**.
-- A finding needs a new name, or the report turns into a rename list → **hai-naming**.
-- The dispositions need to become a phased, verifiable plan → **hai-goal**.
-- The user wants to reframe the whole contract surface rather than patch findings → **geju**.
+## Output and boundaries
 
-## What this skill is NOT
+Use `references/ssot-output-template.md` for an SSOT-focused review; a quick question may use a
+compact verdict but still explain false positives and treatment. In global mode retain entrypoint,
+call-chain, state/config, and test coverage from `references/global-output-template.md`, embedding
+SSOT findings rather than producing a second report. For mixed reviews use the relevant SSOT
+fields inside the main report. Keep nontrivial alternatives, residual risk, and a first proof.
 
-- Not a linter: it reports adjudicated findings with treatment routes, not raw matches.
-- Not "unify everything": its credibility comes from the not-counted list as much as the findings.
-- Not a wire-migration tool: persisted values are out of bounds; only definition sites move.
+A module-ownership root cause stays in the same architecture review. Use `hai-naming` for a naming
+exercise, `hai-goal` for a needed phased execution plan, or `geju` to reframe the contract surface.
+Do not report raw search matches, unify unrelated concepts, or silently change persisted wire.

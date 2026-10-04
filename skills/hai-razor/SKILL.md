@@ -96,7 +96,7 @@ concept exactly one verdict.
    or follow-up proof.
 
 9. **Render only when requested.** The default deliverable is Markdown. If the user explicitly asks
-   for HTML or a visual report, hand the completed judgment to `hai-visual-report`; do not duplicate
+   for HTML or a visual report, hand the completed judgment to `hai-visual-explainer`; do not duplicate
    its rendering workflow here.
 
 ## Output
@@ -112,7 +112,7 @@ Read `references/output-template.md` before finalizing. The answer must contain,
 - A concrete cut list or prove-first list, plus risks and guardrails.
 
 For structural cuts, include before/after ownership only when it materially improves understanding.
-HTML remains opt-in and belongs to `hai-visual-report`.
+HTML remains opt-in and belongs to `hai-visual-explainer`.
 
 ## Use a different skill when
 

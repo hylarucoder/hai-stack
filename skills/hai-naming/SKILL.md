@@ -75,7 +75,7 @@ affects the recommendation.
 - The name is awkward because module ownership or abstraction is wrong → `hai-architecture`.
 - The question is whether a field should exist or where it belongs → `entity-model-auditor`.
 - The user wants a bold direction change rather than a name → `geju`.
-- The scope is an entire React component API, not one identifier → `react-component-diagnosis`.
+- The scope is an entire React component API, not one identifier → `hai-architecture`.
 
 ## Not this skill
 

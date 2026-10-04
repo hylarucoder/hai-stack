@@ -1,9 +1,9 @@
-# Create Visual Card Output Template
+# Hai Visual Explainer — Card Output Template
 
 Use this template when handing off a generated visual card. The HTML and PNG paths should point to real files produced in the workspace.
 
 ```markdown
-# Create Visual Card Delivery
+# Hai Visual Explainer — Card Delivery
 
 ## Content Density
 <low / medium / high> — <one sentence reason>
@@ -14,6 +14,9 @@ Use this template when handing off a generated visual card. The HTML and PNG pat
 ## Generated Files
 - **HTML**: `<absolute path>`
 - **PNG**: `<absolute path>`
+
+## Source Fidelity
+<Confirm the supplied points and qualifications are preserved; identify any requested summary scope.>
 
 ## QA Checks
 - **Screenshot generated**: yes / no

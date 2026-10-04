@@ -56,4 +56,4 @@ description: |
 - 真正问题是模块所有权或抽象：`hai-architecture`。
 - 字段是否存在、存还是算：`entity-model-auditor`。
 - 要的是大胆方向而不是名字：`geju`。
-- 整个 React 组件 API：`react-component-diagnosis`。
+- 整个 React 组件 API：`hai-architecture`。

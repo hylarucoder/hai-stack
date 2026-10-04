@@ -1,7 +1,7 @@
 # hai-stack
 
 <p>
-  <img src="https://img.shields.io/badge/skills-21-2563eb" alt="skills" />
+  <img src="https://img.shields.io/badge/skills-18-2563eb" alt="skills" />
   <img src="https://img.shields.io/badge/for-Claude%20Code%20%2F%20Codex-8A2BE2" alt="for Claude Code / Codex" />
   <a href="LICENSE">License</a>
 </p>
@@ -17,7 +17,7 @@
 | --- | --- | --- |
 | 值不值得投入？ | `hai-idea` | 决策、关键假设、最低成本验证 |
 | 用户需要什么行为？ | `hai-prd` | 范围、场景、可验收要求；小事可以不写 PRD |
-| 系统为什么难改，边界怎么调整？ | `hai-architecture` | 全局运行链调查或局部设计决策、证据、选项 |
+| 系统为什么难改，边界怎么调整？ | `hai-architecture` | 全局运行链调查或局部设计决策（含 React 组件与 SSOT 诊断）、证据、选项 |
 | 出现故障，原因不清楚 | `hai-debug`（试用） | 复现、假设排除、因果链；要求修复时继续完成 |
 | 方向明确，执行依赖复杂 | `hai-goal` | 阶段、依赖、验证和完成条件 |
 | 开始修改 | 常规执行；适合时用 `hai-tdd` | 完整变更和相称的验证；真实 RED/GREEN |
@@ -43,10 +43,8 @@
 
 | 技能 | 独立责任 |
 | --- | --- |
-| `hai-ssot` | 追踪多源定义、默认值、形状和规则漂移，裁决误报，给治理方法 |
 | `entity-model-auditor` | 逐字段判断存储/推导、列/配置、归属与迁移差异 |
 | `hai-naming` | 为具体概念命名，或审查跨模块词汇及迁移影响 |
-| `react-component-diagnosis` | 深入诊断单个 React 组件的 API、状态/effect 和渲染链 |
 | `hai-ast-grep` | 结构化搜索、lint/codemod 规则及正反样例验证 |
 | `readme-beautifier` | 只整理 Markdown 排版结构，保留事实和原意 |
 
@@ -60,8 +58,7 @@
 
 | 技能 | 产出 |
 | --- | --- |
-| `hai-visual-report` | 保留源材料含义的多 section HTML 报告与 PNG 预览 |
-| `create-visual-card` | 单张可分享视觉卡片，HTML 与 PNG |
+| `hai-visual-explainer` | card：单张可分享卡片；report：保留源材料含义的多 section 报告。均交付 HTML 与 PNG |
 
 展示是可选形式，任务完成不要求再做一份视觉报告。
 
@@ -98,6 +95,10 @@ make validate  # 技能结构、资源、入口样例和脚本语法校验
 
 | 旧入口 | 新归属 | 保留的方法 |
 | --- | --- | --- |
+| `hai-visual-report` | `hai-visual-explainer` | card/report 两种模式、模板与统一截图 |
+| `hai-ssot` | `hai-architecture` SSOT 视角 | 十类症状、误报裁决、治理配方与处置报告 |
+| `create-visual-card` | `hai-visual-explainer` card 模式 | 卡片设计与模板、元素截图和可读性检查 |
+| `react-component-diagnosis` | `hai-architecture` bounded 模式 | React 七维诊断、证据与评分报告变体 |
 | `hai-complexity` | `hai-architecture` 全局模式 | 入口族、调用链、状态/配置、测试保护 |
 | `hai-audit-docs-internally` | `hai-audit-docs` 内部模式 | 主张图、矛盾、术语和生命周期漂移 |
 | `hai-audit-docs-against-code` | `hai-audit-docs` 实现/综合模式 | 双向核对、权威优先级、缺陷归属 |
