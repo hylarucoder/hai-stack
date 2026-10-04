@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hai Simplified Technical"
+  short_description: "Write or review technical docs in simplified English or Chinese"
+  default_prompt: "Use $hai-simplified-technical to rewrite this technical document in simplified technical language and run its check script."

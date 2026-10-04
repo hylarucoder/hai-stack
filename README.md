@@ -1,7 +1,7 @@
 # hai-stack
 
 <p>
-  <img src="https://img.shields.io/badge/skills-18-2563eb" alt="skills" />
+  <img src="https://img.shields.io/badge/skills-19-2563eb" alt="skills" />
   <img src="https://img.shields.io/badge/for-Claude%20Code%20%2F%20Codex-8A2BE2" alt="for Claude Code / Codex" />
   <a href="LICENSE">License</a>
 </p>
@@ -58,6 +58,7 @@
 
 | 技能 | 产出 |
 | --- | --- |
+| `hai-simplified-technical` | 按简化技术英语或中文规则撰写、改写和检查技术文档，保留事实与限定条件 |
 | `hai-visual-explainer` | card：单张可分享卡片；report：保留源材料含义的多 section 报告。均交付 HTML 与 PNG |
 
 展示是可选形式，任务完成不要求再做一份视觉报告。

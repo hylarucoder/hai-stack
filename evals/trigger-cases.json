@@ -436,5 +436,24 @@
       "code-review-and-quality"
     ],
     "expected_mode": "bounded"
+  },
+  {
+    "id": "simplified-technical-rewrite",
+    "prompt": "把这份部署 runbook 改成简化技术中文，明确操作主体，每步一条指令，保留条件、风险和全部命令，不改文档事实。",
+    "expected_skills": [
+      "hai-simplified-technical"
+    ],
+    "excluded_skills": [
+      "hai-rewrite-doc",
+      "hai-audit-docs"
+    ]
+  },
+  {
+    "id": "simplified-technical-marketing-near-miss",
+    "prompt": "帮我写一条新品发布推文，语气有感染力，保留一点幽默。",
+    "expected_skills": [],
+    "excluded_skills": [
+      "hai-simplified-technical"
+    ]
   }
 ]
