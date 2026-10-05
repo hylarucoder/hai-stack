@@ -1,82 +1,87 @@
 # hai-stack
 
-<p>
-  <img src="https://img.shields.io/badge/skills-19-2563eb" alt="skills" />
-  <img src="https://img.shields.io/badge/for-Claude%20Code%20%2F%20Codex-8A2BE2" alt="for Claude Code / Codex" />
-  <a href="LICENSE">License</a>
-</p>
+> 让 Coding Agent 把软件迭代做对：从真实问题出发，完成改动，用证据确认结果。
 
-> 帮助软件持续迭代：从真实问题出发，完成改动，用证据确认结果。
+[![Skills](https://img.shields.io/badge/skills-19-2563EB.svg?style=flat-square)](#能力一览)
+[![License](https://img.shields.io/badge/license-CC%20BY--NC%204.0-16A34A.svg?style=flat-square)](LICENSE)
+[![For](https://img.shields.io/badge/for-Coding%20Agents-8A2BE2.svg?style=flat-square)](#安装)
 
-每个技能拥有明确的进入条件、独特的处理方法和可以检查的完成结果。
-选择入口时看当前卡点，不要求每次走完一套流程。
+**支持：大多数能读取 Skills（`SKILL.md`）的 Coding Agent，例如 Claude Code、Codex。**
 
-## 从当前问题进入
+hai-stack 由 [@海拉鲁编程客](https://github.com/hylarucoder) 创建。它把一次软件迭代拆成判断、设计、动手、确认、沉淀五步，每一步都有对应的技能。
 
-| 当前卡点 | 入口 | 完成结果 |
-| --- | --- | --- |
-| 值不值得投入？ | `hai-idea` | 决策、关键假设、最低成本验证 |
-| 用户需要什么行为？ | `hai-prd` | 范围、场景、可验收要求；小事可以不写 PRD |
-| 系统为什么难改，边界怎么调整？ | `hai-architecture` | 全局运行链调查或局部设计决策（含 React 组件与 SSOT 诊断）、证据、选项 |
-| 出现故障，原因不清楚 | `hai-debug`（试用） | 复现、假设排除、因果链；要求修复时继续完成 |
-| 方向明确，执行依赖复杂 | `hai-goal` | 阶段、依赖、验证和完成条件 |
-| 开始修改 | 常规执行；适合时用 `hai-tdd` | 完整变更和相称的验证；真实 RED/GREEN |
-| 检查这次改动 | `code-review-and-quality` | 缺陷、证据、修复方向和限定范围的评审结论 |
-| 确认目标已经完成 | `write-technical-acceptance-report` | 要求与实际验证对应的结果；按风险选择简版/完整版 |
-| 结论需要沉淀 | `hai-audit-docs` / `hai-rewrite-doc` | 准确文档、已修复项与未决问题 |
+[快速开始](#快速开始) · [能力一览](#能力一览) · [安装](#安装) · [怎样知道技能有用](#怎样知道技能有用) · [参与维护](CONTRIBUTING.md)
 
-原因已知的小 bug 可以直接用 TDD 修复；单纯移动类型可以直接改并编译验证；
-不明原因的故障先诊断；跨存储/API/前端的迁移才需要明确阶段与完整验收。
-评审通过不自动授权合并，验收通过不自动授权部署。
+![一次迭代分五步：判断、设计、动手、确认、沉淀，每一步列出接手的技能；geju、goudi、hai-razor 三个纠偏视角在任何一步都能调用](docs/assets/flow.svg)
 
-## 随时可用的纠偏视角
+## hai-stack 解决什么问题
 
-这些是按需调用的视角，不是每次迭代必须完成的阶段，也不绑定某一个模型。
+你不需要先学一套流程，也不需要记住技能名。说出当前的卡点，对应的技能接手，交出能检查的结果。
 
-| 技能 | 什么时候有帮助 | 产出 |
-| --- | --- | --- |
-| `geju` | 方案被历史形状、兼容焦虑和局部补丁限制 | 干净目标、不同选项、可证伪的第一证明点 |
-| `goudi` | 方向很大，第一步和失败信号不清 | 最小证明、现实约束、明确止损规则 |
-| `hai-razor` | 需求、字段、状态、层或流程需要证明独立存在的价值 | 保留/合并/延后/删除/替换/先证明及隐藏责任归属 |
-
-## 专项判断与工具
-
-| 技能 | 独立责任 |
+| 真实处境 | 你会得到 |
 | --- | --- |
-| `entity-model-auditor` | 逐字段判断存储/推导、列/配置、归属与迁移差异 |
-| `hai-naming` | 为具体概念命名，或审查跨模块词汇及迁移影响 |
-| `hai-ast-grep` | 结构化搜索、lint/codemod 规则及正反样例验证 |
-| `readme-beautifier` | 只整理 Markdown 排版结构，保留事实和原意 |
+| 想做一个功能，不确定是不是伪需求 | 一个明确的判断（做、先验证、换题、搁置或砍掉），最强的反对意见，成本最低的验证 |
+| 系统太绕，改一个配置要动很多地方 | 从运行入口追出的调用链、证据和实质不同的方案 |
+| 线上出故障，原因不清楚 | 复现步骤、排除过的假设和因果链；要求修复时继续修好并验证 |
+| 改完一版，想知道有没有问题 | 有证据的缺陷、修复方向和限定范围的评审结论 |
+| 方案被兼容和历史包袱困住，或者太飘、落不了地 | 打开格局后的干净目标，或者压实的第一步和止损规则 |
+| 文档和代码对不上，或者写得含糊 | 有证据的修复，或者一个词一个意思、一句一件事的改写 |
 
-## 文档与展示
+## 快速开始
 
-`hai-audit-docs` 一个入口覆盖内部一致性、实现/契约对照和综合审计。
-文档自洽不等于事实正确，当前代码也不能自动推翻批准的目标行为。
-
-只要求审查就交付问题；已经要求“检查并修复”就完成有证据的局部修复；
-全文重建由 `hai-rewrite-doc` 负责。PRD 与计划调整分别归 `hai-prd` 和 `hai-goal`。
-
-| 技能 | 产出 |
-| --- | --- |
-| `hai-simplified-technical` | 按简化技术英语或中文规则撰写、改写和检查技术文档，保留事实与限定条件 |
-| `hai-visual-explainer` | card：单张可分享卡片；report：保留源材料含义的多 section 报告。均交付 HTML 与 PNG |
-
-展示是可选形式，任务完成不要求再做一份视觉报告。
-
-## 常用说法
+安装后，在你用的 Coding Agent 里直接说出卡点：
 
 ```text
+线上把 RETRY_ENABLED=false 后仍重复请求，本地却正常。先定位原因，不要改代码。
+```
+
+`hai-debug` 接手。它交回复现步骤、排除过的假设和因果链，不改代码。
+
+其他常见的说法：
+
+```text
+我想加一个 AI 命令推荐器，但不确定是不是伪需求，值得投入两周吗？
 系统太绕了，从 server 和 worker 入口看看为什么改重试规则这么费劲。
-这两个包该合并吗？看看真正的所有权和调用关系。
-关闭重试后还是重复请求，先定位根因，不要改代码。
-帮我修这个问题，复现之后继续完成修复和回归验证。
-对照实现检查并修复 README，批准的未来需求不要改成现有行为。
 review 当前 diff，优先找真实 bug 和缺少的验证。
-确认这次迁移满足要求，区分实际通过、跳过和没跑的用例。
+对照实现检查并修复 README，批准的未来需求不要改成现有行为。
+这份 runbook 写得太绕，按简化技术中文改一遍，意思不要变。
 把格局打开。 / 用苟帝压实第一步。 / 用剃刀看看哪些概念该合并。
 ```
 
-## 安装与升级
+## 能力一览
+
+| 工作目标 | 技能 | 常见产出 |
+| --- | --- | --- |
+| **判断** | | |
+| 判断值不值得投入 | `hai-idea` | 判断、关键假设、成本最低的验证 |
+| 定清用户需要什么行为 | `hai-prd` | 范围、场景、可验收的要求；小事可以不写 PRD |
+| **设计** | | |
+| 看清系统为什么难改，决定边界怎么调整 | `hai-architecture` | 全局运行链调查或局部设计决策（含 React 组件与 SSOT 诊断）、证据、方案 |
+| 判断字段该存还是该算、放在哪 | `entity-model-auditor` | 逐字段的存储、推导、归属与迁移判断 |
+| 给概念起名，审查跨模块的词汇 | `hai-naming` | 候选名字、理由和迁移影响 |
+| **动手** | | |
+| 拆开依赖复杂的执行 | `hai-goal` | 阶段、依赖、验证和完成条件 |
+| 用测试驱动行为改动 | `hai-tdd` | 真实的 RED、最小的 GREEN 和验证命令 |
+| 诊断原因不明的故障 | `hai-debug`（试用） | 复现、假设排除、因果链 |
+| 结构化搜索和批量改写 | `hai-ast-grep` | lint 或 codemod 规则，附正反样例 |
+| **确认** | | |
+| 检查这次改动 | `code-review-and-quality` | 有证据的缺陷、修复方向和限定范围的结论 |
+| 确认目标已经完成 | `write-technical-acceptance-report` | 要求与实际验证对应的结果；按风险选择简版或完整版 |
+| **沉淀** | | |
+| 检查文档对不对、和代码是否一致 | `hai-audit-docs` | 问题清单，或要求修复时有证据的局部修复 |
+| 重建已经走样的文档 | `hai-rewrite-doc` | 逐块核实后重写的文档 |
+| 让技术文档只有一种读法 | `hai-simplified-technical` | 按简化技术英语或简化技术中文改写，保留事实与限定条件 |
+| 把材料做成卡片或报告 | `hai-visual-explainer` | 单张卡片或多 section 报告，HTML 与 PNG |
+| 整理 Markdown 排版 | `readme-beautifier` | 只改结构，不改事实和原意 |
+| **纠偏** | | |
+| 方案被历史形状和兼容焦虑限制 | `geju` | 干净的目标、实质不同的选项、可证伪的第一个证明点 |
+| 方向很大，第一步不清楚 | `goudi` | 最小证明、现实约束、止损规则 |
+| 让每个概念证明自己值得存在 | `hai-razor` | 保留、合并、延后、删除、替换或先证明，以及隐藏责任的归属 |
+
+怎么选：原因已知的小 bug，直接用 TDD 修复；原因不明的故障，先诊断。单纯移动类型，直接改并编译验证；跨存储、API 和前端的迁移，才需要明确的阶段与完整验收。
+“做完了”要有实际运行的检查；评审通过不等于授权合并，验收通过不等于授权部署。
+
+## 安装
 
 ```bash
 git clone https://github.com/hylarucoder/hai-stack.git
@@ -84,56 +89,41 @@ cd hai-stack
 make link
 ```
 
-技能链接到 `~/.agents/skills/` 和 `~/.claude/skills/`。
-安装器只清理指向本仓库已退役技能路径的旧链接，包括历史 `~/.codex/skills/` 链接；
-真实目录或其他仓库的链接不会被覆盖。同名独立安装会提示冲突。
+`make link` 把技能链接到 `~/.agents/skills/` 和 `~/.claude/skills/`。真实目录和其他仓库的链接不会被覆盖；同名的独立安装会报告冲突。
+如果你的 Agent 从别的目录读取技能，把 `skills/` 下的目录链接或复制到那个目录。
 
 ```bash
 make status    # 查看安装状态
-make unlink    # 只移除指向本仓库的技能链接
-make validate  # 技能结构、资源、入口样例和脚本语法校验
+make unlink    # 只移除指向本仓库的链接
+make validate  # 检查技能结构、资源、入口样例和脚本语法
 ```
 
-| 旧入口 | 新归属 | 保留的方法 |
-| --- | --- | --- |
-| `hai-visual-report` | `hai-visual-explainer` | card/report 两种模式、模板与统一截图 |
-| `hai-ssot` | `hai-architecture` SSOT 视角 | 十类症状、误报裁决、治理配方与处置报告 |
-| `create-visual-card` | `hai-visual-explainer` card 模式 | 卡片设计与模板、元素截图和可读性检查 |
-| `react-component-diagnosis` | `hai-architecture` bounded 模式 | React 七维诊断、证据与评分报告变体 |
-| `hai-complexity` | `hai-architecture` 全局模式 | 入口族、调用链、状态/配置、测试保护 |
-| `hai-audit-docs-internally` | `hai-audit-docs` 内部模式 | 主张图、矛盾、术语和生命周期漂移 |
-| `hai-audit-docs-against-code` | `hai-audit-docs` 实现/综合模式 | 双向核对、权威优先级、缺陷归属 |
-| `clean-code-reviewer` | `code-review-and-quality` 可维护性模式 | 代码整洁度方法和语言参考 |
+### 更新
 
-原目录不保留重复触发入口；旧内容可从 Git 历史恢复。
-评审和验收沿用已有技能名称，见 [来源说明](docs/skill-sources.md)。
+运行 `git pull && make link`。`make link` 可以重复运行：已有的链接保持不变，新增的技能会补上链接，指向已退役技能的旧链接会被清理。
 
-## 维护原则
+## 怎样知道技能有用
 
-- 独立入口要有独立任务、方法和完成证据；规模或视角变化优先考虑模式/参考资料。
-- `hai-*` 是个人方法系列的命名，不代表所有核心能力都必须加此前缀。
-- 已授权实施的任务不能只交付计划；诊断/审查请求不自动变成修改。
-- 复用目标和当前证据，不重复写报告或无理由重复执行已通过的检查。
-- 新增技能先用真实任务验证收益，不以数量增长为目标。
+新增或合并技能时，先用对照任务验证收益。结果连同局限一起记录：
 
-```text
-skills/<skill-name>/
-  SKILL.md           # 英文执行源
-  SKILL.zh_CN.md     # hai-* 必备中文阅读版
-  references/        # 按需读取的专业方法和模板
-  scripts/           # 确定性辅助工具
-  assets/            # 产物模板
-```
+- [`trigger-cases.json`](evals/trigger-cases.json) 记录 43 条触发边界：哪句话归哪个技能，哪句话不该触发任何技能。
+- [`workflow-cases.json`](evals/workflow-cases.json) 记录 4 个带故障样例的任务。每个任务和基线（改动前的版本；debug 任务用不加载技能）各跑一次，按写好的断言打分。
+- [2026-09-05 重组冒烟结果](evals/results/2026-09-05-reorganization.md)：3 个任务新旧方法都通过 13/13 条断言。这只说明合并后方法没有丢，不说明效果更好。`hai-debug` 不加载技能也解决了任务，所以仍标“试用”。
 
-触发边界在 [trigger-cases.json](evals/trigger-cases.json)，工作样例在
-[workflow-cases.json](evals/workflow-cases.json)。静态校验不等于模型触发准确率；
-对照执行检查方法是否保留、是否误改、是否漏证据或增加流程，见 [评估说明](evals/README.md)。
+`make validate` 只检查结构、资源和脚本语法，不测量模型行为。
 
-## 可选渲染工具
+## 参与维护
 
-只阅读技能不需要 Node 依赖。生成 HTML 截图时安装：
+维护原则、技能目录结构、已退役技能的去向、评估方法、渲染工具和头图的生成方法，见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-```bash
-npm install
-npx playwright install chromium
-```
+## 作者
+
+[@hylarucoder](https://github.com/hylarucoder)
+
+## 许可证
+
+本项目采用 [CC BY-NC 4.0](LICENSE) 许可证。`skills/code-review-and-quality/` 改编自 Addy Osmani 的 [agent-skills](https://github.com/addyosmani/agent-skills)，保留原来的 MIT 许可证，见该目录下的 [LICENSE](skills/code-review-and-quality/LICENSE)。
+
+- 个人使用、学习、研究与非商业项目可以直接使用。
+- 公开发布衍生作品时，请注明来源。
+- 商业用途需要单独授权，请联系作者。

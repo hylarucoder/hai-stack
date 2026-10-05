@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+<title id="title">hai-stack：一次迭代的每一步都有技能接手</title>
+<desc id="desc">一次迭代分五步：判断、设计、动手、确认、沉淀，每一步列出接手的技能。geju、goudi、hai-razor 三个纠偏视角在任何一步都能调用。</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#EA580C"/></marker>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+  </style>
+</defs>
+<rect width="1400" height="900" fill="#FAF9F7"/>
+<rect x="48" y="58" width="40" height="5" rx="2.5" fill="#EA580C"/>
+<text x="104" y="66" font-size="16" font-weight="700" fill="#EA580C" letter-spacing="1.8">HAI-STACK · 软件迭代</text>
+<text x="48" y="122" font-size="38" font-weight="700" fill="#1C1917">一次迭代的每一步，都有技能接手</text>
+<text x="48" y="160" font-size="18" font-weight="400" fill="#78716C">卡在哪一步，就从哪一步进入。每个技能交出能检查的结果，不要求每次走完一圈。</text>
+<path d="M 1236.0 222 L 1236.0 200 L 164.0 200 L 164.0 218" fill="none" stroke="#FDBA74" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arrow)"/>
+<rect x="638.0" y="187" width="124" height="26" rx="13" fill="#FAF9F7"/>
+<text x="700.0" y="205" font-size="15" font-weight="700" fill="#EA580C" text-anchor="middle">进入下一轮</text>
+<rect x="48" y="222" width="232" height="402" rx="16" fill="#FFFFFF" stroke="#E7E5E4" stroke-width="1.5"/>
+<text x="70" y="258" font-size="14" font-weight="700" fill="#A8A29E" letter-spacing="0.6">01 · DECIDE</text>
+<text x="70" y="296" font-size="26" font-weight="700" fill="#1C1917">判断</text>
+<text x="70" y="324" font-size="16" font-weight="400" fill="#78716C">值不值得做</text>
+<rect x="64" y="348" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="76" y="371" font-size="16" font-weight="600" fill="#292524" class="mono">hai-idea</text>
+<rect x="64" y="392" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="76" y="415" font-size="16" font-weight="600" fill="#292524" class="mono">hai-prd</text>
+<line x1="284" y1="423.0" x2="310" y2="423.0" stroke="#EA580C" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="316" y="222" width="232" height="402" rx="16" fill="#FFFFFF" stroke="#E7E5E4" stroke-width="1.5"/>
+<text x="338" y="258" font-size="14" font-weight="700" fill="#A8A29E" letter-spacing="0.6">02 · DESIGN</text>
+<text x="338" y="296" font-size="26" font-weight="700" fill="#1C1917">设计</text>
+<text x="338" y="324" font-size="16" font-weight="400" fill="#78716C">系统怎么改</text>
+<rect x="332" y="348" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="344" y="371" font-size="16" font-weight="600" fill="#292524" class="mono">hai-architecture</text>
+<rect x="332" y="392" width="200" height="58" rx="8" fill="#F5F5F4"/>
+<text x="344" y="415" font-size="16" font-weight="600" fill="#292524" class="mono">entity-model-</text>
+<text x="344" y="437" font-size="16" font-weight="600" fill="#292524" class="mono">auditor</text>
+<rect x="332" y="458" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="344" y="481" font-size="16" font-weight="600" fill="#292524" class="mono">hai-naming</text>
+<line x1="552" y1="423.0" x2="578" y2="423.0" stroke="#EA580C" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="584" y="222" width="232" height="402" rx="16" fill="#FFFFFF" stroke="#E7E5E4" stroke-width="1.5"/>
+<text x="606" y="258" font-size="14" font-weight="700" fill="#A8A29E" letter-spacing="0.6">03 · BUILD</text>
+<text x="606" y="296" font-size="26" font-weight="700" fill="#1C1917">动手</text>
+<text x="606" y="324" font-size="16" font-weight="400" fill="#78716C">把事做对</text>
+<rect x="600" y="348" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="612" y="371" font-size="16" font-weight="600" fill="#292524" class="mono">hai-goal</text>
+<rect x="600" y="392" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="612" y="415" font-size="16" font-weight="600" fill="#292524" class="mono">hai-tdd</text>
+<rect x="600" y="436" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="612" y="459" font-size="16" font-weight="600" fill="#292524" class="mono">hai-debug</text>
+<rect x="600" y="480" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="612" y="503" font-size="16" font-weight="600" fill="#292524" class="mono">hai-ast-grep</text>
+<line x1="820" y1="423.0" x2="846" y2="423.0" stroke="#EA580C" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="852" y="222" width="232" height="402" rx="16" fill="#1C1917" stroke="#1C1917" stroke-width="1.5"/>
+<text x="874" y="258" font-size="14" font-weight="700" fill="#D6D3D1" letter-spacing="0.6">04 · VERIFY</text>
+<text x="874" y="296" font-size="26" font-weight="700" fill="#FFFFFF">确认</text>
+<text x="874" y="324" font-size="16" font-weight="400" fill="#D6D3D1">拿证据确认</text>
+<rect x="868" y="348" width="200" height="58" rx="8" fill="#292524"/>
+<text x="880" y="371" font-size="16" font-weight="600" fill="#FDBA74" class="mono">code-review-and-</text>
+<text x="880" y="393" font-size="16" font-weight="600" fill="#FDBA74" class="mono">quality</text>
+<rect x="868" y="414" width="200" height="58" rx="8" fill="#292524"/>
+<text x="880" y="437" font-size="16" font-weight="600" fill="#FDBA74" class="mono">write-technical-</text>
+<text x="880" y="459" font-size="16" font-weight="600" fill="#FDBA74" class="mono">acceptance-report</text>
+<line x1="1088" y1="423.0" x2="1114" y2="423.0" stroke="#EA580C" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1120" y="222" width="232" height="402" rx="16" fill="#FFFFFF" stroke="#E7E5E4" stroke-width="1.5"/>
+<text x="1142" y="258" font-size="14" font-weight="700" fill="#A8A29E" letter-spacing="0.6">05 · RECORD</text>
+<text x="1142" y="296" font-size="26" font-weight="700" fill="#1C1917">沉淀</text>
+<text x="1142" y="324" font-size="16" font-weight="400" fill="#78716C">留下准确的文档</text>
+<rect x="1136" y="348" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="1148" y="371" font-size="16" font-weight="600" fill="#292524" class="mono">hai-audit-docs</text>
+<rect x="1136" y="392" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="1148" y="415" font-size="16" font-weight="600" fill="#292524" class="mono">hai-rewrite-doc</text>
+<rect x="1136" y="436" width="200" height="58" rx="8" fill="#F5F5F4"/>
+<text x="1148" y="459" font-size="16" font-weight="600" fill="#292524" class="mono">hai-simplified-</text>
+<text x="1148" y="481" font-size="16" font-weight="600" fill="#292524" class="mono">technical</text>
+<rect x="1136" y="502" width="200" height="58" rx="8" fill="#F5F5F4"/>
+<text x="1148" y="525" font-size="16" font-weight="600" fill="#292524" class="mono">hai-visual-</text>
+<text x="1148" y="547" font-size="16" font-weight="600" fill="#292524" class="mono">explainer</text>
+<rect x="1136" y="568" width="200" height="36" rx="8" fill="#F5F5F4"/>
+<text x="1148" y="591" font-size="16" font-weight="600" fill="#292524" class="mono">readme-beautifier</text>
+<line x1="164.0" y1="624" x2="164.0" y2="668" stroke="#FDBA74" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="432.0" y1="624" x2="432.0" y2="668" stroke="#FDBA74" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="700.0" y1="624" x2="700.0" y2="668" stroke="#FDBA74" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="968.0" y1="624" x2="968.0" y2="668" stroke="#FDBA74" stroke-width="1.5" stroke-dasharray="4 5"/>
+<line x1="1236.0" y1="624" x2="1236.0" y2="668" stroke="#FDBA74" stroke-width="1.5" stroke-dasharray="4 5"/>
+<rect x="48" y="668" width="1304" height="112" rx="16" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+<text x="76" y="716" font-size="24" font-weight="700" fill="#1C1917">纠偏视角</text>
+<text x="76" y="748" font-size="16" font-weight="400" fill="#78716C">任何一步都能调用</text>
+<circle cx="348" cy="724.0" r="7" fill="#EA580C"/>
+<text x="370" y="718" font-size="20" font-weight="700" fill="#1C1917" class="mono">geju</text>
+<text x="370" y="748" font-size="17" font-weight="400" fill="#78716C">打开格局</text>
+<circle cx="688" cy="724.0" r="7" fill="#EA580C"/>
+<text x="710" y="718" font-size="20" font-weight="700" fill="#1C1917" class="mono">goudi</text>
+<text x="710" y="748" font-size="17" font-weight="400" fill="#78716C">压实第一步</text>
+<circle cx="1028" cy="724.0" r="7" fill="#EA580C"/>
+<text x="1050" y="718" font-size="20" font-weight="700" fill="#1C1917" class="mono">hai-razor</text>
+<text x="1050" y="748" font-size="17" font-weight="400" fill="#78716C">剃掉多余的概念</text>
+<rect x="48" y="814" width="1304" height="54" rx="12" fill="#F5F5F4"/>
+<circle cx="76" cy="841" r="6" fill="#EA580C"/>
+<text x="94" y="847" font-size="17" font-weight="700" fill="#44403C">原则：原因已知的小 bug 直接 TDD，原因不明先诊断；“做完了”要有实际运行的检查；评审通过不等于授权合并。</text>
+</svg>

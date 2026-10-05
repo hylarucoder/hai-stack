@@ -5,7 +5,7 @@
 
 - 架构全局调查来自原 hai-complexity：保留入口、状态/配置、调用链、测试保护及报告模板。
 - 文档审计整合原两个入口，证据模式与操作权限分别选择，明确支持已授权局部修复。
-- code-review-and-quality 沿用用户已安装的同名技能，保留五轴方法、按风险缩放，吸收原
+- code-review-and-quality 改编自 Addy Osmani 的 agent-skills 中的同名技能，保留五轴方法、按风险缩放，吸收原
   clean-code-reviewer 的专业参考；去掉固定行数裁决、缺失引用和额外批准/外部动作要求。
 - write-technical-acceptance-report 收录用户已有同名技能的说明、模板、方法及证据脚本，
   增加低风险简版、明确审查和修复权限，保留高风险状态/迁移验证。
@@ -17,3 +17,9 @@
 
 静态检查和小样本工作流对照只能验证基本完整性，不能证明所有模型/宿主的触发率提高，
 也不能证明 debug 优于普通执行。后续用真实含糊任务记录纠正次数、证据质量和完成结果。
+
+## 许可证
+
+项目采用 [CC BY-NC 4.0](../LICENSE)。`code-review-and-quality` 保留上游 MIT 许可证，
+来源为 [Addy Osmani 的 agent-skills](https://github.com/addyosmani/agent-skills/tree/main/skills/code-review-and-quality)，
+完整许可及改编说明见 [该技能的 LICENSE](../skills/code-review-and-quality/LICENSE)。
